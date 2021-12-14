@@ -15,6 +15,11 @@ mongoose.connection.on("connected", () => {
 });
 
 // routes
+const locationRouter = require("./routes/locations");
+const postRouter = require("./routes/posts");
+
+app.use("/api/locations", locationRouter);
+app.use("/api/posts", postRouter);
 
 // 404 error
 app.use((req, res, next) => {

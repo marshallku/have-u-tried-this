@@ -22,9 +22,14 @@ module.exports = new Schema(
     //   required: true,
     // },
     location: {
-      type: Schema.Types.ObjectId,
-      ref: "Location",
-      required: true,
+      wide_addr: {
+        type: String,
+        required: true,
+      },
+      local_addr: {
+        type: String,
+        required: true,
+      },
     },
     likes: {
       type: Number,
