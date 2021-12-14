@@ -1,13 +1,14 @@
 const express = require("express");
 const app = express();
-const route = require("./routes");
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
 // routes
-// app.use('경로', 라우터)
+// 라우터 예시코드
+const indexRouter = require("./routes/index");
+app.use("/", indexRouter);
 
 // 404 error
 app.use((req, res, next) => {
