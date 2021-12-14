@@ -3,7 +3,7 @@ module.exports = (requestHandler) => {
     try {
       await requestHandler(req, res);
     } catch (err) {
-      next(err);
+      next(err.message);
     }
   };
 };
