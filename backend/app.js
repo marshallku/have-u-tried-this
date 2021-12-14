@@ -15,9 +15,6 @@ mongoose.connection.on("connected", () => {
 });
 
 // routes
-// 라우터 예시코드
-const indexRouter = require("./routes/index");
-app.use("/", indexRouter);
 
 // 404 error
 app.use((req, res, next) => {

@@ -21,11 +21,11 @@ module.exports = new Schema(
     //   ref: "User",
     //   required: true,
     // },
-    // location: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "Location",
-    //   required: true,
-    // },
+    location: {
+      type: Schema.Types.ObjectId,
+      ref: "Location",
+      required: true,
+    },
     likes: {
       type: Number,
       default: 0,
