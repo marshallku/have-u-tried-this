@@ -42,7 +42,13 @@
 }
 
 .post-item__info {
+  display: flex;
   line-height: 1.7;
+}
+
+.post-item__location {
+  margin-right: auto;
+  padding-right: 10px;
 }
 
 @media (any-hover: hover) {
