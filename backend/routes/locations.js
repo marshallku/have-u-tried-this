@@ -5,7 +5,7 @@ const locationService = require("../services/locations");
 
 router.get("/", async (req, res) => {
   const locations = await locationService.getAll();
-  res.json(locations);
+  res.json({ status: true, data: locations });
 });
 
 module.exports = router;
