@@ -1,6 +1,11 @@
-import fetchLocationData from "./location";
+import fetchLocationListData from "./locationList";
+import fetchPostListData from "./postList";
 import fetchPostData from "./post";
-import fetchListData from "./list";
 import fetchUserData from "./user";
 
-export { fetchLocationData, fetchPostData, fetchListData, fetchUserData };
+export {
+  fetchLocationListData,
+  fetchPostData,
+  fetchPostListData,
+  fetchUserData,
+};
