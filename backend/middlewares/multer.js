@@ -1,11 +1,11 @@
 const multer = require("multer");
 
 function fileFilter(req, file, cb) {
-  let fileType = file.mimetype.split("/")[1];
-  if (fileType == "jpg" || fileType == "png" || fileType == "jpeg") {
+  let fileType = file.mimetype.split("/")[0];
+  if (fileType === "image") {
     cb(null, true);
   } else {
-    cb("jpg, jpeg, png 파일만 업로드 가능합니다.");
+    cb("이미지 파일만 업로드 가능합니다.");
   }
 }
 
