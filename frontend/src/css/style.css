@@ -27,3 +27,7 @@ html {
   background-color: var(--bg);
   color: var(--text);
 }
+
+body {
+  padding-top: 100px;
+}
