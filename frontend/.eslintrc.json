@@ -10,6 +10,9 @@
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
+  "settings": {
+    "import/ignore": [".css$", "node_modules/*"]
+  },
   "rules": {
     "indent": "off",
     "linebreak-style": 0,

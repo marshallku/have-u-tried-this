@@ -1,7 +1,7 @@
-import UserPageInfo from "../router/UserPageInfo.js";
-import UserPagePost from "../router/UserPagePost.js";
-import UserPageComment from "../router/UserPageComment.js";
-import UserPageLike from "../router/UserPageLike.js";
+import UserPageInfo from "../router/UserPageInfo";
+import UserPagePost from "../router/UserPagePost";
+import UserPageComment from "../router/UserPageComment";
+import UserPageLike from "../router/UserPageLike";
 
 export default class UserPage {
   constructor({ $app, api }) {
