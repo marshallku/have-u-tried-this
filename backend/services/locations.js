@@ -1,4 +1,4 @@
-const { Post } = require("../models");
+const { Location, Post } = require("../models");
 
 module.exports = {
   getAll: async () => {
@@ -23,5 +23,10 @@ module.exports = {
     }, {});
 
     return Object.values(result);
+  },
+
+  validation: async (location) => {
+    const { wide_addr, local_addr } = location;
+    return await Location.findOne({ wide_addr, local_addr });
   },
 };

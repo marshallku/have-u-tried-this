@@ -6,16 +6,25 @@ const path = require("path");
 const asyncHandler = require("../utils/async-handler");
 const uploadFile = require("../middlewares/multer");
 
+const locationService = require("../services/locations");
 const postService = require("../services/posts");
 const postDto = require("../models/DTO/Post");
 
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const wide_addr = req.query["wide-addr"];
-    const local_addr = req.query["local-addr"];
+    const location = {
+      wide_addr: req.query["wide-addr"],
+      local_addr: req.query["local-addr"],
+    };
 
-    const postsByAddr = await postService.getAll({ wide_addr, local_addr });
+    // wide_addr, local_addr 검증 로직
+    const isExists = await locationService.validation(location);
+    if (!isExists) {
+      throw new Error("Not access");
+    }
+
+    const postsByAddr = await postService.getAll(location);
     res.json(postsByAddr);
   }),
 );
