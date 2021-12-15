@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
+import authRouter from "./routes/auth.js";
 
 dotenv.config();
 
@@ -14,11 +15,12 @@ app.use(json());
 
 // mongo DB & mongoose
 const mongoUri = process.env.MONGO_DB_URI;
-mongoose.connect(mongoUri);
+mongoose.connect(`${mongoUri}/test`);
 
 // routes
 app.use("/api/locations", locationRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/auth", authRouter);
 
 // 404 error
 app.use((req, res, next) => {
