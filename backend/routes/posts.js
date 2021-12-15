@@ -2,16 +2,7 @@ const { Router } = require("express");
 const router = Router();
 
 const asyncHandler = require("../utils/async-handler");
-
-const multer = require("multer");
-
-const { fileFilter } = require("../config/multer");
-
-const upload = multer({
-  dest: "public/uploads/",
-  limits: { fileSize: 1024 * 1024 * 2 },
-  fileFilter: fileFilter,
-});
+const uploadFile = require("../middlewares/multer");
 
 const postService = require("../services/posts");
 const postDto = require("../models/DTO/Post");
@@ -30,7 +21,7 @@ router.get("/:id", async (req, res) => {});
 // 사진 업로드
 router.post(
   "/",
-  upload.array("pictures", 4),
+  uploadFile,
   asyncHandler(async (req, res) => {
     const pictures = req.files;
     const { title, content, wide_addr, local_addr } = req.body;
