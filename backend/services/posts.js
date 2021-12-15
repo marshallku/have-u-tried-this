@@ -1,5 +1,4 @@
 const { Post } = require("../models");
-const asyncHandler = require("../utils/async-handler");
 
 module.exports = {
   getAll: async (addr) => {
@@ -33,12 +32,17 @@ module.exports = {
     return postId;
   },
 
-  findOne: async (id) => {
+  findById: async (id) => {
     try {
-      const post = await Post.findOne({ _id: id });
+      const post = await Post.findById(id);
       return post;
     } catch (err) {
       throw new Error("No data");
     }
+  },
+
+  findByTitle: async (_title) => {
+    const post = await Post.findOne({ title: _title });
+    return post;
   },
 };
