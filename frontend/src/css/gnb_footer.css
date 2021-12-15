@@ -1,31 +1,46 @@
 ﻿.gnb {
-  background: #303030;
-  height: 70px;
   display: flex;
-  justify-content: flex-start;
+  height: 70px;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(8px) saturate(180%);
+  backdrop-filter: blur(8px) saturate(180%);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
+  align-items: center;
 }
 
 .gnb > div {
   height: 50px;
-  margin: 10px 0;
-  background: #c4c4c4;
 }
 
-.gnb .gnb__logo {
-  min-width: 115px;
+.gnb__logo {
   margin-left: 30px;
 }
 
-.gnb .gnb__search {
+.gnb__logo img {
+  height: 50px;
+}
+
+.search--gnb {
   width: 400px;
   margin-left: 50px;
 }
 
-.gnb .gnb__profile-image {
+.search__input--gnb {
+  width: 100%;
+  padding: 0 10px;
+  height: 50px;
+  line-height: 50px;
+  background-color: var(--lighter-bg);
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.gnb__profile-image {
   min-width: 50px;
   border-radius: 50%;
   margin-left: auto;
   margin-right: 30px;
+  background: var(--lightest-bg);
 }
 
 .footer__pages a,
@@ -35,7 +50,7 @@
 }
 
 .footer {
-  background: #121212;
+  background: var(--lighter-bg);
   width: 100vw;
   min-height: 200px;
   position: absolute;
@@ -51,13 +66,9 @@
   width: 200px;
 }
 
-.footer .footer__hr {
-  width: 108px;
-  margin: 25px 0;
-  border: 1px solid #fff;
-}
-
 .footer .footer__slogan {
-  color: #c4c4c4;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 2px solid var(--text);
   font-size: 1.6em;
 }
