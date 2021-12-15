@@ -10,6 +10,7 @@
   backdrop-filter: blur(8px) saturate(180%);
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.25);
   align-items: center;
+  z-index: 1000;
 }
 
 .gnb > div {
@@ -57,6 +58,7 @@
   display: flex;
   background: var(--lighter-bg);
   width: 100%;
+  margin-top: 100px;
   padding: 100px 0 50px 0;
   min-height: 200px;
   flex-wrap: wrap;
