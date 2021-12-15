@@ -4,26 +4,36 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./src/css/gnb_footer.css" />
-    <link rel="stylesheet" href="./src/css/reset.css" />
     <title>이거 먹어봄?</title>
+    <link rel="stylesheet" href="http://localhost:9990/main.css" />
   </head>
   <body>
-    <header class="header">
-      <div class="header__logo"></div>
-      <div class="header__search"></div>
-      <div class="header__profile-image"></div>
-    </header>
+    <nav class="gnb">
+      <div class="gnb__logo">
+        <a href="/">
+          <img src="./static/images/logo.svg" alt="" />
+        </a>
+      </div>
+      <form class="search search--gnb">
+        <input
+          type="text"
+          id="search"
+          class="search__input search__input--gnb"
+          name="search"
+          placeholder="검색어를 입력하세요."
+        />
+      </form>
+      <div class="gnb__profile-image"></div>
+    </nav>
     <div id="app"></div>
 
     <footer class="footer">
       <div class="footer__logo">
         <img
           class="footer__logo-image"
-          src="./static/images/logo.png"
+          src="./static/images/logo.svg"
           alt="이거 먹어봄 로고"
         />
-        <hr class="footer__hr" />
         <p class="footer__slogan">Have you tried this?</p>
       </div>
       <div class="footer__pages">
@@ -38,5 +48,6 @@
         <li><a href="#">문의하기</a></li>
       </div>
     </footer>
+    <script src="http://localhost:9990/main.js"></script>
   </body>
 </html>

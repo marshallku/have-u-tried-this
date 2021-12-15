@@ -115,14 +115,6 @@ em {
   font-style: italic;
 }
 
-:root {
-  --text-color: #bbb;
-  --highlight-color: #f1f1f1;
-  --bg-color: #121212;
-  --bg-transparent: rgba(18, 18, 18, 0);
-  --main-color: #2b2b2b;
-}
-
 *,
 ::after,
 ::before {

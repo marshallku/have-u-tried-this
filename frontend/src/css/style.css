@@ -1,0 +1,29 @@
+:root {
+  --text: #bbb;
+  --dark-text: #1b1b1b;
+  --highlight-text: #f1f1f1;
+  --bg: #121212;
+  --lighter-bg: #212121;
+  --lightest-bg: #3a3a3a;
+  --bg-transparent: rgba(18, 18, 18, 0);
+  --primary: #fff263;
+  --light: #ffff95;
+  --dark: #c9c02f;
+}
+
+a {
+  color: var(--text);
+}
+
+a:hover {
+  color: var(--highlight-text);
+}
+
+::placeholder {
+  color: var(--text);
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+}
