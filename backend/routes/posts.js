@@ -7,13 +7,16 @@ const uploadFile = require("../middlewares/multer");
 const postService = require("../services/posts");
 const postDto = require("../models/DTO/Post");
 
-router.get("/", async (req, res) => {
-  const wide_addr = req.query["wide-addr"];
-  const local_addr = req.query["local-addr"];
+router.get(
+  "/",
+  asyncHandler(async (req, res) => {
+    const wide_addr = req.query["wide-addr"];
+    const local_addr = req.query["local-addr"];
 
-  const postsByAddr = await postService.getAll({ wide_addr, local_addr });
-  res.json(postsByAddr);
-});
+    const postsByAddr = await postService.getAll({ wide_addr, local_addr });
+    res.json(postsByAddr);
+  }),
+);
 
 // 사진 디테일
 router.get(
