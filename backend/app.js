@@ -28,7 +28,7 @@ app.use((req, res, next) => {
 
 // Error handler
 app.use((err, req, res, next) => {
-  res.json({ message: err });
+  res.status(400).json({ message: err });
 });
 
 // server listen
