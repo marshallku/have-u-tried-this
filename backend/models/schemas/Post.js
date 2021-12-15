@@ -12,8 +12,8 @@ module.exports = new Schema(
     },
     pictures: [
       {
-        url: String,
-        text: String,
+        url: String, //
+        text: String, // 이미지 설명 title 저장
       },
     ],
     // author: {
