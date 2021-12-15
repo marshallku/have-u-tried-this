@@ -1,23 +1,22 @@
-const express = require("express");
-const mongoose = require("mongoose");
-require("dotenv").config();
+/* eslint-disable import/extensions */
+import express, { json } from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import postRouter from "./routes/posts.js";
+import locationRouter from "./routes/locations.js";
+
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(json());
 
 // mongo DB & mongoose
 const mongoUri = process.env.MONGO_DB_URI;
 mongoose.connect(mongoUri);
-mongoose.connection.on("connected", () => {
-  console.log("MongDB connected");
-});
 
 // routes
-const locationRouter = require("./routes/locations");
-const postRouter = require("./routes/posts");
-
 app.use("/api/locations", locationRouter);
 app.use("/api/posts", postRouter);
 
@@ -27,11 +26,12 @@ app.use((req, res, next) => {
 });
 
 // Error handler
+// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   res.status(400).json({ message: err });
 });
 
 // server listen
 app.listen(port, () => {
-  console.log("Server start");
+  // console.log("Server start");
 });

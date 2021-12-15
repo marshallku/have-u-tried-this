@@ -1,4 +1,5 @@
-import { Post } from "../models";
+/* eslint-disable import/extensions */
+import { Post } from "../models/index.js";
 
 export async function getAll(addr) {
   const posts = await Post.find({ location: addr });

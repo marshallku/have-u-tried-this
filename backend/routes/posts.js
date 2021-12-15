@@ -1,11 +1,17 @@
+/* eslint-disable import/extensions */
 import { Router } from "express";
 import { unlink } from "fs";
 import { join } from "path";
-import { validation } from "../services/locations";
-import { getAll, findById, findByTitle, createPost } from "../services/posts";
-import uploadFile from "../middlewares/multer";
-import PostDto from "../models/DTO/Post";
-import asyncHandler from "../utils/async-handler";
+import { validation } from "../services/locations.js";
+import {
+  getAll,
+  findById,
+  findByTitle,
+  createPost,
+} from "../services/posts.js";
+import uploadFile from "../middlewares/multer.js";
+import PostDto from "../models/DTO/Post.js";
+import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
 

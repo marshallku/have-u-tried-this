@@ -1,8 +1,8 @@
 // Input data 검증을 위한
 
-import { Schema } from "mongoose";
+import mongoose from "mongoose";
 
-export default new Schema({
+export default new mongoose.Schema({
   wideAddr: {
     type: String,
     required: true,

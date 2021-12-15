@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
-const PostSchema = require("./schemas/Post");
-const LocationSchema = require("./schemas/Location");
+/* eslint-disable import/extensions */
+import mongoose from "mongoose";
+import PostSchema from "./schemas/Post.js";
+import LocationSchema from "./schemas/Location.js";
 
-exports.Post = mongoose.model("Post", PostSchema);
-exports.Location = mongoose.model("Location", LocationSchema);
+export const Post = mongoose.model("Post", PostSchema);
+export const Location = mongoose.model("Location", LocationSchema);

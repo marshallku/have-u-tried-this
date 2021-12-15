@@ -1,6 +1,7 @@
+/* eslint-disable import/extensions */
 import { Router } from "express";
-import { getAll } from "../services/locations";
-import asyncHandler from "../utils/async-handler";
+import { getAll } from "../services/locations.js";
+import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
 
