@@ -24,4 +24,9 @@ module.exports = {
     const postId = Post.create(post);
     return postId;
   },
+
+  findOne: async (id) => {
+    const post = await Post.findOne({ _id: id });
+    return post;
+  },
 };
