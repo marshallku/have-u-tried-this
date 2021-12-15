@@ -10,7 +10,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    pictures: [
+    photos: [
       {
         url: String, //
         text: String, // 이미지 설명 title 저장

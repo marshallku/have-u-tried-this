@@ -22,6 +22,7 @@ router.get(
     const id = req.params.id;
     const post = await postService.findOne(id);
     if (!post) {
+      console.log("errr");
       throw new Error("No Data");
     }
     res.json(post);
@@ -33,9 +34,9 @@ router.post(
   "/",
   uploadFile,
   asyncHandler(async (req, res) => {
-    const pictures = req.files;
+    const photos = req.files;
     const { title, content, wide_addr, local_addr } = req.body;
-    const post = new postDto(title, content, pictures, wide_addr, local_addr);
+    const post = new postDto(title, content, photos, wide_addr, local_addr);
     const postId = await postService.createPost(post);
     res.json({ id: postId.id });
   }),

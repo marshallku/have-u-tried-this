@@ -1,4 +1,5 @@
 const { Post } = require("../models");
+const asyncHandler = require("../utils/async-handler");
 
 module.exports = {
   getAll: async (addr) => {
@@ -8,7 +9,7 @@ module.exports = {
         id: post.id,
         wide_addr: post.location.wide_addr,
         local_addr: post.location.local_addr,
-        pictures: post.pictures[0].url,
+        photo: post.photos[0].url,
         title: post.title,
         likes: post.likes,
       };
@@ -16,12 +17,10 @@ module.exports = {
   },
 
   createPost: async (postDto) => {
-    // 이미지 사이즈 20MB -> 20000
-    // 이미지 확장자 mimetype image/jpeg
-    const { pictures, ...rest } = postDto;
+    const { photos, ...rest } = postDto;
     const post = {
       ...rest,
-      pictures: postDto.pictures.reduce((prev, curr) => {
+      photos: postDto.photos.reduce((prev, curr) => {
         prev.push({
           url: curr.filename,
           text: postDto.title,
@@ -35,7 +34,11 @@ module.exports = {
   },
 
   findOne: async (id) => {
-    const post = await Post.findOne({ _id: id });
-    return post;
+    try {
+      const post = await Post.findOne({ _id: id });
+      return post;
+    } catch (err) {
+      throw new Error("No data");
+    }
   },
 };
