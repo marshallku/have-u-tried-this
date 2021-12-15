@@ -1,27 +1,27 @@
-﻿.header {
+﻿.gnb {
   background: #303030;
   height: 70px;
   display: flex;
   justify-content: flex-start;
 }
 
-.header > div {
+.gnb > div {
   height: 50px;
   margin: 10px 0;
   background: #c4c4c4;
 }
 
-.header .header__logo {
+.gnb .gnb__logo {
   min-width: 115px;
   margin-left: 30px;
 }
 
-.header .header__search {
+.gnb .gnb__search {
   width: 400px;
   margin-left: 50px;
 }
 
-.header .header__profile-image {
+.gnb .gnb__profile-image {
   min-width: 50px;
   border-radius: 50%;
   margin-left: auto;
