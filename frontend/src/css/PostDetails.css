@@ -1,0 +1,18 @@
+.small-container {
+  max-width: 860px;
+  margin: 3rem auto 0 auto;
+}
+
+.details__title {
+  margin: 1rem 0;
+  font-size: 2rem;
+  line-height: 1.7;
+}
+
+.details__author {
+  margin-bottom: 2rem;
+}
+
+.details__text {
+  line-height: 1.7;
+}
