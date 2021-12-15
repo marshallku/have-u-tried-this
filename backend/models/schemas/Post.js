@@ -1,6 +1,7 @@
-const { Schema } = require("mongoose");
+const mongoose = require("mongoose");
+const AutoIncrement = require("mongoose-sequence")(mongoose);
 
-module.exports = new Schema(
+const PostSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -40,3 +41,7 @@ module.exports = new Schema(
     timestamps: true,
   },
 );
+
+PostSchema.plugin(AutoIncrement, { inc_field: "postId" });
+
+module.exports = PostSchema;
