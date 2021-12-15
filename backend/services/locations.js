@@ -1,32 +1,31 @@
-const { Location, Post } = require("../models");
+import { Location, Post } from "../models";
 
-module.exports = {
-  getAll: async () => {
-    const posts = await Post.find({});
-    const result = posts.reduce((prev, curr) => {
-      const key = curr.location.wide_addr + " " + curr.location.local_addr;
-      if (!prev[key]) {
-        const value = {
-          wide_addr: curr.location.wide_addr,
-          local_addr: curr.location.local_addr,
-          photo: curr.photos[0].url,
-          likes: curr.likes,
-        };
-        prev[key] = value;
-      } else {
-        if (prev[key].likes < curr.likes) {
-          prev[key].photo = curr.photos[0].url;
-          prev[key].likes = curr.likes;
-        }
-      }
-      return prev;
-    }, {});
+export async function getAll() {
+  const posts = await Post.find({});
+  const result = posts.reduce((prev, curr) => {
+    const key = curr.location.wideAddr + curr.location.localAddr;
+    if (!prev[key]) {
+      const value = {
+        wideAddr: curr.location.wideAddr,
+        localAddr: curr.location.localAddr,
+        photo: curr.photos[0].url,
+        likes: curr.likes,
+      };
+      // eslint-disable-next-line no-param-reassign
+      prev[key] = value;
+    } else if (prev[key].likes < curr.likes) {
+      // eslint-disable-next-line no-param-reassign
+      prev[key].photo = curr.photos[0].url;
+      // eslint-disable-next-line no-param-reassign
+      prev[key].likes = curr.likes;
+    }
+    return prev;
+  }, {});
 
-    return Object.values(result);
-  },
-
-  validation: async (location) => {
-    const { wide_addr, local_addr } = location;
-    return await Location.findOne({ wide_addr, local_addr });
-  },
-};
+  return Object.values(result);
+}
+export async function validation(location) {
+  const { wideAddr, localAddr } = location;
+  const check = await Location.findOne({ wideAddr, localAddr });
+  return check;
+}

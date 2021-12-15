@@ -1,7 +1,7 @@
-const multer = require("multer");
+import multer, { MulterError } from "multer";
 
 function fileFilter(req, file, cb) {
-  let fileType = file.mimetype.split("/")[0];
+  const fileType = file.mimetype.split("/")[0];
   if (fileType === "image") {
     cb(null, true);
   } else {
@@ -9,19 +9,19 @@ function fileFilter(req, file, cb) {
   }
 }
 
-module.exports = function uploadFile(req, res, next) {
+export default function uploadFile(req, res, next) {
   const upload = multer({
     dest: "public/uploads/",
     limits: { fileSize: 1024 * 1024 * 2 },
-    fileFilter: fileFilter,
+    fileFilter,
   }).array("pictures", 4);
 
-  upload(req, res, function (err) {
-    if (err instanceof multer.MulterError) {
+  upload(req, res, (err) => {
+    if (err instanceof MulterError) {
       next(err.message);
     } else if (err) {
       next(err);
     }
     next();
   });
-};
+}

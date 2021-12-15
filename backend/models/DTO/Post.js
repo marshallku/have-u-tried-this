@@ -1,16 +1,19 @@
-module.exports = class Post {
+export default class Post {
   title;
+
   content;
+
   photos;
+
   location;
 
-  constructor(title, content, photos, wide_addr, local_addr) {
+  constructor(title, content, photos, wideAddr, localAddr) {
     this.title = title;
     this.content = content;
     this.photos = photos;
     this.location = {
-      wide_addr: wide_addr,
-      local_addr: local_addr,
+      wideAddr,
+      localAddr,
     };
   }
-};
+}

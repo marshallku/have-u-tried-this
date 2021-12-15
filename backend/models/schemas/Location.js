@@ -1,13 +1,13 @@
 // Input data 검증을 위한
 
-const { Schema } = require("mongoose");
+import { Schema } from "mongoose";
 
-module.exports = new Schema({
-  wide_addr: {
+export default new Schema({
+  wideAddr: {
     type: String,
     required: true,
   },
-  local_addr: {
+  localAddr: {
     type: String,
     required: true,
   },

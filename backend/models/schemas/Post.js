@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { Schema } from "mongoose";
 
-const PostSchema = new mongoose.Schema(
+const PostSchema = new Schema(
   {
     title: {
       type: String,
@@ -22,11 +22,11 @@ const PostSchema = new mongoose.Schema(
     //   required: true,
     // },
     location: {
-      wide_addr: {
+      wideAddr: {
         type: String,
         required: true,
       },
-      local_addr: {
+      localAddr: {
         type: String,
         required: true,
       },
@@ -41,4 +41,4 @@ const PostSchema = new mongoose.Schema(
   },
 );
 
-module.exports = PostSchema;
+export default PostSchema;

@@ -1,40 +1,37 @@
-const { Router } = require("express");
+import { Router } from "express";
+import { unlink } from "fs";
+import { join } from "path";
+import { validation } from "../services/locations";
+import { getAll, findById, findByTitle, createPost } from "../services/posts";
+import uploadFile from "../middlewares/multer";
+import PostDto from "../models/DTO/Post";
+import asyncHandler from "../utils/async-handler";
+
 const router = Router();
-const fs = require("fs");
-const path = require("path");
-
-const asyncHandler = require("../utils/async-handler");
-const uploadFile = require("../middlewares/multer");
-
-const locationService = require("../services/locations");
-const postService = require("../services/posts");
-const postDto = require("../models/DTO/Post");
 
 router.get(
   "/",
   asyncHandler(async (req, res) => {
     const location = {
-      wide_addr: req.query["wide-addr"],
-      local_addr: req.query["local-addr"],
+      wideAddr: req.query["wide-addr"],
+      localAddr: req.query["local-addr"],
     };
 
-    // wide_addr, local_addr 검증 로직
-    const isExists = await locationService.validation(location);
+    const isExists = await validation(location);
     if (!isExists) {
       throw new Error("Not access");
     }
 
-    const postsByAddr = await postService.getAll(location);
+    const postsByAddr = await getAll(location);
     res.json(postsByAddr);
   }),
 );
 
-// 사진 디테일
 router.get(
   "/:id",
   asyncHandler(async (req, res) => {
-    const id = req.params.id;
-    const post = await postService.findById(id);
+    const { id } = req.params;
+    const post = await findById(id);
     if (!post) {
       throw new Error("No Data");
     }
@@ -42,29 +39,25 @@ router.get(
   }),
 );
 
-// 사진 업로드
 router.post(
   "/",
   uploadFile,
   asyncHandler(async (req, res) => {
     const photos = req.files;
-    const { title, content, wide_addr, local_addr } = req.body;
+    const { title, content, wideAddr, localAddr } = req.body;
 
-    const check = await postService.findByTitle(title);
+    const check = await findByTitle(title);
     if (check) {
       photos.forEach((photo) => {
-        fs.unlink(path.join(__dirname, "../", photo.path), (err) => {});
+        unlink(join(__dirname, "../", photo.path), () => {});
       });
       throw new Error("Already Exists");
     }
 
-    const post = new postDto(title, content, photos, wide_addr, local_addr);
-    const postId = await postService.createPost(post);
+    const post = new PostDto(title, content, photos, wideAddr, localAddr);
+    const postId = await createPost(post);
     res.json({ id: postId.id });
   }),
 );
 
-// 사진 수정
-// 사진 삭제
-
-module.exports = router;
+export default router;
