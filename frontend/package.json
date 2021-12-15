@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "npx webpack --mode='production'",
-    "dev": "webpack serve --open"
+    "dev": "webpack serve"
   },
   "keywords": [],
   "author": "",

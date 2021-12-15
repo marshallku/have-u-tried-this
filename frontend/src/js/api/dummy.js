@@ -13,8 +13,14 @@ const tmpUser = {
   isActive: true,
 };
 
-export async function fetchLocationData() {
-  return tmpLocation;
+export async function fetchLocationListData() {
+  return [
+    tmpLocation,
+    {
+      wide_addr: "서울특별시",
+      local_addr: "도봉구",
+    },
+  ];
 }
 
 export async function fetchPostData() {
@@ -36,25 +42,25 @@ export async function fetchPostData() {
   };
 }
 
-export async function fetchListData() {
+export async function fetchPostListData() {
   return [
     {
+      id: "61b9768f8c12d364584838aa",
       wide_addr: "서울특별시",
-      local_addr: "도봉구",
-      picture: {
-        url: "https://lh3.googleusercontent.com/pw/AM-JKLV7TvNQ5eFsAjkF1OCVR8oTHGeW4iftbFHaf6NL1MKyC3G9IeZU1c38ENLCsXi2kxnwaVML_EutFf4dTEVCgoaJ1to_Y-Gfq1dD3_yc-G7uWpg-TV0oaI21DgSUjMt1jgETPHukIo7AjEMO0Tz6fYQK=s1080-no",
-        text: "",
-      },
-      likes: 27,
+      local_addr: "종로구",
+      photo:
+        "https://lh3.googleusercontent.com/pw/AM-JKLV7TvNQ5eFsAjkF1OCVR8oTHGeW4iftbFHaf6NL1MKyC3G9IeZU1c38ENLCsXi2kxnwaVML_EutFf4dTEVCgoaJ1to_Y-Gfq1dD3_yc-G7uWpg-TV0oaI21DgSUjMt1jgETPHukIo7AjEMO0Tz6fYQK=s1080-no",
+      title: "title-0",
+      likes: 24,
     },
     {
+      id: "61b97a5449807cf11d466513",
       wide_addr: "서울특별시",
-      local_addr: "마포구",
-      picture: {
-        url: "https://lh3.googleusercontent.com/pw/AM-JKLUU3lh8tC1cq7puzYNmkwcPgS7BDNvPzsn16pkzlNtqkNrb-dYuUiv0LPqpUb1pV84bzciY0REMHboqsYZIBOZiU8Pt7o9WcrmdeRQOEq4pWep-fDH23mCTr6Dc5qBrZJGM-aYIyAPI34qW6vmsEqVK=s1080-no",
-        text: "",
-      },
-      likes: 20,
+      local_addr: "종로구",
+      photo:
+        "https://lh3.googleusercontent.com/pw/AM-JKLUU3lh8tC1cq7puzYNmkwcPgS7BDNvPzsn16pkzlNtqkNrb-dYuUiv0LPqpUb1pV84bzciY0REMHboqsYZIBOZiU8Pt7o9WcrmdeRQOEq4pWep-fDH23mCTr6Dc5qBrZJGM-aYIyAPI34qW6vmsEqVK=s1080-no",
+      title: "title-0",
+      likes: 16,
     },
   ];
 }
