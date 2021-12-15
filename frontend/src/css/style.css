@@ -18,3 +18,12 @@ a {
 a:hover {
   color: var(--highlight-text);
 }
+
+::placeholder {
+  color: var(--text);
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+}
