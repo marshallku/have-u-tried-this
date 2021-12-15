@@ -9,13 +9,13 @@ module.exports = {
         const value = {
           wide_addr: curr.location.wide_addr,
           local_addr: curr.location.local_addr,
-          picture: curr.pictures[0],
+          picture: curr.pictures[0].url,
           likes: curr.likes,
         };
         prev[key] = value;
       } else {
         if (prev[key].likes < curr.likes) {
-          prev[key].picture = curr.pictures[0];
+          prev[key].picture = curr.pictures[0].url;
           prev[key].likes = curr.likes;
         }
       }

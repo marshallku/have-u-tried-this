@@ -3,7 +3,16 @@ const { Post } = require("../models");
 module.exports = {
   getAll: async (addr) => {
     const posts = await Post.find({ location: addr });
-    return posts;
+    return posts.map((post) => {
+      return {
+        id: post.id,
+        wide_addr: post.location.wide_addr,
+        local_addr: post.location.local_addr,
+        pictures: post.pictures[0].url,
+        title: post.title,
+        likes: post.likes,
+      };
+    });
   },
 
   createPost: async (postDto) => {
