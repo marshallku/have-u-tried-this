@@ -10,6 +10,7 @@ export default function GlobalNavigation() {
   const logo = document.createElement("img");
   const searchForm = document.createElement("form");
   const search = document.createElement("input");
+  const createPost = document.createElement("a");
   const profileWrap = document.createElement("div");
   const profileAnchor = document.createElement("a");
 
@@ -34,6 +35,10 @@ export default function GlobalNavigation() {
 
   searchForm.append(search);
 
+  // Nav
+  createPost.classList.add("gnb__add-post", "icon-add_a_photo");
+  addClickEvent(createPost, "/add");
+
   // Profile
   profileWrap.classList.add("gnb__profile-image");
   Profile.src = "/static/images/default_profile.png";
@@ -43,7 +48,7 @@ export default function GlobalNavigation() {
   profileWrap.append(profileAnchor);
 
   // Append
-  nav.append(logoWrap, searchForm, profileWrap);
+  nav.append(logoWrap, searchForm, createPost, profileWrap);
 
   return nav;
 }
