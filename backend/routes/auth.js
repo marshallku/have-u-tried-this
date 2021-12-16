@@ -5,7 +5,7 @@ import passport from "passport";
 import mongoose from "mongoose";
 import session from "express-session";
 import { v4 as uuidv4 } from "uuid";
-import passportGoogleOAuth from "passport-google-oauth2";
+import passportGoogleOAuth from "passport-google-oauth20";
 import MongoDBSession from "connect-mongodb-session";
 import asyncHandler from "../utils/async-handler.js";
 import UserSchema from "../models/schemas/User.js";

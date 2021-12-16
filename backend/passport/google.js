@@ -1,8 +1,9 @@
+/* eslint-disable import/extensions */
 import passport from "passport";
 import mongoose from "mongoose";
-import UserSchema from "../models/schemas/User";
+import UserSchema from "../models/schemas/User.js";
 
-let GoogleStrategy = require("passport-google-oauth").OAuth2Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 require("dotenv").config();
 
 const User = mongoose.model("User", UserSchema);
