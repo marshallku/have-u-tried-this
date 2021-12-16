@@ -1,0 +1,30 @@
+.footer__pages a,
+.footer__policy a {
+  color: #fff;
+  line-height: 1.6em;
+}
+
+.footer {
+  display: flex;
+  background: var(--lighter-bg);
+  width: 100%;
+  margin-top: 100px;
+  padding: 100px 0 50px 0;
+  min-height: 200px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  flex-basis: 200px;
+  justify-content: space-evenly;
+}
+
+.footer .footer__logo-image {
+  width: 200px;
+}
+
+.footer .footer__slogan {
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+  border-top: 2px solid var(--text);
+  font-size: 1.6em;
+}

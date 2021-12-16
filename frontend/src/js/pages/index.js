@@ -8,7 +8,14 @@ import UserPage from "./UserPage";
 
 const app = document.getElementById("app");
 
+function resetApp() {
+  while (app.firstChild) {
+    app.firstChild.remove();
+  }
+}
+
 export default function renderPage(page) {
+  resetApp();
   switch (page) {
     case "":
       app.append(FrontPage());

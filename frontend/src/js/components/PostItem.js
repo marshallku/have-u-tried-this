@@ -1,4 +1,5 @@
 import LikesCount from "./LikesCount";
+import { addClickEvent } from "../router";
 import "../../css/PostItem.css";
 
 export default function PostItem({ title, thumbnail, location, slug, likes }) {
@@ -11,10 +12,12 @@ export default function PostItem({ title, thumbnail, location, slug, likes }) {
   const articleInfo = document.createElement("div");
   const locationElt = document.createElement("div");
   const likesContainer = LikesCount(likes);
+  const to = `/post/${slug}`;
 
   // Article
   article.classList.add("post-item");
-  anchor.href = `/posts/${slug}`;
+  anchor.href = to;
+  addClickEvent(anchor, to);
 
   // Thumbnail
   figure.classList.add("post-item__thumbnail");
