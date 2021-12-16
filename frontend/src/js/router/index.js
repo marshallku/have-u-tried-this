@@ -7,7 +7,7 @@ export function route() {
 }
 
 export function updatePath(path) {
-  console.log(path);
+  window.scrollTo(0, 0);
   window.history.pushState("", document.title, path);
   route();
 }
