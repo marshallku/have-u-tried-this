@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable consistent-return */
 /* eslint-disable import/extensions */
 import { Router } from "express";
 import dotenv from "dotenv";
@@ -20,7 +18,8 @@ const User = mongoose.model("User", UserSchema);
 const passportConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/google/callback",
+  callbackURL: "http://localhost:3000/api/auth/google/callback",
+  passReqToCallback: true,
 };
 
 const MongoDBStore = MongoDBSession(session);
@@ -42,6 +41,18 @@ router.use(
 router.use(passport.initialize());
 router.use(passport.session());
 
+passport.serializeUser((user, done) => {
+  console.log("passport.serializeUser", user);
+  done(null, user.id);
+});
+
+// // 사용자가 페이지를 방문할 때마다 호출되는 함수
+// // done(null, id)로 사용자의 정보를 각 request의 user 변수에 넣어준다.
+passport.deserializeUser((id, done) => {
+  console.log("passport.deserializeUser", id);
+  done(null, id);
+});
+
 passport.use(
   new GoogleStrategy(
     passportConfig,
@@ -53,11 +64,12 @@ passport.use(
   ),
 );
 
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"] }),
+);
+
 // Google OAuth
-router.get("/google", (req, res) => {
-  console.log("TEST");
-  passport.authenticate("google", { scope: ["email", "profile"] });
-});
 
 router.get(
   "/google/callback",
@@ -70,7 +82,6 @@ router.get(
 router.get(
   "/test",
   asyncHandler(async (req, res) => {
-    const User = mongoose.model("User", UserSchema);
     const newUser = new User({
       googleId: uuidv4(),
       email: `${uuidv4()}@gmail.com`,
