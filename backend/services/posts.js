@@ -2,20 +2,17 @@
 import { Post, Location } from "../models/index.js";
 
 export async function getAll(addr) {
-  const { wideAddr, localAddr } = addr;
-  const location = await Location.find({ wideAddr, localAddr }).populate(
-    "posts",
-  );
+  const posts = await Post.find({ location: addr }).populate("location");
 
-  if (typeof location[0].posts === "undefined") {
+  if (posts.length === 0) {
     throw new Error("No data");
   }
 
-  return location[0].posts.map((post) => {
+  return posts.map((post) => {
     const data = {
       id: post.id,
-      wideAddr,
-      localAddr,
+      wideAddr: addr.wideAddr,
+      localAddr: addr.localAddr,
       photo: post.photos[0].url,
       title: post.photos[0].title,
       likes: post.likes,
@@ -41,6 +38,10 @@ export async function createPost(postDto) {
       });
       return prev;
     }, []),
+    location: {
+      wideAddr,
+      localAddr,
+    },
   });
 
   await Location.updateOne(

@@ -20,6 +20,16 @@ const PostSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    location: {
+      wideAddr: {
+        type: String,
+        required: true,
+      },
+      localAddr: {
+        type: String,
+        required: true,
+      },
+    },
   },
   {
     timestamps: true,
