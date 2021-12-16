@@ -45,6 +45,6 @@ module.exports = {
     port: 9990,
     hot: true,
     host: "localhost",
-    compress: true,
+    historyApiFallback: true,
   },
 };

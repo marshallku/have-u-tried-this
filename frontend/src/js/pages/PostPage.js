@@ -1,8 +1,9 @@
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
+import { fetchPostData } from "../api/dummy";
 import "../../css/PostDetails.css";
 
-export default function PostDetails(data) {
+function renderPostDetails(data) {
   const frag = document.createDocumentFragment();
   const carousel = Carousel(data.pictures);
   const smallContainer = document.createElement("section");
@@ -35,4 +36,14 @@ export default function PostDetails(data) {
   frag.append(carousel, smallContainer);
 
   return frag;
+}
+
+export default function PostDetails() {
+  const div = document.createElement("div");
+
+  fetchPostData().then((data) => {
+    div.append(renderPostDetails(data));
+  });
+
+  return div;
 }

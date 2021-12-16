@@ -1,5 +1,5 @@
-import GridContainer from "../components/GridContainer";
-import PostItem from "../components/PostItem";
+import GridContainer from "./GridContainer";
+import PostItem from "./PostItem";
 
 export default function List(data) {
   const container = GridContainer();
