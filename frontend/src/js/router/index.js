@@ -7,6 +7,7 @@ export function route() {
 }
 
 export function updatePath(path) {
+  console.log(path);
   window.history.pushState("", document.title, path);
   route();
 }
@@ -21,10 +22,6 @@ export function addClickEvent(elt, path) {
 
 export function initializeRouter() {
   route();
-
-  document.querySelectorAll("a").forEach((elt) => {
-    addClickEvent(elt, elt.pathname);
-  });
 
   window.addEventListener("popstate", (event) => {
     event.preventDefault();
