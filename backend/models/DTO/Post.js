@@ -5,15 +5,15 @@ export default class Post {
 
   photos;
 
-  location;
+  wideAddr;
+
+  localAddr;
 
   constructor(title, content, photos, wideAddr, localAddr) {
     this.title = title;
     this.content = content;
     this.photos = photos;
-    this.location = {
-      wideAddr,
-      localAddr,
-    };
+    this.wideAddr = wideAddr;
+    this.localAddr = localAddr;
   }
 }

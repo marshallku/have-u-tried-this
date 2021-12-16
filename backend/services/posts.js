@@ -1,35 +1,60 @@
 /* eslint-disable import/extensions */
-import { Post } from "../models/index.js";
+import { Post, Location } from "../models/index.js";
 
 export async function getAll(addr) {
-  const posts = await Post.find({ location: addr });
-  return posts.map((post) => {
+  const { wideAddr, localAddr } = addr;
+  const location = await Location.find({ wideAddr, localAddr }).populate(
+    "posts",
+  );
+
+  if (typeof location[0].posts === "undefined") {
+    throw new Error("No data");
+  }
+
+  return location[0].posts.map((post) => {
     const data = {
       id: post.id,
-      wideAddr: post.location.wideAddr,
-      localAddr: post.location.localAddr,
+      wideAddr,
+      localAddr,
       photo: post.photos[0].url,
-      title: post.title,
+      title: post.photos[0].title,
       likes: post.likes,
     };
     return data;
   });
 }
 export async function createPost(postDto) {
-  const { photos, ...rest } = postDto;
-  const post = {
-    ...rest,
-    photos: postDto.photos.reduce((prev, curr) => {
+  const { title, content, photos, wideAddr, localAddr } = postDto;
+
+  const location = await Location.findOne({ wideAddr, localAddr });
+  if (!location) {
+    throw new Error("Not exists");
+  }
+
+  const post = new Post({
+    title,
+    content,
+    photos: photos.reduce((prev, curr) => {
       prev.push({
         url: curr.filename,
         text: postDto.title,
       });
       return prev;
     }, []),
-  };
+  });
 
-  const postId = Post.create(post);
-  return postId;
+  await Location.updateOne(
+    { wideAddr, localAddr },
+    {
+      $push: {
+        posts: post,
+      },
+    },
+  );
+
+  await post.save();
+
+  return post.id;
 }
 export async function findById(id) {
   try {

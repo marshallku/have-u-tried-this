@@ -1,7 +1,7 @@
 /* eslint-disable import/extensions */
 import { Router } from "express";
 import { unlink } from "fs";
-import { join } from "path";
+import path from "path";
 import { validation } from "../services/locations.js";
 import {
   getAll,
@@ -55,14 +55,16 @@ router.post(
     const check = await findByTitle(title);
     if (check) {
       photos.forEach((photo) => {
-        unlink(join(__dirname, "../", photo.path), () => {});
+        // eslint-disable-next-line no-underscore-dangle
+        const __dirname = path.resolve();
+        unlink(path.join(__dirname, photo.path), () => {});
       });
       throw new Error("Already Exists");
     }
 
     const post = new PostDto(title, content, photos, wideAddr, localAddr);
     const postId = await createPost(post);
-    res.json({ id: postId.id });
+    res.json({ id: postId });
   }),
 );
 

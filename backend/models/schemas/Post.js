@@ -12,25 +12,10 @@ const PostSchema = new mongoose.Schema(
     },
     photos: [
       {
-        url: String, //
-        text: String, // 이미지 설명 title 저장
+        url: String,
+        text: String,
       },
     ],
-    // author: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-    location: {
-      wideAddr: {
-        type: String,
-        required: true,
-      },
-      localAddr: {
-        type: String,
-        required: true,
-      },
-    },
     likes: {
       type: Number,
       default: 0,
