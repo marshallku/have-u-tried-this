@@ -42,8 +42,7 @@ export default function GlobalNavigation() {
   // Profile
   profileWrap.classList.add("gnb__profile-image");
   Profile.src = "/static/images/default_profile.png";
-  profileAnchor.href = "/user";
-  addClickEvent(profileAnchor, "/user");
+  addClickEvent(profileAnchor, "/login");
   profileAnchor.append(Profile);
   profileWrap.append(profileAnchor);
 

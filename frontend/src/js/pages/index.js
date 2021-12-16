@@ -2,7 +2,6 @@ import FrontPage from "./FrontPage";
 import ListPage from "./ListPage";
 import PostPage from "./PostPage";
 import SignInPage from "./SignInPage";
-import SignUpPage from "./SignUpPage";
 import UploadPage from "./UploadPage";
 import UserPage from "./UserPage";
 
@@ -31,9 +30,6 @@ export default function renderPage(page) {
       break;
     case "login":
       app.append(SignInPage());
-      break;
-    case "signup":
-      app.append(SignUpPage());
       break;
     case "user":
       app.append(UserPage());

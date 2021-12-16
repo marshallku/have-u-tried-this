@@ -1,0 +1,34 @@
+.sign-in {
+  display: flex;
+  max-width: 880px;
+  min-height: calc(100vh - 200px);
+  margin: 0 auto;
+  padding: 10px 10px 100px 10px;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sign-in__logo {
+  width: 360px;
+}
+
+.sign-in__button {
+  display: flex;
+  height: 40px;
+  margin-top: auto;
+  padding: 4px 8px 4px 0;
+  align-items: center;
+  border-radius: 4px;
+  background-color: #4285f4;
+  color: var(--highlight-text);
+}
+
+.sign-in__button > img {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+}
+
+.sign-in__button > span {
+  font-size: 14px;
+}
