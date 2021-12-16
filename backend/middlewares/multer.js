@@ -14,7 +14,7 @@ export default function uploadFile(req, res, next) {
     dest: "public/uploads/",
     limits: { fileSize: 1024 * 1024 * 2 },
     fileFilter,
-  }).array("pictures", 4);
+  }).array("photos", 4);
 
   upload(req, res, (err) => {
     if (err instanceof MulterError) {
