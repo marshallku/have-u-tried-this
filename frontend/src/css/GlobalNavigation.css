@@ -4,6 +4,7 @@
   left: 0;
   display: flex;
   width: 100%;
+  padding: 0 20px;
   height: 70px;
   background: rgba(0, 0, 0, 0.8);
   -webkit-backdrop-filter: blur(8px) saturate(180%);
@@ -14,38 +15,46 @@
   /* position: fixed; */
 }
 
-.gnb > div {
-  height: 50px;
+.gnb__logo,
+.gnb__add-post,
+.gnb__profile-image {
+  flex-shrink: 0;
 }
 
-.gnb__logo {
-  margin-left: 30px;
+.gnb > div {
+  height: 45px;
 }
 
 .gnb__logo img {
-  height: 50px;
+  height: 45px;
 }
 
 .search--gnb {
+  display: none;
   width: 400px;
-  margin-left: 50px;
+  margin: 0 20px;
 }
 
 .search__input--gnb {
   width: 100%;
   padding: 0 10px;
-  height: 50px;
-  line-height: 50px;
+  height: 45px;
+  line-height: 45px;
   background-color: var(--lighter-bg);
   border-radius: 5px;
   font-size: 16px;
 }
 
+.gnb__add-post {
+  margin-left: auto;
+  margin-right: 15px;
+  font-size: 30px;
+  line-height: 45px;
+}
+
 .gnb__profile-image {
   min-width: 50px;
   border-radius: 50%;
-  margin-left: auto;
-  margin-right: 30px;
   overflow: hidden;
   background: var(--lightest-bg);
 }

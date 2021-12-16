@@ -9,12 +9,10 @@ export default function CityItem({ wide, local, thumbnail }) {
   const header = document.createElement("header");
   const wideLocation = document.createElement("h2");
   const localLocation = document.createElement("h3");
-  const to = `/location/${wide}/${local}`;
 
   // Article
   article.classList.add("city-item");
-  anchor.href = to;
-  addClickEvent(anchor, to);
+  addClickEvent(anchor, `/location/${wide}/${local}`);
 
   // Thumbnail
   figure.classList.add("city-item__thumbnail");

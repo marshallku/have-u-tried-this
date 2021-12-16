@@ -12,6 +12,7 @@ export function updatePath(path) {
 }
 
 export function addClickEvent(elt, path) {
+  elt.setAttribute("href", path);
   elt.addEventListener("click", (event) => {
     event.preventDefault();
     updatePath(path);
