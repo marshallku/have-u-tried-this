@@ -39,7 +39,7 @@
 }
 
 /* User Page - Comment */
-.main {
+.settings {
   float: right;
   width: calc(100% - 360px);
   height: 100%;
@@ -48,19 +48,19 @@
   overflow-x: hidden;
 }
 
-.main__title {
+.settings__title {
   font-size: 40px;
   padding: 50px;
 }
 
-.main__list {
+.settings__list {
   width: 100%;
   height: 250px;
   background-color: var(--lighter-bg);
   margin-bottom: 30px;
 }
 
-.main__list > div {
+.settings__list > div {
   height: 100%;
   padding: 20px;
   display: grid;
@@ -68,7 +68,7 @@
   grid-template-rows: 1fr 2fr;
 }
 
-.main__list--name {
+.settings__list--name {
   grid-column: 1;
   grid-row: 1;
   font-size: 30px;
@@ -76,7 +76,7 @@
   padding: 10px;
 }
 
-.main__list--comment {
+.settings__list--comment {
   grid-column: 1/3;
   grid-row: 2;
   padding: 20px;
@@ -89,14 +89,14 @@
   -webkit-box-orient: vertical;
 }
 
-.main__list--fix {
+.settings__list--fix {
   grid-column: 3/5;
   grid-row: 2;
   margin: 80px 30px 10px 80px;
   background-color: var(--lightest-bg);
 }
 
-.main__list--close {
+.settings__list--close {
   grid-column: 4;
   grid-row: 1;
   padding: 10px;
