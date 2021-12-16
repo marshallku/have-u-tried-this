@@ -86,7 +86,7 @@ function Drawer() {
   return nav;
 }
 
-export default async function UserPage() {
+export default function UserPage() {
   const fragment = document.createDocumentFragment();
   const drawer = Drawer();
 
