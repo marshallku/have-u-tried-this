@@ -1,43 +1,21 @@
 import mongoose from "mongoose";
 
-const UserSchema = new mongoose.Schema(
-  {
-    googleId: {
-      type: String,
-      unique: true,
-    },
-    email: {
-      type: String,
-      unique: true,
-    },
-    firstName: {
-      type: String,
-      default: null,
-    },
-    lastName: {
-      type: String,
-      default: null,
-    },
-    profileImage: {
-      type: String,
-    },
-    lastLoginAt: {
-      type: Date,
-      required: true,
-    },
-    isActive: {
-      type: Boolean,
-      required: true,
-      dafault: true,
-    },
+const UserSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    default: null,
   },
-  {
-    createdAt: {
-      type: Date,
-      immutable: true,
-    },
-    timestamps: true,
+  email: {
+    type: String,
+    required: [true, "email required"],
+    unique: [true, "email already registered"],
   },
-);
+  firstName: String,
+  lastName: String,
+  profilePhoto: String,
+  password: String,
+  source: { type: String, required: [true, "source not specified"] },
+  lastVisited: { type: Date, default: new Date() },
+});
 
 export default UserSchema;
