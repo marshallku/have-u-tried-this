@@ -29,7 +29,7 @@ router.get(
 
     const isExists = await validation(location);
     if (!isExists) {
-      throw new Error("Not access");
+      throw new Error("허용되지 않은 접근입니다.");
     }
 
     const postsByAddr = await getAll(location, page, perPage);
@@ -44,7 +44,7 @@ router.get(
     const { id } = req.params;
     const post = await findById(id);
     if (!post) {
-      throw new Error("No Data");
+      throw new Error("해당 글이 존재하지 않습니다.");
     }
     res.json(post);
   }),
@@ -66,7 +66,7 @@ router.post(
         const __dirname = path.resolve();
         unlink(path.join(__dirname, photo.path), () => {});
       });
-      throw new Error("Already Exists");
+      throw new Error("이미 존재하는 제목입니다.");
     }
 
     const post = new PostDto(title, content, photos, wideAddr, localAddr);

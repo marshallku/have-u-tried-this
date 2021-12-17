@@ -14,7 +14,7 @@ export async function getAll(_location, page, perPage) {
 
   // 데이터 없는 경우
   if (posts.length === 0) {
-    throw new Error("No data");
+    throw new Error("해당 지역의 글이 존재하지 않습니다.");
   }
 
   return {
@@ -42,7 +42,7 @@ export async function createPost(postDto) {
   // 존재하는 지역인지 검증
   const location = await Location.findOne({ wideAddr, localAddr });
   if (!location) {
-    throw new Error("Not exists");
+    throw new Error("올바른 지역 명이 아닙니다.");
   }
 
   // post 인스턴스 생성
@@ -85,7 +85,7 @@ export async function findById(id) {
     const post = await Post.findById(id);
     return post;
   } catch (err) {
-    throw new Error("No data");
+    throw new Error("글이 존재하지 않습니다.");
   }
 }
 export async function findByTitle(_title) {
