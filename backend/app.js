@@ -32,6 +32,10 @@ app.use((err, req, res, next) => {
 });
 
 // server listen
-app.listen(port, () => {
-  // console.log("Server start");
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    // console.log("Server start");
+  });
+}
+
+export default app;

@@ -20,8 +20,8 @@ router.get(
   "/",
   asyncHandler(async (req, res) => {
     const location = {
-      wideAddr: req.query["wide-addr"],
-      localAddr: req.query["local-addr"],
+      wideAddr: req.query.wide,
+      localAddr: req.query.local,
     };
 
     const page = req.query.page || 1;
