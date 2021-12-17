@@ -9,7 +9,6 @@ function renderPostDetails(data) {
   const smallContainer = document.createElement("section");
   const postInfo = document.createElement("div");
   const likes = LikesCount(data.likes);
-  const edit = document.createElement("button");
   const title = document.createElement("h2");
   const author = document.createElement("div");
   const authorAvatar = document.createElement("img");
@@ -26,6 +25,8 @@ function renderPostDetails(data) {
   postInfo.classList.add("details__info");
   postInfo.append(likes);
   if (data.isAuthor) {
+    const edit = document.createElement("button");
+
     edit.classList.add("icon-create");
     edit.addEventListener("click", () => {
       const nextStatus = !editing.status;
@@ -35,6 +36,7 @@ function renderPostDetails(data) {
 
       if (editing.status) {
         // End editing
+        edit.className = "icon-create";
         // Remove Attributes
         title.removeAttribute("role");
         title.classList.remove("details__title--editing");
@@ -52,6 +54,7 @@ function renderPostDetails(data) {
         // TODO: Update post with api
       } else {
         // Start editing
+        edit.className = "icon-save";
         editing.title = title.innerText;
         editing.desc = desc.innerText;
         title.setAttribute("role", "textbox");
@@ -72,8 +75,9 @@ function renderPostDetails(data) {
 
   // Author
   author.classList.add("details__author");
+  authorAvatar.src = data.author.profile;
   authorName.innerText = `by ${data.author.nickname}`;
-  author.append(authorName);
+  author.append(authorAvatar, authorName);
 
   // desc
   desc.classList.add("details__desc");
