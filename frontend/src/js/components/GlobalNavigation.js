@@ -1,5 +1,5 @@
+import { addClickEvent, updatePath } from "../router";
 import "../../css/GlobalNavigation.css";
-import { addClickEvent } from "../router";
 
 const Profile = document.createElement("img");
 
@@ -30,9 +30,15 @@ export default function GlobalNavigation() {
   search.type = "text";
   search.id = "search";
   search.name = "search";
-  search.placeholder = "검색어를 입력하세요.";
+  search.placeholder = "위치 검색";
   search.classList.add("search__input", "search__input--gnb");
 
+  searchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    // TODO: 입력받은 지역 올바른 지역인지 검증
+    const [wideAddr, localAddr] = search.value.split(" ");
+    updatePath(`/location/${wideAddr}/${localAddr}`);
+  });
   searchForm.append(search);
 
   // Nav
