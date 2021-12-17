@@ -1,8 +1,10 @@
+import renderHeader from "../components/Header";
 import renderPage from "../pages";
 
 export function route() {
   const path = window.location.pathname.split("/")[1];
 
+  renderHeader(path);
   renderPage(path);
 }
 
