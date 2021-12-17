@@ -1,0 +1,9 @@
+.likes {
+  cursor: pointer;
+  user-select: none;
+}
+
+.likes > i {
+  display: inline-block;
+  margin-right: 5px;
+}
