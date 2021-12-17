@@ -19,12 +19,40 @@ export default function Carousel(items) {
     containerWidth = container.offsetWidth;
   };
 
+  const Count = () => {
+    const count = document.createElement("span");
+    const item = {
+      elt: document.createElement("div"),
+      update: (number) => {
+        count.innerText = `${number}`;
+      },
+    };
+    const amount = document.createElement("span");
+    const slash = document.createTextNode(" / ");
+
+    count.innerText = "1";
+    amount.innerText = items.length;
+
+    item.elt.classList.add("carousel__counter");
+    item.elt.append(count, slash, amount);
+
+    return item;
+  };
+
+  const counter = Count();
+
   const slide = (direction) => {
     // First Page
-    if (currentIndex === 0 && direction === -1) return slide(0);
+    if (currentIndex === 0 && direction === -1) {
+      slide(0);
+      return;
+    }
 
     // Last page
-    if (direction === 1 && currentIndex === items.length - 1) return slide(0);
+    if (direction === 1 && currentIndex === items.length - 1) {
+      slide(0);
+      return;
+    }
 
     if (containerWidth === undefined) setContainerWidth();
 
@@ -89,35 +117,6 @@ export default function Carousel(items) {
     return button;
   };
 
-  const Count = () => {
-    const item = {
-      elt: document.createElement("div"),
-      update: function (number) {
-        count.innerText = `${number}`;
-      },
-    };
-    const count = document.createElement("span");
-    const amount = document.createElement("span");
-    const slash = document.createTextNode(" / ");
-
-    count.innerText = "1";
-    amount.innerText = items.length;
-
-    item.elt.classList.add("carousel__counter");
-    item.elt.append(count, slash, amount);
-
-    return item;
-  };
-
-  const handleTouchEnd = () => {
-    slider.classList.remove("carousel__items--transition-removed");
-    window.removeEventListener("touchmove", handleTouchMove);
-    scrollLocked = false;
-
-    if (Math.abs(diffX) > 100) slide(diffX > 0 ? 1 : -1);
-    else slide(0);
-  };
-
   const handleTouchMove = (event) => {
     if (scrollLocked && event.cancelable) event.preventDefault();
 
@@ -131,6 +130,15 @@ export default function Carousel(items) {
     }px, 0, 0)`;
   };
 
+  const handleTouchEnd = () => {
+    slider.classList.remove("carousel__items--transition-removed");
+    window.removeEventListener("touchmove", handleTouchMove);
+    scrollLocked = false;
+
+    if (Math.abs(diffX) > 100) slide(diffX > 0 ? 1 : -1);
+    else slide(0);
+  };
+
   const handleTouchStart = (event) => {
     if (event.touches.length > 1) return;
     if (containerWidth === undefined) setContainerWidth();
@@ -141,8 +149,6 @@ export default function Carousel(items) {
     window.addEventListener("touchmove", handleTouchMove);
     window.addEventListener("touchend", handleTouchEnd, { once: true });
   };
-
-  const counter = Count();
 
   container.classList.add("carousel-container");
   carousel.classList.add("carousel");
