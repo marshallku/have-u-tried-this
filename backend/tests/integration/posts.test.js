@@ -7,7 +7,10 @@ import app from "../../app";
 import { Post } from "../../models/index.js";
 
 describe("post 라우터 테스트", () => {
-  afterEach(async () => {
+  let postId;
+  let afterAllDeletePostId;
+
+  afterAll(async () => {
     // 글 생성 이후 정리
     await Post.findOneAndDelete({ title: "title" });
     // 중복 글 이후 정리
@@ -72,10 +75,10 @@ describe("post 라우터 테스트", () => {
     const res = await request(app).get("/api/posts/donotexistpostid").send();
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.message).toEqual("글이 존재하지 않습니다.");
+    expect(res.body.message).toEqual("존재하지 않는 글입니다.");
   });
 
-  test("Success Post /api/posts 글 생성 And GET /api/posts/id 글 상세 페이지", async () => {
+  test("Success Post /api/posts 글 생성", async () => {
     const __dirname = path.resolve();
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
@@ -89,28 +92,33 @@ describe("post 라우터 테스트", () => {
     expect(res.statusCode).toEqual(201);
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(["id"]));
 
-    const id = res.body.id;
-    const res2 = await request(app)
-      .get("/api/posts/" + id)
+    postId = res.body.id;
+  });
+
+  test("Success GET /api/posts/id 글 상세 페이지", async () => {
+    const res = await request(app)
+      .get("/api/posts/" + postId)
       .send();
 
-    expect(res2.statusCode).toEqual(200);
-    expect(res2.body.title).toEqual("title");
-    expect(res2.body.content).toEqual("content");
-    expect(res2.body.location.localAddr).toEqual("강남구");
-    expect(res2.body.likes).toBeGreaterThanOrEqual(0);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.title).toEqual("title");
+    expect(res.body.content).toEqual("content");
+    expect(res.body.location.localAddr).toEqual("강남구");
+    expect(res.body.likes).toBeGreaterThanOrEqual(0);
   });
 
   test("Failure Post /api/posts, 이미 존재하는 글 생성", async () => {
     const __dirname = path.resolve();
     const pwd = path.join(__dirname, "tests/integration/test-image");
-    await request(app)
+    const dummy = await request(app)
       .post("/api/posts")
       .field("title", "already")
       .field("content", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
+
+    afterAllDeletePostId = dummy.body.id;
 
     const res = await request(app)
       .post("/api/posts")
@@ -122,6 +130,11 @@ describe("post 라우터 테스트", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
+
+    // delete already test dummy
+    await request(app)
+      .delete("/api/posts/" + afterAllDeletePostId)
+      .send();
   });
 
   test("Failure Post /api/posts, 4개 이상 그림 업로드", async () => {
@@ -173,5 +186,21 @@ describe("post 라우터 테스트", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message).toEqual("이미지 파일만 업로드 가능합니다.");
+  });
+
+  test("Success DELETE /api/posts/:id 포스트 삭제", async () => {
+    const res = await request(app)
+      .delete("/api/posts/" + postId)
+      .send();
+
+    expect(res.status).toEqual(200);
+    expect(res.body).toEqual({ success: true });
+  });
+
+  test("Failure DELETE /api/posts/:id 포스트 삭제", async () => {
+    const res = await request(app).delete("/api/posts/123").send();
+
+    expect(res.status).toEqual(400);
+    expect(res.body).toEqual({ message: "존재하지 않는 글입니다." });
   });
 });

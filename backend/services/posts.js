@@ -1,4 +1,6 @@
 /* eslint-disable import/extensions */
+import fs from "fs";
+import path from "path";
 import { Post, Location } from "../models/index.js";
 import resizeFile from "../utils/file-resize.js";
 
@@ -84,11 +86,38 @@ export async function findById(id) {
   try {
     const post = await Post.findById(id);
     return post;
-  } catch (err) {
-    throw new Error("글이 존재하지 않습니다.");
+  } catch (e) {
+    throw new Error("존재하지 않는 글입니다.");
   }
 }
 export async function findByTitle(_title) {
   const post = await Post.findOne({ title: _title });
   return post;
+}
+
+export async function deletePost(postId) {
+  try {
+    const post = await Post.findByIdAndDelete(postId);
+    // 사진 삭제, DB에서는 삭제 되는지 확인 필요
+    const { photos, location } = post;
+    // eslint-disable-next-line no-underscore-dangle
+    const __dirname = path.resolve();
+    photos.forEach((photo) => {
+      fs.unlinkSync(path.join(__dirname, "public/uploads", photo.url));
+    });
+
+    await Location.updateOne(
+      {
+        wideAddr: location.wideAddr,
+        localAddr: location.localAddr,
+      },
+      {
+        $pull: {
+          posts: { _id: postId },
+        },
+      },
+    );
+  } catch (e) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }

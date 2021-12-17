@@ -8,6 +8,7 @@ import {
   findById,
   findByTitle,
   createPost,
+  deletePost,
 } from "../services/posts.js";
 import uploadFile from "../middlewares/multer.js";
 import PostDto from "../models/DTO/Post.js";
@@ -43,9 +44,6 @@ router.get(
   asyncHandler(async (req, res) => {
     const { id } = req.params;
     const post = await findById(id);
-    if (!post) {
-      throw new Error("해당 글이 존재하지 않습니다.");
-    }
     res.json(post);
   }),
 );
@@ -72,6 +70,16 @@ router.post(
     const post = new PostDto(title, content, photos, wideAddr, localAddr);
     const postId = await createPost(post);
     res.status(201).json({ id: postId });
+  }),
+);
+
+// 포스트 삭제 로직
+router.delete(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    await deletePost(postId);
+    res.json({ success: true });
   }),
 );
 

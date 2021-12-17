@@ -8,7 +8,10 @@ export async function getAll(page, perPage) {
   }).countDocuments();
   const totalPage = Math.ceil(total / perPage);
 
-  const locations = await Location.find({ posts: { $type: "array" } })
+  // posts가 없는 로케이션, posts가 있어도 size가 0인 경우 제외
+  const locations = await Location.find({
+    $nor: [{ posts: { $exists: false } }, { posts: { $size: 0 } }],
+  })
     .sort({ wideAddr: -1 })
     .skip((page - 1) * perPage)
     .limit(perPage)
