@@ -5,13 +5,15 @@ import { Router } from "express";
 import dotenv from "dotenv";
 import passport from "passport";
 import mongoose from "mongoose";
-import session from "express-session";
 import { v4 as uuidv4 } from "uuid";
 import passportGoogleOAuth from "passport-google-oauth20";
-import MongoDBSession from "connect-mongodb-session";
 import asyncHandler from "../utils/async-handler.js";
 import UserSchema from "../models/schemas/User.js";
-import { getUserByEmail, addGoogleUser } from "../services/users.service.js";
+import {
+  getUserById,
+  // getUserByEmail,
+  addGoogleUser,
+} from "../services/users.service.js";
 
 dotenv.config();
 
@@ -25,28 +27,13 @@ const passportConfig = {
   passReqToCallback: true,
 };
 
-const MongoDBStore = MongoDBSession(session);
-const sessionStore = new MongoDBStore({
-  uri: "mongodb://localhost:27017/session",
-  collection: "mySessions",
-});
-
-router.use(
-  session({
-    secret: "secret-key",
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-  }),
-);
-
 // passport 초기화 및 session 연결
 router.use(passport.initialize());
 router.use(passport.session());
 
 passport.serializeUser((user, done) => {
   console.log("passport.serializeUser", user);
-  done(null, user.id);
+  done(null, user);
 });
 
 // // 사용자가 페이지를 방문할 때마다 호출되는 함수
@@ -61,7 +48,8 @@ passport.use(
   new GoogleStrategy(
     passportConfig,
     (accessToken, refreshToken, params, profile, done) => {
-      console.log({ accessToken, refreshToken, params, profile, done });
+      // console.log({ accessToken, refreshToken, params, profile, done });
+      console.log({ profile });
       const googleId = profile.id;
       const email = profile.emails[0].value;
       const firstName = profile.name.givenName;
@@ -69,7 +57,7 @@ passport.use(
       const profilePhoto = profile.photos[0].value;
       const source = profile.provider;
 
-      const currentUser = getUserByEmail({ email });
+      const currentUser = getUserById({ googleId });
       if (!currentUser) {
         const newUser = addGoogleUser({
           googleId,
@@ -103,7 +91,6 @@ router.get("/", (req, res) => {
 
 router.get(
   "/google",
-
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
@@ -111,9 +98,11 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
+  passport.authenticate("google", {
+    failureRedirect: "/api/auth?type=failed",
+  }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/api/auth?type=success");
   },
 );
 
@@ -126,7 +115,8 @@ router.get(
       firstName: "firstName",
       lastName: "lastName",
       profileImage: "profileImage",
-      lastLoginAt: new Date(),
+      source: "test",
+      lastVisited: new Date(),
       isActive: true,
     });
     newUser.save();

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable import/extensions */
 import { User } from "../models/index.js";
@@ -8,6 +9,7 @@ export const addGoogleUser = ({
   firstName,
   lastName,
   profilePhoto,
+  source,
 }) => {
   const user = new User({
     googleId,
@@ -15,15 +17,27 @@ export const addGoogleUser = ({
     firstName,
     lastName,
     profilePhoto,
-    source: "google",
+    source,
   });
   return user.save();
 };
 
-export const getUsers = (googleId) => User.find({ googleId });
-
-export const getUserByEmail = (email) => {
-  User.findOne({ email });
+export const getUserById = (googleId) => {
+  User.find({ googleId }).then((err, user) => {
+    if (err) {
+      console.error(err);
+    }
+    return user;
+  });
 };
 
-export default getUsers;
+export const getUserByEmail = (email) => {
+  User.find({ email }).then((err, user) => {
+    if (err) {
+      console.error(err);
+    }
+    return user;
+  });
+};
+
+export default getUserById;
