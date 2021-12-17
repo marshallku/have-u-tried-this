@@ -1,6 +1,14 @@
-const tmpLocation = {
-  wideAddr: "서울특별시",
-  localAddr: "종로구",
+export const dummyAddress = {
+  서울특별시: ["종로구", "중구"],
+  광주광역시: ["동구", "서구", "남구", "북구", "광산구"],
+  대전광역시: ["동구", "중구", "서구", "유성구", "대덕구"],
+  울산광역시: ["중구", "남구", "동구", "북구", "울주군"],
+  세종특별자치시: ["세종특별자치시"],
+  경기도: ["수원시"],
+  강원도: ["춘천시"],
+  충청북도: ["청주시", "충주시"],
+  충청남도: ["천안시", "공주시"],
+  제주특별자치도: ["제주시", "서귀포시"],
 };
 
 const tmpUser = {
@@ -77,4 +85,8 @@ export async function fetchPostListData() {
 
 export async function fetchUserData() {
   return tmpUser;
+}
+
+export async function fetchAddressData() {
+  return dummyAddress;
 }
