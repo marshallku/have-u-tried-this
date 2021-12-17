@@ -71,7 +71,7 @@ router.post(
 
     const post = new PostDto(title, content, photos, wideAddr, localAddr);
     const postId = await createPost(post);
-    res.json({ id: postId });
+    res.status(201).json({ id: postId });
   }),
 );
 
