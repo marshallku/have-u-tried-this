@@ -1,7 +1,6 @@
 .sign-in {
   display: flex;
   max-width: 880px;
-  min-height: calc(100vh - 200px);
   margin: 0 auto;
   padding: 10px 10px 100px 10px;
   flex-direction: column;
@@ -9,13 +8,29 @@
 }
 
 .sign-in__logo {
-  width: 360px;
+  width: clamp(0px, 300px, 80%);
+}
+
+.sign-in__container {
+  margin-top: 5rem;
+  padding: 40px 20px;
+  text-align: center;
+  border: 2px solid var(--lightest-bg);
+  border-radius: 5px;
+}
+
+.sign-in__title {
+  font-size: 2rem;
+}
+
+.sign-in__info {
+  margin: 3.5rem 0;
+  font-size: 1.2rem;
 }
 
 .sign-in__button {
-  display: flex;
+  display: inline-flex;
   height: 40px;
-  margin-top: auto;
   padding: 4px 8px 4px 0;
   align-items: center;
   border-radius: 4px;
