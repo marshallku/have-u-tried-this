@@ -2,6 +2,7 @@
 import { Location } from "../models/index.js";
 
 export async function getAll(page, perPage) {
+  // 페이지네이션
   const total = await Location.find({
     posts: { $type: "array" },
   }).countDocuments();
@@ -12,6 +13,8 @@ export async function getAll(page, perPage) {
     .skip((page - 1) * perPage)
     .limit(perPage)
     .populate("posts");
+
+  // api 명세에 맞게 데이터 파싱
   const parsedLocations = locations.map((location) => {
     const data = {
       wideAddr: location.wideAddr,

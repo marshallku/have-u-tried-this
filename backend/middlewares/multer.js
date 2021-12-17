@@ -11,7 +11,11 @@ function fileFilter(req, file, cb) {
 
 export default function uploadFile(req, res, next) {
   const upload = multer({
-    dest: "public/uploads/",
+    storage: multer.diskStorage({
+      destination(_req, file, cb) {
+        cb(null, "public/uploads");
+      },
+    }),
     limits: { fileSize: 1024 * 1024 * 2 },
     fileFilter,
   }).array("photos", 4);

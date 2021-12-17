@@ -5,6 +5,7 @@ import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
 
+// 로케이션 리스트 페이지, 인덱스 페이지
 router.get(
   "/",
   asyncHandler(async (req, res) => {

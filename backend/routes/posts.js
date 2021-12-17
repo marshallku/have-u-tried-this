@@ -15,6 +15,7 @@ import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
 
+// 지역 별 포스트 리스트 페이지
 router.get(
   "/",
   asyncHandler(async (req, res) => {
@@ -36,6 +37,7 @@ router.get(
   }),
 );
 
+// 포스트 상세 페이지
 router.get(
   "/:id",
   asyncHandler(async (req, res) => {
@@ -48,6 +50,7 @@ router.get(
   }),
 );
 
+// 포스트 등록
 router.post(
   "/",
   uploadFile,
@@ -56,6 +59,7 @@ router.post(
     const { title, content, wideAddr, localAddr } = req.body;
 
     const check = await findByTitle(title);
+    // 타이틀 중복 시 업로드된 이미지 제거
     if (check) {
       photos.forEach((photo) => {
         // eslint-disable-next-line no-underscore-dangle

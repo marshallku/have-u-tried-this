@@ -1,7 +1,9 @@
 /* eslint-disable import/extensions */
 import { Post, Location } from "../models/index.js";
+import resizeFile from "../utils/file-resize.js";
 
 export async function getAll(_location, page, perPage) {
+  // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
   const totalPage = Math.ceil(total / perPage);
   const posts = await Post.find({ location: _location })
@@ -10,6 +12,7 @@ export async function getAll(_location, page, perPage) {
     .limit(perPage)
     .populate("location");
 
+  // 데이터 없는 경우
   if (posts.length === 0) {
     throw new Error("No data");
   }
@@ -36,11 +39,13 @@ export async function getAll(_location, page, perPage) {
 export async function createPost(postDto) {
   const { title, content, photos, wideAddr, localAddr } = postDto;
 
+  // 존재하는 지역인지 검증
   const location = await Location.findOne({ wideAddr, localAddr });
   if (!location) {
     throw new Error("Not exists");
   }
 
+  // post 인스턴스 생성
   const post = new Post({
     title,
     content,
@@ -57,6 +62,7 @@ export async function createPost(postDto) {
     },
   });
 
+  // location에 post data 추가
   await Location.updateOne(
     { wideAddr, localAddr },
     {
@@ -66,7 +72,11 @@ export async function createPost(postDto) {
     },
   );
 
+  // post 데이터 저장
   await post.save();
+
+  // 사진 리사이즈
+  resizeFile(photos);
 
   return post.id;
 }
