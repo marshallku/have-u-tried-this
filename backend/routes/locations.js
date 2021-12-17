@@ -8,7 +8,10 @@ const router = Router();
 router.get(
   "/",
   asyncHandler(async (req, res) => {
-    const locations = await getAll();
+    const page = req.query.page || 1;
+    const perPage = req.query.perPage || 9;
+
+    const locations = await getAll(page, perPage);
     res.json(locations);
   }),
 );

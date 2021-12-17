@@ -1,24 +1,37 @@
 /* eslint-disable import/extensions */
 import { Post, Location } from "../models/index.js";
 
-export async function getAll(addr) {
-  const posts = await Post.find({ location: addr }).populate("location");
+export async function getAll(_location, page, perPage) {
+  const total = await Post.find({ location: _location }).countDocuments();
+  const totalPage = Math.ceil(total / perPage);
+  const posts = await Post.find({ location: _location })
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * perPage)
+    .limit(perPage)
+    .populate("location");
 
   if (posts.length === 0) {
     throw new Error("No data");
   }
 
-  return posts.map((post) => {
-    const data = {
-      id: post.id,
-      wideAddr: addr.wideAddr,
-      localAddr: addr.localAddr,
-      photo: post.photos[0].url,
-      title: post.photos[0].title,
-      likes: post.likes,
-    };
-    return data;
-  });
+  return {
+    data: posts.map((post) => {
+      const data = {
+        id: post.id,
+        wideAddr: _location.wideAddr,
+        localAddr: _location.localAddr,
+        photo: post.photos[0].url,
+        title: post.photos[0].title,
+        likes: post.likes,
+      };
+      return data;
+    }),
+    pagination: {
+      page,
+      perPage,
+      totalPage,
+    },
+  };
 }
 export async function createPost(postDto) {
   const { title, content, photos, wideAddr, localAddr } = postDto;

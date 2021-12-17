@@ -23,12 +23,15 @@ router.get(
       localAddr: req.query["local-addr"],
     };
 
+    const page = req.query.page || 1;
+    const perPage = req.query.page || 9;
+
     const isExists = await validation(location);
     if (!isExists) {
       throw new Error("Not access");
     }
 
-    const postsByAddr = await getAll(location);
+    const postsByAddr = await getAll(location, page, perPage);
     res.json(postsByAddr);
   }),
 );
