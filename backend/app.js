@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import path from "path";
 import favicon from "serve-favicon";
+import httpError from "http-errors";
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
@@ -38,8 +39,9 @@ app.listen(port, () => {
 // Error handler
 // 404 error
 app.use((req, res, next) => {
-  next("404 Not Found");
+  next(httpError(404));
 });
+
 app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send({ message: err });
