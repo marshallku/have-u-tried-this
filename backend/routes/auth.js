@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import { Router } from "express";
 import dotenv from "dotenv";
@@ -9,6 +10,7 @@ import passportGoogleOAuth from "passport-google-oauth20";
 import MongoDBSession from "connect-mongodb-session";
 import asyncHandler from "../utils/async-handler.js";
 import UserSchema from "../models/schemas/User.js";
+import UserService from "../services/users.js";
 
 dotenv.config();
 
@@ -58,6 +60,37 @@ passport.use(
     passportConfig,
     (accessToken, refreshToken, profile, done) => {
       console.log({ accessToken, refreshToken, profile, done });
+      const { id } = profile;
+      const email = profile.emails[0].value;
+      const firstName = profile.name.givenName;
+      const lastName = profile.name.familyName;
+      const profilePhoto = profile.photos[0].value;
+      const source = "google";
+
+      const currentUser = UserService.getUserByEmail({ email });
+      if (!currentUser) {
+        const newUser = UserService.addGoogleUser({
+          id,
+          email,
+          firstName,
+          lastName,
+          profilePhoto,
+          source,
+        });
+        return done(null, newUser);
+      }
+
+      if (currentUser.source !== "google") {
+        // return error
+        return done(null, false, {
+          message:
+            "You have previously signed up with a different signin method",
+        });
+      }
+
+      currentUser.lastVisited = new Date();
+      return done(null, currentUser);
+
       // User.findOrCreate({ googleId: profile.id }, (err, user) =>
       // done(err, user),
       // );

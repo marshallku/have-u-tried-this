@@ -7,6 +7,8 @@ import dotenv from "dotenv";
 import path from "path";
 import favicon from "serve-favicon";
 import httpError from "http-errors";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
@@ -18,9 +20,13 @@ const port = process.env.PORT || 3000;
 
 app.use(json());
 
-// favicon
+// parsers and favicon
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 const __dirname = path.resolve();
+app.use(express.static(`${__dirname}/public`));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(cookieParser());
 
 // mongo DB & mongoose
 const mongoUri = process.env.MONGO_DB_URI;
