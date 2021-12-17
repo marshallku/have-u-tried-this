@@ -1,5 +1,6 @@
 import { addClickEvent, updatePath } from "../router";
 import "../../css/GlobalNavigation.css";
+import WordAutoComplete from "./WordAutoComplete";
 
 const Profile = document.createElement("img");
 
@@ -13,6 +14,8 @@ export default function GlobalNavigation() {
   const createPost = document.createElement("a");
   const profileWrap = document.createElement("div");
   const profileAnchor = document.createElement("a");
+  const dataList = document.createElement("datalist");
+  WordAutoComplete(dataList);
 
   // Nav
   nav.classList.add("gnb");
@@ -31,7 +34,9 @@ export default function GlobalNavigation() {
   search.id = "search";
   search.name = "search";
   search.placeholder = "위치 검색";
+  search.setAttribute("list", "address");
   search.classList.add("search__input", "search__input--gnb");
+  dataList.id = "address";
 
   searchForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -40,6 +45,7 @@ export default function GlobalNavigation() {
     updatePath(`/location/${wideAddr}/${localAddr}`);
   });
   searchForm.append(search);
+  searchForm.append(dataList);
 
   // Nav
   createPost.classList.add("gnb__add-post", "icon-add_a_photo");
