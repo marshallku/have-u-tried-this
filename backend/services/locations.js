@@ -39,3 +39,18 @@ export async function validation(location) {
   const check = await Location.findOne({ wideAddr, localAddr });
   return check;
 }
+
+export async function getAllLocations() {
+  const locations = await Location.find({});
+  return locations.reduce((prev, curr) => {
+    const key = curr.wideAddr;
+    if (!prev[key]) {
+      // eslint-disable-next-line no-param-reassign
+      prev[key] = [];
+      prev[key].push(curr.localAddr);
+    } else {
+      prev[key].push(curr.localAddr);
+    }
+    return prev;
+  }, {});
+}

@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { Router } from "express";
-import { getAll } from "../services/locations.js";
+import { getAll, getAllLocations } from "../services/locations.js";
 import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
@@ -13,6 +13,14 @@ router.get(
     const perPage = req.query.perPage || 9;
 
     const locations = await getAll(page, perPage);
+    res.json(locations);
+  }),
+);
+
+router.get(
+  "/all",
+  asyncHandler(async (_req, res) => {
+    const locations = await getAllLocations();
     res.json(locations);
   }),
 );
