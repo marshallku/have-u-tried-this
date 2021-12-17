@@ -77,7 +77,7 @@ describe("post 라우터 테스트", () => {
 
   test("Success Post /api/posts 글 생성 And GET /api/posts/id 글 상세 페이지", async () => {
     const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/routes/test-image");
+    const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title")
@@ -103,7 +103,7 @@ describe("post 라우터 테스트", () => {
 
   test("Failure Post /api/posts, 이미 존재하는 글 생성", async () => {
     const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/routes/test-image");
+    const pwd = path.join(__dirname, "tests/integration/test-image");
     await request(app)
       .post("/api/posts")
       .field("title", "already")
@@ -126,7 +126,7 @@ describe("post 라우터 테스트", () => {
 
   test("Failure Post /api/posts, 4개 이상 그림 업로드", async () => {
     const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/routes/test-image");
+    const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
@@ -145,7 +145,7 @@ describe("post 라우터 테스트", () => {
 
   test("Failure Post /api/posts, 너무 큰 용량 파일", async () => {
     const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/routes/test-image");
+    const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
@@ -161,7 +161,7 @@ describe("post 라우터 테스트", () => {
 
   test("Failure Post /api/posts, 파일 형식 빌런", async () => {
     const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/routes/test-image");
+    const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
