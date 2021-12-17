@@ -20,7 +20,18 @@
 }
 
 .details__author {
+  display: flex;
   margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.details__author > img {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 5px;
 }
 
 .details__desc {
