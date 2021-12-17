@@ -57,15 +57,22 @@ passport.use(
   new GoogleStrategy(
     passportConfig,
     (accessToken, refreshToken, profile, done) => {
-      User.findOrCreate({ googleId: profile.id }, (err, user) =>
-        done(err, user),
-      );
+      console.log({ accessToken, refreshToken, profile, done });
+      // User.findOrCreate({ googleId: profile.id }, (err, user) =>
+      // done(err, user),
+      // );
     },
   ),
 );
 
+router.get("/", (req, res) => {
+  const user = req?.user || null;
+  res.json({ user });
+});
+
 router.get(
   "/google",
+
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
 
@@ -99,7 +106,7 @@ router.get(
 // logout
 router.get("/logout", (req, res) => {
   req.logout();
-  res.redirect("/login");
+  res.redirect("/");
 });
 
 export default router;

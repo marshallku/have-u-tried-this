@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import express, { json } from "express";
 import mongoose from "mongoose";
@@ -22,15 +23,14 @@ app.use("/api/locations", locationRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/auth", authRouter);
 
+// Error handler
 // 404 error
 app.use((req, res, next) => {
   next("404 Not Found");
 });
-
-// Error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  res.status(400).json({ message: err });
+app.use((err, req, res) => {
+  console.error(err.stack);
+  res.status(500).json({ message: err });
 });
 
 // server listen
