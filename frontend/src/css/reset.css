@@ -121,4 +121,5 @@ em {
   box-sizing: border-box;
   scrollbar-width: thin;
   scrollbar-color: var(--main-color) var(--bg-color);
+  -webkit-tap-highlight-color: transparent;
 }

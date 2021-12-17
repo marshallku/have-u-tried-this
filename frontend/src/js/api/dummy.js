@@ -44,6 +44,7 @@ export async function fetchPostData() {
       "https://lh3.googleusercontent.com/pw/AM-JKLWtmyoI-4ieFleNiT1uPTQy2jXoYC-a5aokwTb7WAUi-iQQ-xb0vOu28rxbGXYDNVRnTKEZyTC_7x3SStfVMJZresseuK0eyHX1irtR5eo0w9SEKw1ToSiI-jyLwvmiRLhNLTlHkfZdUwIu9L_XQGZc=s1080-no",
     ],
     author: tmpUser,
+    isAuthor: true,
     location: tmpLocation,
     createdAt: new Date("2021-12-13T16:00:00Z"),
     updatedAt: new Date("2021-12-14T18:00:00Z"),

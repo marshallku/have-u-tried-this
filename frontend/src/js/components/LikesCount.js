@@ -1,12 +1,12 @@
 import "../../css/LikesCount.css";
 
 export default function LikesCount(number) {
-  const likesContainer = document.createElement("div");
+  const likesButton = document.createElement("button");
   const icon = document.createElement("i");
   const likesElt = document.createTextNode(`${number}`);
 
-  likesContainer.classList.add("likes");
-  likesContainer.addEventListener("click", () => {
+  likesButton.classList.add("likes");
+  likesButton.addEventListener("click", () => {
     // TODO: api 통신 추가
     const currentLiked = parseInt(likesElt.textContent, 10);
     const liked = icon.classList.toggle("icon-favorite");
@@ -22,7 +22,7 @@ export default function LikesCount(number) {
   // TODO: 좋아한 게시글인지 확인해서 class 추가
   icon.classList.add("icon-favorite_outline");
 
-  likesContainer.append(icon, likesElt);
+  likesButton.append(icon, likesElt);
 
-  return likesContainer;
+  return likesButton;
 }
