@@ -3,14 +3,14 @@
 import { User } from "../models/index.js";
 
 export const addGoogleUser = ({
-  id,
+  googleId,
   email,
   firstName,
   lastName,
   profilePhoto,
 }) => {
   const user = new User({
-    id,
+    googleId,
     email,
     firstName,
     lastName,
@@ -20,7 +20,7 @@ export const addGoogleUser = ({
   return user.save();
 };
 
-export const getUsers = (id) => User.find({ id });
+export const getUsers = (googleId) => User.find({ googleId });
 
 export const getUserByEmail = (email) => {
   User.findOne({ email });

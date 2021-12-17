@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-  id: {
+  googleId: {
     type: String,
     default: null,
   },
