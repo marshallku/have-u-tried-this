@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import { Router } from "express";
@@ -10,7 +11,7 @@ import passportGoogleOAuth from "passport-google-oauth20";
 import MongoDBSession from "connect-mongodb-session";
 import asyncHandler from "../utils/async-handler.js";
 import UserSchema from "../models/schemas/User.js";
-import UserService from "../services/users.js";
+import { getUserByEmail, addGoogleUser } from "../services/users.service.js";
 
 dotenv.config();
 
@@ -52,25 +53,26 @@ passport.serializeUser((user, done) => {
 // // done(null, id)로 사용자의 정보를 각 request의 user 변수에 넣어준다.
 passport.deserializeUser((id, done) => {
   console.log("passport.deserializeUser", id);
-  done(null, id);
+  const currentUser = User.findOne({ id });
+  done(null, currentUser);
 });
 
 passport.use(
   new GoogleStrategy(
     passportConfig,
-    (accessToken, refreshToken, profile, done) => {
-      console.log({ accessToken, refreshToken, profile, done });
-      const { id } = profile;
+    (accessToken, refreshToken, params, profile, done) => {
+      console.log({ accessToken, refreshToken, params, profile, done });
+      const googleId = profile.id;
       const email = profile.emails[0].value;
       const firstName = profile.name.givenName;
       const lastName = profile.name.familyName;
       const profilePhoto = profile.photos[0].value;
-      const source = "google";
+      const source = profile.provider;
 
-      const currentUser = UserService.getUserByEmail({ email });
+      const currentUser = getUserByEmail({ email });
       if (!currentUser) {
-        const newUser = UserService.addGoogleUser({
-          id,
+        const newUser = addGoogleUser({
+          googleId,
           email,
           firstName,
           lastName,
@@ -90,10 +92,6 @@ passport.use(
 
       currentUser.lastVisited = new Date();
       return done(null, currentUser);
-
-      // User.findOrCreate({ googleId: profile.id }, (err, user) =>
-      // done(err, user),
-      // );
     },
   ),
 );
@@ -138,8 +136,11 @@ router.get(
 
 // logout
 router.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
+  // req.logout();
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.redirect("/");
+  });
 });
 
 export default router;
