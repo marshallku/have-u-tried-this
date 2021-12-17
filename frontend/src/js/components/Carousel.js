@@ -68,8 +68,11 @@ export default function Carousel(items) {
   const Button = (text, direction) => {
     const button = document.createElement("button");
 
-    button.innerText = text;
-    button.classList.add("carousel__button", `carousel__button--to-${text}`);
+    button.classList.add(
+      "carousel__button",
+      `carousel__button--${text}`,
+      "icon-arrow_forward_ios",
+    );
 
     button.addEventListener("click", () => {
       slide(direction);
@@ -159,8 +162,8 @@ export default function Carousel(items) {
   carousel.append(dotsContainer);
   carousel.append(counter.elt);
   [
-    ["prev", -1],
-    ["next", 1],
+    ["back", -1],
+    ["forward", 1],
   ].forEach(([text, direction]) => {
     const button = Button(text, direction);
 

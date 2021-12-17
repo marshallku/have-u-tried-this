@@ -44,11 +44,11 @@
 
 .carousel__counter {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  padding: 10px 20px;
-  font-size: 0.8rem;
-  background-color: rgba(255, 255, 255, 0.25);
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  background-color: rgba(0, 0, 0, 0.35);
   border-radius: 2rem;
 }
 
@@ -75,15 +75,17 @@
 
 .carousel__button {
   position: absolute;
+  font-size: 32px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.carousel__button--to-prev {
+.carousel__button--back {
   left: 0;
+  transform: translateY(-50%) scaleX(-1);
 }
 
-.carousel__button--to-next {
+.carousel__button--forward {
   right: 0;
 }
 

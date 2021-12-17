@@ -39,6 +39,9 @@
 .icon-add_circle_outline:before {
   content: "\e905";
 }
+.icon-create:before {
+  content: "\e926";
+}
 .icon-filter_list:before {
   content: "\e906";
 }
@@ -125,6 +128,9 @@
 }
 .icon-calendar_today:before {
   content: "\e921";
+}
+.icon-edit_off:before {
+  content: "\e927";
 }
 .icon-filter_alt:before {
   content: "\e922";

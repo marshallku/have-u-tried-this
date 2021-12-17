@@ -1,6 +1,16 @@
 .small-container {
-  max-width: 860px;
+  max-width: 880px;
   margin: 3rem auto 0 auto;
+  padding: 0 10px;
+}
+
+.details__info {
+  display: flex;
+  font-size: 1.2rem;
+}
+
+.details__rate {
+  margin-right: auto;
 }
 
 .details__title {
@@ -13,6 +23,15 @@
   margin-bottom: 2rem;
 }
 
-.details__text {
+.details__desc {
   line-height: 1.7;
+}
+.details__title,
+.details__desc {
+  border-bottom: 2px solid var(--bg);
+}
+
+.details__title--editing,
+.details__desc--editing {
+  border-color: var(--primary);
 }
