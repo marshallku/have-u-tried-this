@@ -53,7 +53,10 @@ export async function fetchPostData() {
     ],
     author: tmpUser,
     isAuthor: true,
-    location: tmpLocation,
+    location: {
+      wideAddr: "서울특별시",
+      localAddr: "종로구",
+    },
     createdAt: new Date("2021-12-13T16:00:00Z"),
     updatedAt: new Date("2021-12-14T18:00:00Z"),
     likes: 8,
