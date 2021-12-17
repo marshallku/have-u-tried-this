@@ -31,3 +31,7 @@ html {
 body {
   padding-top: 70px;
 }
+
+.highlight {
+  color: var(--highlight-text);
+}
