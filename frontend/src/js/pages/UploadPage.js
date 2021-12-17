@@ -1,42 +1,62 @@
 import "../../css/UploadImage.css";
+import toast from "../utils/toast";
 
-export default function UploadImage() {
+export default function UploadPage(){
   const container = document.createElement("section");
   const form = document.createElement("form");
   const imageContent = document.createElement("div");
-  const imageContentUpload = document.createElement("div");
-  const imageContentBox = document.createElement("div");
-  const imageContentLabel = document.createElement("label");
-  const imageContentInput = document.createElement("input");
   const imageContentPreview = document.createElement("div");
+  const imageUploadGPS = document.createElement("div");
+  const imageUploadInput = document.createElement("input");
+  const dataList = document.createElement("datalist");
+  const imageContentCompleteBox = document.createElement("div");
+  const imageContentLabel = document.createElement("label");
+  const imageContentInner = document.createElement("div");
+  const imageContentText = document.createElement("div");
+  const imageContentInput = document.createElement("input");
   const imageContentInfo = document.createElement("div");
-  const inputTitleWrap = document.createElement("div");
-  const inputTitle = document.createElement("input");
-  const inputDescWrap = document.createElement("div");
-  const inputDesc = document.createElement("textarea");
+  const imageContentTitle = document.createElement("input");
+  const imageContentDesc = document.createElement("textarea");
   const submitBtn = document.createElement("button");
 
-  const Div = (img) => {
+  const Img = (event) => {
+      const img = document.createElement("img");
+      img.classList.add("imgStyle");
+      img.src = event.target.result;
+      return img;
+  }
+
+  const ImgDiv = (img) => {
+      const div = document.createElement("div");
+      div.classList.add("imgDivStyle");
+      div.appendChild(img);
+      return div;
+  }
+
+  const Div = (imgDiv) => {
     const div = document.createElement("div");
     div.classList.add("divStyle");
-    div.appendChild(img);
+    div.append(imgDiv);
     return div;
   };
 
-  const Img = (e) => {
-    const img = document.createElement("img");
-    img.classList.add("imgStyle");
-    img.src = e.target.result;
-    return img;
-  };
+  const HiddenDropBox = () => {
+    const dropBox = document.querySelector(".image-content__label");
+    dropBox.style.display = "none";
+  }
 
-  const handleUpdate = (e) => {
-    const filesInfo = e.target.files;
+  const ShowCompleteBox = () => {
+    const completeBox = document.querySelector(".image-content__completeBox");
+    completeBox.style.display = "block";
+  }
+
+  const handleUpdate = (event) => {
+    const filesInfo = event.target.files;
     const fileList = [...filesInfo];
-    const previewZone = document.querySelector(".image-content__preview");
+    const preview = document.querySelector(".image-content__preview");
 
-    if (filesInfo.length > 4) {
-      alert("사진은 4장까지 올릴 수 있습니다.");
+    if(filesInfo.length > 4){
+      toast("사진은 4장까지 올릴 수 있습니다.");
       return;
     }
 
@@ -44,60 +64,79 @@ export default function UploadImage() {
       const reader = new FileReader();
       reader.addEventListener("load", (event) => {
         const img = Img(event);
-        const div = Div(img);
-        previewZone.appendChild(div);
+        const imgDiv = ImgDiv(img);
+        const div = Div(imgDiv);
+        preview.append(div);
       });
       reader.readAsDataURL(file);
-    });
-  };
+    })
+    HiddenDropBox();
+    ShowCompleteBox();
+  }
 
   imageContentInput.addEventListener("change", handleUpdate);
 
-  // Container
+  // container
   container.classList.add("container");
   form.classList.add("image-form");
-  form.method = "POST";
-  submitBtn.innerText = "제출";
+  form.method="post";
+  form.action="/post/tmp";
+  imageContent.classList.add("image-content");
+  submitBtn.innerText="제출";
   submitBtn.classList.add("image-content__submit");
 
-  // Image content
-  imageContent.classList.add("image-content");
-
-  // Upload file
-  imageContentUpload.classList.add("image-content__upload");
-  imageContentBox.classList.add("image-content__box");
+  // preview
   imageContentPreview.classList.add("image-content__preview");
-  imageContentLabel.for = "#upload-image";
+
+  // upload
+  imageUploadGPS.classList.add("image-upload__gps");
+  imageUploadInput.classList.add("image-upload__input");
+  imageUploadInput.type="text";
+  imageUploadInput.setAttribute("list", "address");
+  imageUploadInput.id="image-upload__input";
+  imageUploadInput.name="image-upload__input";
+  imageUploadInput.placeholder="사진 촬영 장소";
+  dataList.classList.add("image-content__datalist");
+  dataList.id = "address";
+  imageUploadGPS.append(imageUploadInput, dataList);
+
+  // completeBox
+  imageContentCompleteBox.classList.add("image-content__completeBox");
+  imageContentCompleteBox.innerText = "✅ 사진 업로드 완료";
+
+  // drag & drop
   imageContentLabel.classList.add("image-content__label");
-  imageContentInput.id = "upload-image";
-  imageContentInput.name = "images";
+  imageContentLabel.for = "#image-content__label";
+  imageContentInner.classList.add("image-content__inner");
+  imageContentText.classList.add("image-content__text");
+  imageContentText.innerText = "드래그하거나 클릭하여 업로드";
+  imageContentInput.classList.add("image-content__input");
+  imageContentInput.id = "image-content__input";
+  imageContentInput.name = "image-content__input";
   imageContentInput.accept = "image/*";
   imageContentInput.type = "file";
   imageContentInput.required = true;
   imageContentInput.multiple = true;
-  imageContentInput.classList.add("image-content__input");
-  imageContentLabel.append(
-    document.createTextNode("드래그하거나 클릭하여 업로드"),
-  );
-  imageContentLabel.append(imageContentInput);
-  imageContentBox.append(imageContentLabel);
-  imageContentUpload.append(imageContentBox, imageContentPreview);
+  imageContentText.append(imageContentInput);
+  imageContentInner.append(imageContentText);
+  imageContentLabel.append(imageContentInner);
 
-  // Input information
+  // info
   imageContentInfo.classList.add("image-content__info");
-  inputTitle.type = "text";
-  inputTitle.placeholder = "제목";
-  inputTitle.name = "title";
-  inputTitle.classList.add("image-content__title");
-  inputDesc.placeholder = "내용";
-  inputDesc.name = "description";
-  inputDesc.classList.add("image-content__desc");
-  inputTitleWrap.append(inputTitle);
-  inputDescWrap.append(inputDesc);
-  imageContentInfo.append(inputTitleWrap, inputDescWrap);
+  imageContentTitle.classList.add("image-content__title");
+  imageContentTitle.type="text";
+  imageContentTitle.name = "image-content__title";
+  imageContentTitle.placeholder="게시글 제목";
+  imageContentDesc.classList.add("image-content__desc");
+  imageContentDesc.name = "image-content__desc";
+  imageContentDesc.maxLength="100";
+  imageContentDesc.placeholder="게시글 설명(100자 이내)";
+  imageContentInfo.append(imageContentTitle, imageContentDesc);
 
-  // Image content
-  imageContent.append(imageContentUpload, imageContentInfo);
+  // image content
+  imageContent.append(imageContentPreview, imageUploadGPS);
+  imageContent.append(imageContentCompleteBox, imageContentLabel);
+  imageContent.append(imageContentInfo);
 
   // append
   form.append(imageContent, submitBtn);
