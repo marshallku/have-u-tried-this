@@ -1,30 +1,16 @@
-import el from "../utils/dom";
 import PostItem from "../components/PostItem";
-import GridContainer from "../components/GridContainer";
-import { fetchPostListData } from "../api/dummy";
+import MasonryContainer from "../components/MasonryContainer";
 
 export default function FrontPage() {
-  const div = el("div", {});
-
-  fetchPostListData().then((data) => {
-    const container = GridContainer();
-
-    data.forEach((article) =>
-      container.append(
-        PostItem({
-          title: article.title,
-          thumbnail: article.photo,
-          slug: article.id,
-          location: article.wideAddr
-            ? `${article.wideAddr} ${article.localAddr}`
-            : null,
-          likes: article.likes,
-        }),
-      ),
-    );
-
-    div.append(container);
-  });
-
-  return div;
+  return MasonryContainer("http://localhost:9980/tmp", (article) =>
+    PostItem({
+      title: article.title,
+      thumbnail: article.photo,
+      slug: article.id,
+      location: article.wideAddr
+        ? `${article.wideAddr} ${article.localAddr}`
+        : null,
+      likes: article.likes,
+    }),
+  );
 }

@@ -3,10 +3,13 @@ import PostPage from "./PostPage";
 import SignInPage from "./SignInPage";
 import UploadPage from "./UploadPage";
 import UserPage from "./UserPage";
-import MasonryList from "./MasonryList";
-import { MasonryInit } from "../components/Masonry";
+import ListPage from "./ListPage";
 
 const app = document.getElementById("app");
+
+function removeWindowEventListener() {
+  window.removeEventListener("resize", window.resizeHandler);
+}
 
 function resetApp() {
   while (app.firstChild) {
@@ -16,13 +19,13 @@ function resetApp() {
 
 export default function renderPage(page) {
   resetApp();
+  removeWindowEventListener();
   switch (page) {
     case "":
       app.append(FrontPage());
       break;
     case "location":
-      app.append(MasonryList());
-      MasonryInit();
+      app.append(ListPage());
       break;
     case "post":
       app.append(PostPage());

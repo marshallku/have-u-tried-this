@@ -1,0 +1,19 @@
+.masonry-container {
+  display: grid;
+  width: clamp(0px, 100%, 1140px);
+  column-gap: 20px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 600px) {
+  .masonry-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 860px) {
+  .masonry-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
