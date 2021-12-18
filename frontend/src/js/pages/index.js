@@ -1,9 +1,12 @@
 import FrontPage from "./FrontPage";
-import ListPage from "./ListPage";
 import PostPage from "./PostPage";
 import SignInPage from "./SignInPage";
 import UploadPage from "./UploadPage";
 import UserPage from "./UserPage";
+import MasonryList from "./MasonryList";
+import { MasonryInit } from "../components/Masonry";
+
+s;
 
 const app = document.getElementById("app");
 
@@ -20,7 +23,8 @@ export default function renderPage(page) {
       app.append(FrontPage());
       break;
     case "location":
-      app.append(ListPage());
+      app.append(MasonryList());
+      MasonryInit();
       break;
     case "post":
       app.append(PostPage());
