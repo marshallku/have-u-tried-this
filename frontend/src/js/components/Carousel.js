@@ -1,3 +1,4 @@
+import el from "../utils/dom";
 import "../../css/Carousel.css";
 
 export default function Carousel(items) {
@@ -80,18 +81,8 @@ export default function Carousel(items) {
     }px, 0, 0)`;
   };
 
-  const CarouselItem = (src) => {
-    const li = document.createElement("li");
-    const img = document.createElement("img");
-
-    li.classList.add("carousel__item");
-
-    img.src = src;
-
-    li.append(img);
-
-    return li;
-  };
+  const CarouselItem = (src) =>
+    el("li", { className: "carousel__item" }, el("img", { src }));
 
   const Button = (text, direction) => {
     const button = document.createElement("button");
@@ -109,13 +100,7 @@ export default function Carousel(items) {
     return button;
   };
 
-  const Dot = () => {
-    const button = document.createElement("div");
-
-    button.classList.add("carousel__dot");
-
-    return button;
-  };
+  const Dot = () => el("button", { className: "carousel__dot" });
 
   const handleTouchMove = (event) => {
     if (scrollLocked && event.cancelable) event.preventDefault();
