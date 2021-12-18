@@ -1,10 +1,13 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-named-as-default-member */
 /* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import { Router } from "express";
 import dotenv from "dotenv";
-import passport from "passport";
 import mongoose from "mongoose";
+import passport from "passport";
+import moment from "moment";
+import "moment-timezone";
 import { v4 as uuidv4 } from "uuid";
 import passportGoogleOAuth from "passport-google-oauth20";
 import asyncHandler from "../utils/async-handler.js";
@@ -16,6 +19,9 @@ import {
 } from "../services/users.service.js";
 
 dotenv.config();
+
+// 타임존 설정
+moment.tz.setDefault("Asia/Seoul");
 
 const router = Router();
 const GoogleStrategy = passportGoogleOAuth.Strategy;
@@ -31,33 +37,36 @@ const passportConfig = {
 router.use(passport.initialize());
 router.use(passport.session());
 
-passport.serializeUser((user, done) => {
-  console.log("passport.serializeUser", user);
-  done(null, user);
+passport.serializeUser((id, done) => {
+  console.log("passport.serializeUser", id);
+  done(null, id);
 });
 
 // // 사용자가 페이지를 방문할 때마다 호출되는 함수
 // // done(null, id)로 사용자의 정보를 각 request의 user 변수에 넣어준다.
-passport.deserializeUser((id, done) => {
-  console.log("passport.deserializeUser", id);
-  const currentUser = User.findOne({ id });
-  done(null, currentUser);
+passport.deserializeUser((googleId, done) => {
+  console.log("passport.deserializeUser", googleId);
+  User.find({ googleId }, (err, user) => {
+    done(err, user);
+  });
 });
 
 passport.use(
   new GoogleStrategy(
     passportConfig,
-    (accessToken, refreshToken, params, profiles, done) => {
-      console.log({ params, profiles });
-      console.log(typeof profiles.id, profiles.id);
+    async (accessToken, refreshToken, params, profiles, done) => {
+      // console.log({ params, profiles });
+      // console.log(typeof profiles.id, profiles.id);
       const googleId = profiles.id;
       const email = profiles.emails[0].value;
       const firstName = profiles.name.givenName;
       const lastName = profiles.name.familyName;
       const profile = profiles.photos[0].value;
       const source = profiles.provider;
+      console.log({ googleId });
 
-      const currentUser = getUserById({ googleId });
+      const currentUser = await getUserById(googleId);
+      console.log({ currentUser });
       if (!currentUser) {
         const newUser = addGoogleUser({
           googleId,
@@ -67,7 +76,8 @@ passport.use(
           profile,
           source,
         });
-        return done(null, newUser);
+        console.log({ newUser });
+        return done(null, newUser.googleId);
       }
 
       if (currentUser.source !== "google") {
@@ -78,31 +88,31 @@ passport.use(
         });
       }
 
-      currentUser.lastVisited = new Date();
-      return done(null, currentUser);
+      currentUser.lastVisited = moment();
+      currentUser.save();
+      return done(null, currentUser.googleId);
     },
   ),
 );
 
+// Get current authorized user
 router.get("/", (req, res) => {
   const user = req?.user || null;
   res.json({ user });
 });
 
+// Google OAuth2
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] }),
 );
-
-// Google OAuth
-
 router.get(
   "/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/api/auth?type=failed",
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/api/auth");
   },
 );
 
@@ -114,7 +124,7 @@ router.get(
       email: `${uuidv4()}@gmail.com`,
       firstName: "firstName",
       lastName: "lastName",
-      profileImage: "profileImage",
+      profile: "profileImage",
       source: "test",
       lastVisited: new Date(),
       isActive: true,
