@@ -15,9 +15,9 @@ const tmpUser = {
   nickname: "John Doe",
   profile:
     "https://lh3.googleusercontent.com/a/AATXAJxUzSTmgJx8JAf1CvXu_udg9ZXeT7xondn0svFd=s32-p-no",
-  createdAt: new Date("2021-12-10T16:00:00Z"),
-  updatedAt: new Date("2021-12-13T16:00:00Z"),
-  lastLoginAt: new Date("2021-12-13T16:00:00Z"),
+  createdAt: "2021-12-10T16:00:00Z",
+  updatedAt: "2021-12-13T16:00:00Z",
+  lastLoginAt: "2021-12-13T16:00:00Z",
   isActive: true,
 };
 
@@ -57,8 +57,8 @@ export async function fetchPostData() {
       wideAddr: "서울특별시",
       localAddr: "종로구",
     },
-    createdAt: new Date("2021-12-13T16:00:00Z"),
-    updatedAt: new Date("2021-12-14T18:00:00Z"),
+    createdAt: "2021-12-16T03:07:30.754Z",
+    updatedAt: "2021-12-18T03:07:30.754Z",
     likes: 8,
   };
 }
