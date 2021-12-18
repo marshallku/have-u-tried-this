@@ -39,6 +39,18 @@
 .icon-add_circle_outline:before {
   content: "\e905";
 }
+.icon-clear:before {
+  content: "\e928";
+}
+.icon-content_copy:before {
+  content: "\e929";
+}
+.icon-content_cut:before {
+  content: "\e92a";
+}
+.icon-content_paste:before {
+  content: "\e92b";
+}
 .icon-create:before {
   content: "\e926";
 }
