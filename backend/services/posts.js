@@ -4,6 +4,14 @@ import path from "path";
 import { Post, Location } from "../models/index.js";
 import resizeFile from "../utils/file-resize.js";
 
+async function checkLocation(wideAddr, localAddr) {
+  const location = await Location.findOne({ wideAddr, localAddr });
+  if (!location) {
+    throw new Error("올바른 지역 명이 아닙니다.");
+  }
+  return location;
+}
+
 export async function getAll(_location, page, perPage) {
   // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
@@ -42,10 +50,7 @@ export async function createPost(postDto) {
   const { title, content, photos, wideAddr, localAddr } = postDto;
 
   // 존재하는 지역인지 검증
-  const location = await Location.findOne({ wideAddr, localAddr });
-  if (!location) {
-    throw new Error("올바른 지역 명이 아닙니다.");
-  }
+  checkLocation(wideAddr, localAddr);
 
   // post 인스턴스 생성
   const post = new Post({
@@ -93,6 +98,53 @@ export async function findById(id) {
 export async function findByTitle(_title) {
   const post = await Post.findOne({ title: _title });
   return post;
+}
+
+export async function updatePost(postId, newPostDto) {
+  // eslint-disable-next-line no-unused-vars
+  const { title, content, _photos, wideAddr, localAddr } = newPostDto;
+  // 있는 지역인지 검증
+  const newLocation = await checkLocation(wideAddr, localAddr);
+  try {
+    // 포스트 있는지 검증
+    const post = await Post.findById(postId);
+    // 새로운 포스트 내용 업데이트
+    const newPost = await Post.findByIdAndUpdate(
+      postId,
+      {
+        title,
+        content,
+        location: {
+          wideAddr,
+          localAddr,
+        },
+        photos: post.photos.map((photo) => {
+          // eslint-disable-next-line no-param-reassign
+          photo.text = title;
+          return photo;
+        }),
+        likes: post.likes,
+        createdAt: post.createdAt,
+        updatedAt: Date.now(),
+      },
+      { new: true },
+    );
+
+    // 로케이션 배열 정리
+    await Location.findOneAndUpdate(
+      { wideAddr: post.location.wideAddr, localAddr: post.location.localAddr },
+      {
+        $pull: { posts: { _id: postId } },
+      },
+    );
+    await Location.findByIdAndUpdate(newLocation.id, {
+      $push: { posts: newPost },
+    });
+    return newPost;
+  } catch (err) {
+    // throw new Error(err);
+    throw new Error("존재하지 않는 글입니다.");
+  }
 }
 
 export async function deletePost(postId) {

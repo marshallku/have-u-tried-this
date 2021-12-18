@@ -8,6 +8,7 @@ import {
   findById,
   findByTitle,
   createPost,
+  updatePost,
   deletePost,
 } from "../services/posts.js";
 import uploadFile from "../middlewares/multer.js";
@@ -70,6 +71,32 @@ router.post(
     const post = new PostDto(title, content, photos, wideAddr, localAddr);
     const postId = await createPost(post);
     res.status(201).json({ id: postId });
+  }),
+);
+
+// 포스트 수정 로직
+router.put(
+  "/:id",
+  asyncHandler(async (req, res) => {
+    const postId = req.params.id;
+    const { title, content, wideAddr, localAddr } = req.body;
+
+    // title 검증 필요
+    const check = await findByTitle(title);
+    if (check) {
+      throw new Error("이미 존재하는 제목입니다.");
+    }
+
+    const newPostDto = new PostDto(
+      title,
+      content,
+      undefined,
+      wideAddr,
+      localAddr,
+    );
+
+    const newPost = await updatePost(postId, newPostDto);
+    res.json(newPost);
   }),
 );
 

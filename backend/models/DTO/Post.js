@@ -1,6 +1,4 @@
 export default class Post {
-  postId;
-
   title;
 
   content;
@@ -11,8 +9,7 @@ export default class Post {
 
   localAddr;
 
-  constructor(title, content, photos, wideAddr, localAddr, postId = undefined) {
-    this.postId = postId;
+  constructor(title, content, photos, wideAddr, localAddr) {
     this.title = title;
     this.content = content;
     this.photos = photos;

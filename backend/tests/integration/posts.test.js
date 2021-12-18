@@ -6,9 +6,11 @@ import fs from "fs";
 import app from "../../app";
 import { Post } from "../../models/index.js";
 
+jest.setTimeout(10000);
+
 describe("post 라우터 테스트", () => {
   let postId;
-  let afterAllDeletePostId;
+  let updatePostId;
 
   afterAll(async () => {
     // 글 생성 이후 정리
@@ -105,6 +107,7 @@ describe("post 라우터 테스트", () => {
     expect(res.body.content).toEqual("content");
     expect(res.body.location.localAddr).toEqual("강남구");
     expect(res.body.likes).toBeGreaterThanOrEqual(0);
+    expect(typeof res.body.createdAt).toEqual("string");
   });
 
   test("Failure Post /api/posts, 이미 존재하는 글 생성", async () => {
@@ -118,7 +121,7 @@ describe("post 라우터 테스트", () => {
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
 
-    afterAllDeletePostId = dummy.body.id;
+    updatePostId = dummy.body.id;
 
     const res = await request(app)
       .post("/api/posts")
@@ -130,11 +133,6 @@ describe("post 라우터 테스트", () => {
 
     expect(res.statusCode).toEqual(400);
     expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
-
-    // delete already test dummy
-    await request(app)
-      .delete("/api/posts/" + afterAllDeletePostId)
-      .send();
   });
 
   test("Failure Post /api/posts, 4개 이상 그림 업로드", async () => {
@@ -202,5 +200,57 @@ describe("post 라우터 테스트", () => {
 
     expect(res.status).toEqual(400);
     expect(res.body).toEqual({ message: "존재하지 않는 글입니다." });
+  });
+
+  test("수정 기능 실패 테스트, 없는 게시물", async () => {
+    const res = await request(app).put("/api/posts/1233").send({
+      title: "update title",
+      content: "content update",
+      wideAddr: "서울특별시",
+      localAddr: "성북구",
+    });
+
+    expect(res.body.message).toEqual("존재하지 않는 글입니다.");
+  });
+
+  test("수정 기능 실패 테스트 이미 있는 이름", async () => {
+    const res = await request(app)
+      .put("/api/posts/" + updatePostId)
+      .send({
+        title: "already",
+        content: "content update",
+        wideAddr: "서울특별시",
+        localAddr: "성북구",
+      });
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
+  });
+
+  test("수정 기능 성공 테스트 후 삭제", async () => {
+    const res = await request(app)
+      .put("/api/posts/" + updatePostId)
+      .send({
+        title: "update title",
+        content: "content update",
+        wideAddr: "서울특별시",
+        localAddr: "성북구",
+      });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body._id).toEqual(updatePostId);
+    expect(res.body.title).toEqual("update title");
+    expect(res.body.content).toEqual("content update");
+    expect(res.body.location.wideAddr).toEqual("서울특별시");
+    expect(res.body.location.localAddr).toEqual("성북구");
+    const createdAt = new Date(res.body.createdAt);
+    const updatedAt = new Date(res.body.updatedAt);
+    expect(createdAt <= updatedAt).toEqual(true);
+
+    const res2 = await request(app)
+      .delete("/api/posts/" + updatePostId)
+      .send();
+
+    expect(res2.statusCode).toEqual(200);
   });
 });
