@@ -26,6 +26,10 @@
   margin-right: auto;
 }
 
+.details__buttons > button:not(.details__rate) {
+  padding-left: 5px;
+}
+
 .details__title {
   margin: 1rem 0;
   font-size: 2rem;
