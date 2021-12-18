@@ -123,8 +123,6 @@ export async function updatePost(postId, newPostDto) {
           photo.text = title;
           return photo;
         }),
-        likes: post.likes,
-        createdAt: post.createdAt,
         updatedAt: Date.now(),
       },
       { new: true },
