@@ -1,45 +1,26 @@
 import LikesCount from "./LikesCount";
 import { addClickEvent } from "../router";
 import "../../css/PostItem.css";
+import el from "../utils/dom";
 
-export default function PostItem({ title, thumbnail, location, slug, likes }) {
-  const article = document.createElement("article");
-  const anchor = document.createElement("a");
-  const figure = document.createElement("figure");
-  const img = document.createElement("img");
-  const header = document.createElement("header");
-  const titleElt = document.createElement("h2");
-  const articleInfo = document.createElement("div");
-  const locationElt = document.createElement("div");
-  const likesContainer = LikesCount(likes);
+export default function PostItem({ title, thumbnail, slug, likes }) {
+  const anchor = el(
+    "a",
+    {},
+    el(
+      "figure",
+      { className: "post-item__thumbnail" },
+      el("img", { src: thumbnail }),
+    ),
+    el(
+      "header",
+      { className: "post-item__header" },
+      el("h2", { className: "post-item__title" }, title),
+      el("div", { className: "post-item__info" }, LikesCount("div", likes)),
+    ),
+  );
 
-  // Article
-  article.classList.add("post-item");
   addClickEvent(anchor, `/post/${slug}`);
 
-  // Thumbnail
-  figure.classList.add("post-item__thumbnail");
-  img.src = thumbnail;
-  figure.append(img);
-
-  // Header
-  header.classList.add("post-item__header");
-  // Title
-  titleElt.classList.add("post-item__title");
-  titleElt.innerText = title;
-  // Info
-  articleInfo.classList.add("post-item__info");
-  if (location) {
-    locationElt.classList.add("post-item__location");
-    locationElt.innerText = location;
-    articleInfo.append(locationElt);
-  }
-  articleInfo.append(likesContainer);
-  header.append(titleElt, articleInfo);
-
-  // Append
-  anchor.append(figure, header);
-  article.append(anchor);
-
-  return article;
+  return el("article", { className: "post-item" }, anchor);
 }

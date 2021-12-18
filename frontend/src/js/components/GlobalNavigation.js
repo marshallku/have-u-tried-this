@@ -1,69 +1,58 @@
 import { addClickEvent, updatePath } from "../router";
 import "../../css/GlobalNavigation.css";
 import WordAutoComplete from "./WordAutoComplete";
-
-const Profile = document.createElement("img");
+import el from "../utils/dom";
 
 export default function GlobalNavigation() {
-  const nav = document.createElement("nav");
-  const logoWrap = document.createElement("div");
-  const logoAnchor = document.createElement("a");
-  const logo = document.createElement("img");
-  const searchForm = document.createElement("form");
-  const search = document.createElement("input");
-  const createPost = document.createElement("a");
-  const profileWrap = document.createElement("div");
-  const profileAnchor = document.createElement("a");
-  const dataList = document.createElement("datalist");
-  WordAutoComplete(dataList);
+  const logoAnchor = el("a", {}, el("img", { src: "/static/images/logo.svg" }));
+  const createBtn = el("a", { className: "gnb__add-post icon-add_a_photo" });
+  const profileAnchor = el(
+    "a",
+    {},
+    el("img", { src: "/static/images/default_profile.png" }),
+  );
+  const dataList = WordAutoComplete();
 
-  // Nav
-  nav.classList.add("gnb");
-
-  // Logo
-  logoWrap.classList.add("gnb__logo");
-  logoAnchor.href = "/";
-  addClickEvent(logoAnchor, "/");
-  logo.src = "/static/images/logo.svg";
-  logoAnchor.append(logo);
-  logoWrap.append(logoAnchor);
-
-  // Search Form
-  searchForm.classList.add("search", "search--gnb");
-  search.type = "text";
-  search.id = "search";
-  search.name = "search";
-  search.placeholder = "위치 검색";
-  search.setAttribute("list", "address");
-  search.classList.add("search__input", "search__input--gnb");
   dataList.id = "address";
-
-  searchForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    // TODO: 입력받은 지역 올바른 지역인지 검증
-    const [wideAddr, localAddr] = search.value.split(" ");
-    updatePath(`/location/${wideAddr}/${localAddr}`);
-  });
-  searchForm.append(search);
-  searchForm.append(dataList);
-
-  // Nav
-  createPost.classList.add("gnb__add-post", "icon-add_a_photo");
-  addClickEvent(createPost, "/add");
-
-  // Profile
-  profileWrap.classList.add("gnb__profile-image");
-  Profile.src = "/static/images/default_profile.png";
+  addClickEvent(logoAnchor, "/");
+  addClickEvent(createBtn, "/add");
   addClickEvent(profileAnchor, "/login");
-  profileAnchor.append(Profile);
-  profileWrap.append(profileAnchor);
 
-  // Append
-  nav.append(logoWrap, searchForm, createPost, profileWrap);
+  return el(
+    "nav",
+    { className: "gnb" },
+    el("div", { className: "gnb__logo" }, logoAnchor),
+    el(
+      "form",
+      {
+        className: "search search--gnb",
+        events: {
+          submit: (event) => {
+            event.preventDefault();
+            // TODO: 입력받은 지역 올바른 지역인지 검증
+            const input = document.querySelector(".search__input");
+            if (!input) return;
+            const [wideAddr, localAddr] = input.value.split(" ");
 
-  return nav;
+            updatePath(`/location/${wideAddr}/${localAddr}`);
+          },
+        },
+      },
+      el("input", {
+        type: "text",
+        id: "search",
+        name: "search",
+        placeholder: "위치 검색",
+        list: "address",
+        className: "search__input search__input--gnb",
+      }),
+      dataList,
+    ),
+    createBtn,
+    el("div", { className: "gnb__profile-image" }, profileAnchor),
+  );
 }
 
 export function UpdateGnbProfile(src) {
-  Profile.src = src;
+  document.querySelector(".gnb__profile-image img").src = src;
 }

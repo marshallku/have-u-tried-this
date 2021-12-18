@@ -27,7 +27,7 @@ function renderPostDetails(data) {
   const dateText = document.createElement("span");
   const postDate = new Date(`${updatedAt || createdAt}`);
   const buttonsWrap = document.createElement("div");
-  const likesElt = LikesCount(likes);
+  const likesElt = LikesCount("button", likes);
   const titleElt = document.createElement("h2");
   const authorElt = document.createElement("div");
   const authorAvatar = document.createElement("img");
