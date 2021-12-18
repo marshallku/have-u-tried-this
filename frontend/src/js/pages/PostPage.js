@@ -102,9 +102,7 @@ function renderPostDetails(data) {
     // Delete
     const del = document.createElement("button");
 
-    del.classList.add("icon-");
-    del.append("X");
-
+    del.classList.add("icon-clear");
     del.addEventListener("click", () => {
       const app = document.getElementById("app");
       app.append(Modal(author, content));
