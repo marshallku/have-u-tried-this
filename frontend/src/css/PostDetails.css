@@ -4,7 +4,20 @@
   padding: 0 10px;
 }
 
-.details__info {
+.details__location,
+.details__date {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.details__location > i,
+.details__date > i {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.details__buttons {
   display: flex;
   font-size: 1.2rem;
 }
