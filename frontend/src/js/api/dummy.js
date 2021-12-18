@@ -93,3 +93,29 @@ export async function fetchUserData() {
 export async function fetchAddressData() {
   return dummyAddress;
 }
+
+export async function fetchAddressAPI(longitude, latitude) {
+  const request = {
+    method: "GET",
+    headers: {
+      Authorization: `KakaoAK 4be5731b9445ebbbc4acf16e9d6f0588`,
+    },
+  };
+
+  const URL = `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${longitude}&y=${latitude}`;
+  try {
+    const address = await fetch(URL, request)
+      .then((res) => res.json())
+      .then((res) => {
+        const { documents: regionType } = res;
+        const legalDivision = regionType[0];
+        return legalDivision;
+      });
+
+    const { region_1depth_name: wide_addr, region_2depth_name: local_addr } =
+      address;
+    return [wide_addr, local_addr];
+  } catch (e) {
+    console.log("API가 정상적으로 호출되지 않았습니다.");
+  }
+}
