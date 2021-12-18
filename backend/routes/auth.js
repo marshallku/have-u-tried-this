@@ -47,15 +47,15 @@ passport.deserializeUser((id, done) => {
 passport.use(
   new GoogleStrategy(
     passportConfig,
-    (accessToken, refreshToken, params, profile, done) => {
-      // console.log({ accessToken, refreshToken, params, profile, done });
-      console.log({ profile });
-      const googleId = profile.id;
-      const email = profile.emails[0].value;
-      const firstName = profile.name.givenName;
-      const lastName = profile.name.familyName;
-      const profilePhoto = profile.photos[0].value;
-      const source = profile.provider;
+    (accessToken, refreshToken, params, profiles, done) => {
+      console.log({ params, profiles });
+      console.log(typeof profiles.id, profiles.id);
+      const googleId = profiles.id;
+      const email = profiles.emails[0].value;
+      const firstName = profiles.name.givenName;
+      const lastName = profiles.name.familyName;
+      const profile = profiles.photos[0].value;
+      const source = profiles.provider;
 
       const currentUser = getUserById({ googleId });
       if (!currentUser) {
@@ -64,7 +64,7 @@ passport.use(
           email,
           firstName,
           lastName,
-          profilePhoto,
+          profile,
           source,
         });
         return done(null, newUser);
@@ -102,7 +102,7 @@ router.get(
     failureRedirect: "/api/auth?type=failed",
   }),
   (req, res) => {
-    res.redirect("/api/auth?type=success");
+    res.redirect("/");
   },
 );
 

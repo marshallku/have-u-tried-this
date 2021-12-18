@@ -8,7 +8,7 @@ export const addGoogleUser = ({
   email,
   firstName,
   lastName,
-  profilePhoto,
+  profile,
   source,
 }) => {
   const user = new User({
@@ -16,7 +16,7 @@ export const addGoogleUser = ({
     email,
     firstName,
     lastName,
-    profilePhoto,
+    profile,
     source,
   });
   return user.save();
