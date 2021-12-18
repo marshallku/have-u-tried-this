@@ -22,17 +22,22 @@ export const addGoogleUser = ({
   return user.save();
 };
 
-export const getUserById = (googleId) => {
-  User.find({ googleId }).then((err, user) => {
-    if (err) {
-      console.error(err);
-    }
-    return user;
-  });
+export const getUserById = async (googleId) => {
+  console.log("getUserById:", { googleId });
+  // return User.find({ googleId }).then((user, err) => {
+  //   if (err) {
+  //     console.error("ERROR getUserById:", { err, user });
+  //   }
+  //   console.log("Already in db");
+  //   return user;
+  // });
+  const user = await User.findOne({ googleId });
+  return user;
 };
 
 export const getUserByEmail = (email) => {
-  User.find({ email }).then((err, user) => {
+  console.log("getUserByEmail:", { email });
+  return User.findOne({ email }).then((err, user) => {
     if (err) {
       console.error(err);
     }
