@@ -1,5 +1,6 @@
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
+import Modal from "../components/Modal";
 import { fetchPostData } from "../api/dummy";
 import "../../css/PostDetails.css";
 
@@ -55,6 +56,7 @@ function renderPostDetails(data) {
   buttonsWrap.classList.add("details__buttons");
   buttonsWrap.append(likesElt);
   if (data.isAuthor) {
+    // Edit
     const edit = document.createElement("button");
 
     edit.classList.add("icon-create");
@@ -96,7 +98,19 @@ function renderPostDetails(data) {
 
       editing.status = nextStatus;
     });
-    buttonsWrap.append(edit);
+
+    // Delete
+    const del = document.createElement("button");
+
+    del.classList.add("icon-");
+    del.append("X");
+
+    del.addEventListener("click", () => {
+      const app = document.getElementById("app");
+      app.append(Modal(author, content));
+    });
+
+    buttonsWrap.append(edit, del);
   }
 
   // Title
