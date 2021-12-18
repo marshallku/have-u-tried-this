@@ -6,8 +6,6 @@ import UserPage from "./UserPage";
 import MasonryList from "./MasonryList";
 import { MasonryInit } from "../components/Masonry";
 
-s;
-
 const app = document.getElementById("app");
 
 function resetApp() {
