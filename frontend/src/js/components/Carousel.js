@@ -150,6 +150,12 @@ export default function Carousel(items) {
     window.addEventListener("touchend", handleTouchEnd, { once: true });
   };
 
+  const resizeObserver = new ResizeObserver(() => {
+    setContainerWidth();
+
+    slide(0);
+  });
+
   container.classList.add("carousel-container");
   carousel.classList.add("carousel");
   slider.classList.add("carousel__items");
@@ -180,6 +186,8 @@ export default function Carousel(items) {
 
   container.addEventListener("touchstart", handleTouchStart);
   container.append(carousel);
+
+  resizeObserver.observe(carousel);
 
   return container;
 }
