@@ -52,8 +52,7 @@ export default function UploadPage() {
     completeBox.style.display = "block";
   };
 
-  const handleUpdate = (event) => {
-    const filesInfo = event.target.files;
+  const handleUpdate = (filesInfo) => {
     const fileList = [...filesInfo];
     const preview = document.querySelector(".image-content__preview");
 
@@ -122,7 +121,32 @@ export default function UploadPage() {
     input.value = `${wide_addr} ${local_addr}`;
   }
 
-  imageContentInput.addEventListener("change", handleUpdate);
+  // image upload
+  imageContentInput.addEventListener("change", (e) => {
+    const filesInfo = e.target.files;
+    handleUpdate(filesInfo);
+  });
+
+  // image drag & drop
+  imageContentLabel.addEventListener("dragover", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    imageContentLabel.style.backgroundColor = "#616161";
+  });
+
+  imageContentLabel.addEventListener("dragleave", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    imageContentLabel.style.backgroundColor = "#434343";
+  });
+
+  imageContentLabel.addEventListener("drop", (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const fileInfo = e.dataTransfer.files;
+    imageContentLabel.style.backgroundColor = "#434343";
+    handleUpdate(fileInfo);
+  });
 
   // container
   container.classList.add("container");
