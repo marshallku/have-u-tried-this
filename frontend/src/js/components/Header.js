@@ -1,15 +1,12 @@
+import el from "../utils/dom";
 import "../../css/Header.css";
 
 function Header({ title }) {
-  const header = document.createElement("header");
-  const titleElt = document.createElement("h1");
-
-  header.classList.add("header");
-  titleElt.classList.add("header__title");
-  titleElt.innerText = title;
-  header.append(titleElt);
-
-  return header;
+  return el(
+    "header",
+    { className: "header" },
+    el("h1", { className: "header__title" }, title),
+  );
 }
 
 function updateHeader({ element, title }) {

@@ -1,9 +1,6 @@
+import el from "../utils/dom";
 import "../../css/GridContainer.css";
 
 export default function GridContainer() {
-  const container = document.createElement("div");
-
-  container.classList.add("grid-container");
-
-  return container;
+  return el("div", { className: "grid-container" });
 }

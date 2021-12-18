@@ -1,17 +1,16 @@
+import el from "../utils/dom";
 import { fetchAddressData } from "../api/dummy";
 
-export default function WordAutoComplete(dataList) {
-  const optionFragment = document.createDocumentFragment();
+export default function WordAutoComplete() {
+  const dataList = el("datalist", {});
 
   fetchAddressData().then((response) => {
     Object.entries(response).forEach(([wideAddr, localAddr]) => {
       localAddr.forEach((city) => {
-        const option = document.createElement("option");
-        option.value = `${wideAddr} ${city}`;
-        optionFragment.appendChild(option);
+        dataList.appendChild(el("option", { value: `${wideAddr} ${city}` }));
       });
     });
-    dataList.appendChild(optionFragment);
-    return dataList;
   });
+
+  return dataList;
 }
