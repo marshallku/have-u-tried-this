@@ -56,7 +56,7 @@ describe("post 라우터 테스트", () => {
       })
       .send();
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("허용되지 않은 접근입니다.");
   });
 
@@ -69,14 +69,14 @@ describe("post 라우터 테스트", () => {
       })
       .send();
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("해당 지역의 글이 존재하지 않습니다.");
   });
 
   test("Failure GET /api/posts/id, 없는 글 조회", async () => {
     const res = await request(app).get("/api/posts/donotexistpostid").send();
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("존재하지 않는 글입니다.");
   });
 
@@ -131,7 +131,7 @@ describe("post 라우터 테스트", () => {
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
   });
 
@@ -150,7 +150,7 @@ describe("post 라우터 테스트", () => {
       .attach("photos", pwd + "/4.jpeg")
       .attach("photos", pwd + "/5.jpg");
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("Unexpected field");
   });
 
@@ -166,7 +166,7 @@ describe("post 라우터 테스트", () => {
       .attach("photos", pwd + "/1.JPG")
       .attach("photos", pwd + "/tooLarge.jpg");
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("File too large");
   });
 
@@ -182,7 +182,7 @@ describe("post 라우터 테스트", () => {
       .attach("photos", pwd + "/1.JPG")
       .attach("photos", pwd + "/locations.csv");
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("이미지 파일만 업로드 가능합니다.");
   });
 
@@ -198,8 +198,11 @@ describe("post 라우터 테스트", () => {
   test("Failure DELETE /api/posts/:id 포스트 삭제", async () => {
     const res = await request(app).delete("/api/posts/123").send();
 
-    expect(res.status).toEqual(400);
-    expect(res.body).toEqual({ message: "존재하지 않는 글입니다." });
+    expect(res.status).toEqual(500);
+    expect(res.body).toEqual({
+      error: true,
+      message: "존재하지 않는 글입니다.",
+    });
   });
 
   test("수정 기능 실패 테스트, 없는 게시물", async () => {
@@ -223,7 +226,7 @@ describe("post 라우터 테스트", () => {
         localAddr: "성북구",
       });
 
-    expect(res.statusCode).toEqual(400);
+    expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
   });
 

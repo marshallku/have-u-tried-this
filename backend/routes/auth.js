@@ -12,11 +12,7 @@ import { v4 as uuidv4 } from "uuid";
 import passportGoogleOAuth from "passport-google-oauth20";
 import asyncHandler from "../utils/async-handler.js";
 import UserSchema from "../models/schemas/User.js";
-import {
-  getUserById,
-  // getUserByEmail,
-  addGoogleUser,
-} from "../services/users.service.js";
+import { getUserById, addGoogleUser } from "../services/users.service.js";
 
 dotenv.config();
 
@@ -29,7 +25,7 @@ const User = mongoose.model("User", UserSchema);
 const passportConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/api/auth/google/callback",
+  callbackURL: process.env.GOOGLE_CALLBACK_URL,
   passReqToCallback: true,
 };
 
@@ -55,8 +51,6 @@ passport.use(
   new GoogleStrategy(
     passportConfig,
     async (accessToken, refreshToken, params, profiles, done) => {
-      // console.log({ params, profiles });
-      // console.log(typeof profiles.id, profiles.id);
       const googleId = profiles.id;
       const email = profiles.emails[0].value;
       const firstName = profiles.name.givenName;
