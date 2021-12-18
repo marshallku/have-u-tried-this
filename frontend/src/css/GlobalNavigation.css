@@ -50,7 +50,7 @@
 }
 
 .gnb__profile-image {
-  min-width: 50px;
+  width: 45px;
   border-radius: 50%;
   overflow: hidden;
   background: var(--lightest-bg);
