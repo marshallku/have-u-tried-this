@@ -1,18 +1,20 @@
-export function fit(callback) {
+const DEFAULT_WAIT = 500;
+
+export function fit(func) {
   let ticking = false;
 
   return () => {
     if (!ticking) {
       ticking = true;
       requestAnimationFrame(() => {
-        callback();
+        func();
         ticking = false;
       });
     }
   };
 }
 
-export function throttle(func, wait) {
+export function throttle(func, wait = DEFAULT_WAIT) {
   let timer;
 
   return () => {
@@ -25,7 +27,7 @@ export function throttle(func, wait) {
   };
 }
 
-export function debounce(func, wait) {
+export function debounce(func, wait = DEFAULT_WAIT) {
   let timer;
 
   return () => {
