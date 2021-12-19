@@ -87,7 +87,7 @@
     background-color: rgba(0, 0, 0, 0.8);
   }
 
-  .fixed-container > article {
+  .fixed-container > article:not(:empty) {
     display: grid;
     margin: auto;
     padding: 20px;

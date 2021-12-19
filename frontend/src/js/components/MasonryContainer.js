@@ -3,6 +3,7 @@ import { addQuery } from "../utils/format";
 import toast from "../utils/toast";
 import imagesLoaded from "../utils/imagesLoaded";
 import { debounce } from "../utils/optimize";
+import Loader from "./Loader";
 import masonry from "../utils/masonry";
 import "../../css/MasonryContainer.css";
 
@@ -13,9 +14,11 @@ export default function MasonryContainer(apiUri, component) {
   let msnry;
   const container = el("div", { className: "masonry-container" });
   const observeTarget = document.querySelector(".footer");
+  const loader = Loader();
   const fetchData = async (initialize) => {
     if (isLoading || isDone) return;
     isLoading = true;
+    container.append(loader);
 
     const requestUri = addQuery({
       uri: apiUri,
@@ -40,6 +43,7 @@ export default function MasonryContainer(apiUri, component) {
         isLoading = false;
       });
 
+      loader.remove();
       elements.forEach((elt) => fragment.append(elt));
 
       container.append(fragment);

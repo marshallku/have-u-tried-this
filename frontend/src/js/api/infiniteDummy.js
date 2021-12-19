@@ -1,8 +1,17 @@
 const http = require("http");
 
-const server = http
-  .createServer((req, res) => {
+function delay(delay) {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res();
+    }, delay);
+  });
+}
+
+http
+  .createServer(async (req, res) => {
     const { url } = req;
+    await delay(1000);
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Content-Type", "application/json");
     if (url === "/tmp?page=8") {

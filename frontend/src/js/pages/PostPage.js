@@ -1,11 +1,12 @@
+import el from "../utils/dom";
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
 import Modal from "../components/Modal";
 import { fetchPostData } from "../api/dummy";
-import "../../css/PostDetails.css";
-import el from "../utils/dom";
+import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
 import { formatToReadableTime } from "../utils/format";
+import "../../css/PostDetails.css";
 
 function renderPostDetails(data) {
   const {
@@ -146,12 +147,20 @@ function renderPostDetails(data) {
 }
 
 export default function PostDetails(fixed) {
+  const loader = Loader();
   const article = el("article", {});
   const container = el(
     "div",
     { className: fixed ? "fixed-container" : "" },
+    loader,
     article,
   );
+
+  // Format loader
+  loader.style.position = "fixed";
+  loader.style.top = "50%";
+  loader.style.left = "50%";
+  loader.style.transform = "translate3d(-50%, -50%, 0)";
 
   if (fixed) {
     container.addEventListener("click", (event) => {
@@ -160,6 +169,7 @@ export default function PostDetails(fixed) {
   }
 
   fetchPostData().then((data) => {
+    loader.remove();
     article.append(renderPostDetails(data, fixed));
   });
 
