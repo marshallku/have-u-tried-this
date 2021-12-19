@@ -5,6 +5,7 @@ import { fetchPostData } from "../api/dummy";
 import "../../css/PostDetails.css";
 import el from "../utils/dom";
 import { addClickEvent } from "../router";
+import { formatToReadableTime } from "../utils/format";
 
 function renderPostDetails(data) {
   const {
@@ -26,8 +27,8 @@ function renderPostDetails(data) {
   const locationAnchor = document.createElement("a");
   const dateWrap = document.createElement("div");
   const dateIcon = document.createElement("i");
-  const dateText = document.createElement("span");
-  const postDate = new Date(`${updatedAt || createdAt}`);
+  const dateText = document.createElement("time");
+  const readablePostDate = formatToReadableTime(`${updatedAt || createdAt}`);
   const buttonsWrap = document.createElement("div");
   const likesElt = LikesCount("button", likes);
   const titleElt = document.createElement("h2");
@@ -54,7 +55,8 @@ function renderPostDetails(data) {
   // Date
   dateWrap.classList.add("details__date");
   dateIcon.classList.add("icon-calendar_today");
-  dateText.innerText = postDate.toLocaleDateString("ko-KR");
+  dateText.innerText = readablePostDate;
+  dateText.dateTime = `${updatedAt || createdAt}`;
   dateWrap.append(dateIcon, dateText);
 
   // Buttons
