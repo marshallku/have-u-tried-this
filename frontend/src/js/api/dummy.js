@@ -1,3 +1,11 @@
+function delay(delay) {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res();
+    }, delay);
+  });
+}
+
 export const dummyAddress = {
   서울특별시: ["종로구", "중구"],
   광주광역시: ["동구", "서구", "남구", "북구", "광산구"],
@@ -22,6 +30,7 @@ const tmpUser = {
 };
 
 export async function fetchLocationListData() {
+  await delay(1000);
   return [
     {
       wideAddr: "서울특별시",
@@ -41,6 +50,7 @@ export async function fetchLocationListData() {
 }
 
 export async function fetchPostData() {
+  await delay(1000);
   return {
     title: "My First Post",
     content:
