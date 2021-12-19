@@ -3,6 +3,8 @@ import LikesCount from "../components/LikesCount";
 import Modal from "../components/Modal";
 import { fetchPostData } from "../api/dummy";
 import "../../css/PostDetails.css";
+import el from "../utils/dom";
+import { addClickEvent } from "../router";
 
 function renderPostDetails(data) {
   const {
@@ -21,7 +23,7 @@ function renderPostDetails(data) {
   const header = document.createElement("header");
   const locationWrap = document.createElement("div");
   const locationIcon = document.createElement("i");
-  const locationText = document.createElement("span");
+  const locationAnchor = document.createElement("a");
   const dateWrap = document.createElement("div");
   const dateIcon = document.createElement("i");
   const dateText = document.createElement("span");
@@ -42,8 +44,12 @@ function renderPostDetails(data) {
   // Location
   locationWrap.classList.add("details__location");
   locationIcon.classList.add("icon-location_on");
-  locationText.innerText = `${location.wideAddr} ${location.localAddr}`;
-  locationWrap.append(locationIcon, locationText);
+  locationAnchor.innerText = `${location.wideAddr} ${location.localAddr}`;
+  addClickEvent(
+    locationAnchor,
+    `/location/${location.wideAddr}/${location.localAddr}`,
+  );
+  locationWrap.append(locationIcon, locationAnchor);
 
   // Date
   dateWrap.classList.add("details__date");
@@ -137,12 +143,23 @@ function renderPostDetails(data) {
   return frag;
 }
 
-export default function PostDetails() {
-  const article = document.createElement("article");
+export default function PostDetails(fixed) {
+  const article = el("article", {});
+  const container = el(
+    "div",
+    { className: fixed ? "fixed-container" : "" },
+    article,
+  );
+
+  if (fixed) {
+    container.addEventListener("click", (event) => {
+      if (event.target === container) window.history.back();
+    });
+  }
 
   fetchPostData().then((data) => {
-    article.append(renderPostDetails(data));
+    article.append(renderPostDetails(data, fixed));
   });
 
-  return article;
+  return container;
 }

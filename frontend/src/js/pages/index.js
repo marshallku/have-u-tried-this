@@ -17,18 +17,44 @@ function resetApp() {
   }
 }
 
-export default function renderPage(page) {
-  resetApp();
-  removeWindowEventListener();
+function reset(page, initializing, isPopstate) {
+  if (initializing) return;
+
+  if (page !== "post") {
+    const fixedContainer = document.querySelector(".fixed-container");
+
+    if (fixedContainer && isPopstate) {
+      fixedContainer.remove();
+
+      return false;
+    }
+
+    window.scrollTo(0, 0);
+    removeWindowEventListener();
+    resetApp();
+    return true;
+  }
+
+  window.scrollTo(0, 0);
+  return true;
+}
+
+export default function renderPage(page, isPopstate) {
+  const initializing = !document.getElementById("app").firstChild;
+  const shouldAppend = reset(page, initializing, isPopstate);
+
   switch (page) {
     case "":
       app.append(FrontPage());
       break;
     case "location":
-      app.append(ListPage());
+      console.log(shouldAppend);
+      if (shouldAppend) {
+        app.append(ListPage());
+      }
       break;
     case "post":
-      app.append(PostPage());
+      app.append(PostPage(!initializing));
       break;
     case "add":
       app.append(UploadPage());

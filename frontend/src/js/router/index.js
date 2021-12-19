@@ -1,11 +1,11 @@
 import renderHeader from "../components/Header";
 import renderPage from "../pages";
 
-export function route() {
+export function route(isPopstate) {
   const path = window.location.pathname.split("/")[1];
 
   renderHeader(path);
-  renderPage(path);
+  renderPage(path, isPopstate);
 }
 
 export function customRouter() {
@@ -47,7 +47,6 @@ export function customRouter() {
 }
 
 export function updatePath(path) {
-  window.scrollTo(0, 0);
   window.history.pushState("", document.title, path);
   route();
 }
@@ -65,6 +64,6 @@ export function initializeRouter() {
 
   window.addEventListener("popstate", (event) => {
     event.preventDefault();
-    route();
+    route(true);
   });
 }
