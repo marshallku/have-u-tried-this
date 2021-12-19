@@ -2,7 +2,6 @@ import PostItem from "../components/PostItem";
 import MasonryContainer from "../components/MasonryContainer";
 
 export default function ListPage() {
-  console.log("hi");
   return MasonryContainer("http://localhost:9980/tmp", (article) =>
     PostItem({
       title: article.title,

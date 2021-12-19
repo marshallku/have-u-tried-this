@@ -48,7 +48,6 @@ export default function renderPage(page, isPopstate) {
       app.append(FrontPage());
       break;
     case "location":
-      console.log(shouldAppend);
       if (shouldAppend) {
         app.append(ListPage());
       }
