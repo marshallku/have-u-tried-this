@@ -1,10 +1,8 @@
-import UserPageInfo from "../components/UserPageInfo";
+import el from "../utils/dom";
 import UserPagePost from "../components/UserPagePost";
-import UserPageComment from "../components/UserPageComment";
 import UserPageLike from "../components/UserPageLike";
 import { customRouter } from "../router";
 import "../../css/userPage.css";
-import el from "../utils/dom";
 
 function Drawer(userPageRouter) {
   const Button = ({ text, path }) => {
