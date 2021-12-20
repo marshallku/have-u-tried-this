@@ -54,6 +54,8 @@ router.post(
   "/",
   uploadFile,
   asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
     const photos = req.files;
     const { title, content, wideAddr, localAddr } = req.body;
 
@@ -68,7 +70,14 @@ router.post(
       throw new Error("이미 존재하는 제목입니다.");
     }
 
-    const post = new PostDto(title, content, photos, wideAddr, localAddr);
+    const post = new PostDto(
+      title,
+      content,
+      photos,
+      wideAddr,
+      localAddr,
+      authorId,
+    );
     const postId = await createPost(post);
     res.status(201).json({ id: postId });
   }),

@@ -17,6 +17,9 @@ import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
 
+// to test
+import mockLogin from "./utils/mock-login.js";
+
 dotenv.config();
 callPassport();
 
@@ -55,6 +58,11 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+// to test
+if (process.env.NODE_ENV === "test") {
+  app.use(mockLogin);
+}
 
 // routes
 app.use("/api/locations", locationRouter);
