@@ -1,5 +1,5 @@
 import el from "../utils/dom";
-import { addQuery } from "../utils/format";
+import { addQuery } from "../utils/location";
 import toast from "../utils/toast";
 import imagesLoaded from "../utils/imagesLoaded";
 import { debounce } from "../utils/optimize";
@@ -22,7 +22,7 @@ export default function MasonryContainer(apiUri, component) {
 
     const requestUri = addQuery({
       uri: apiUri,
-      query: "page",
+      param: "page",
       value: currentPage,
     });
 

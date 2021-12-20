@@ -5,7 +5,7 @@ import Modal from "../components/Modal";
 import { fetchPostData } from "../api/dummy";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
-import { formatToReadableTime } from "../utils/format";
+import { formatToReadableTime } from "../utils/time";
 import "../../css/PostDetails.css";
 
 function renderPostDetails(data) {

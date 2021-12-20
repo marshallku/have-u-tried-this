@@ -9,7 +9,11 @@ export default function el(nodeName, attributes, ...children) {
       Object.entries(value).forEach(([type, listener]) => {
         node.addEventListener(type, listener);
       });
-    } else if (key in node) {
+
+      return;
+    }
+
+    if (key in node) {
       try {
         node[key] = value;
       } catch (err) {
