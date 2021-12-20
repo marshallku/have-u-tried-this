@@ -1,6 +1,6 @@
 import "../../css/UploadImage.css";
 import toast from "../utils/toast";
-import { fetchAddressAPI } from "../api/dummy";
+import { fetchAddressAPI } from "../api";
 import EXIF from "exif-js";
 
 export default function UploadPage() {
