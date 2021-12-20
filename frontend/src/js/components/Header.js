@@ -1,4 +1,5 @@
 import el from "../utils/dom";
+import { getPaths } from "../utils/location";
 import "../../css/Header.css";
 
 function Header({ title }) {
@@ -39,10 +40,7 @@ function checkHeader({ title }) {
 }
 
 export default function renderHeader(page) {
-  const [wideAddr, localAddr] = window.location.pathname
-    .split("/")
-    .slice(2)
-    .map((x) => decodeURI(x));
+  const [wideAddr, localAddr] = getPaths().slice(1);
 
   switch (page) {
     case "":

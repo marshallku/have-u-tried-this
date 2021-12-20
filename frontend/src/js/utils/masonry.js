@@ -1,16 +1,19 @@
+import { resetWithSize } from "./array";
+import { isZero } from "./number";
+
 /* eslint-disable no-param-reassign */
 export default function masonry({ container, selector, elements }) {
-  const m = {};
-  let stack = [];
+  const masonryObj = {};
+  const stack = [];
   let itemWidth;
 
   const calculate = (elt) => {
     const min = Math.min(...stack);
     const currentPosition = stack.indexOf(min);
-    const xGap = currentPosition === 0 ? 0 : 20;
-    const yGap = min === 0 ? 0 : 20;
+    const xGap = isZero(currentPosition) ? 0 : 20;
+    const yGap = isZero(min) ? 0 : 20;
     const x = currentPosition * itemWidth + xGap * currentPosition;
-    const y = min === 0 ? 0 : min + yGap;
+    const y = isZero(min) ? 0 : min + yGap;
     const height = elt.querySelector("img").offsetHeight;
 
     elt.style.position = "absolute";
@@ -18,7 +21,11 @@ export default function masonry({ container, selector, elements }) {
     elt.style.top = `${y}px`;
     elt.style.width = `${itemWidth}px`;
     elt.style.height = `${height}px`;
-    stack[currentPosition] += height + yGap;
+
+    if (stack[currentPosition] !== undefined) {
+      stack[currentPosition] = min + height + yGap;
+    }
+
     container.style.height = `${Math.max(...stack)}px`;
   };
 
@@ -33,16 +40,16 @@ export default function masonry({ container, selector, elements }) {
     itemWidth = container.querySelector(selector).offsetWidth;
     const cols = Math.floor(container.offsetWidth / itemWidth);
 
-    stack = [...new Array(cols)].map(() => 0);
+    resetWithSize(stack, cols, 0);
   };
 
-  m.resize = () => {
+  masonryObj.resize = () => {
     container.querySelector(selector).removeAttribute("style");
     setSize();
     recalculate();
   };
 
-  m.append = (element) => {
+  masonryObj.append = (element) => {
     element.forEach((elt) => {
       if (!elt.querySelector("img")) return;
       calculate(elt);
@@ -50,8 +57,8 @@ export default function masonry({ container, selector, elements }) {
   };
 
   setSize();
-  m.append(elements);
+  masonryObj.append(elements);
   container.style.position = "relative";
 
-  return m;
+  return masonryObj;
 }
