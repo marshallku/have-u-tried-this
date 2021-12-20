@@ -23,7 +23,6 @@ export const addGoogleUser = ({
 };
 
 export const getUserById = async (googleId) => {
-  console.log("getUserById:", { googleId });
   // return User.find({ googleId }).then((user, err) => {
   //   if (err) {
   //     console.error("ERROR getUserById:", { err, user });

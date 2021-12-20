@@ -1,5 +1,4 @@
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable no-console */
 /* eslint-disable import/extensions */
 import express from "express";
 import mongoose from "mongoose";
@@ -7,14 +6,19 @@ import dotenv from "dotenv";
 import path from "path";
 import favicon from "serve-favicon";
 import httpError from "http-errors";
+import passport from "passport";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import cookieParser from "cookie-parser";
+
+import callPassport from "./passport/index.js";
+
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
 
 dotenv.config();
+callPassport();
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -48,6 +52,9 @@ app.use(
     },
   }),
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // routes
 app.use("/api/locations", locationRouter);
