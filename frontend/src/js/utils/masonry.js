@@ -2,7 +2,14 @@ import { resetWithSize } from "./array";
 import { isZero } from "./number";
 
 /* eslint-disable no-param-reassign */
-export default function masonry({ container, selector, elements }) {
+// TODO: padding과 gap값을 전달받는 것과 계산하는 것 중 무엇이 나을지 생각하기
+export default function masonry({
+  container,
+  selector,
+  elements,
+  padding,
+  gap,
+}) {
   const masonryObj = {};
   const stack = [];
   let itemWidth;
@@ -10,14 +17,14 @@ export default function masonry({ container, selector, elements }) {
   const calculate = (elt) => {
     const min = Math.min(...stack);
     const currentPosition = stack.indexOf(min);
-    const xGap = isZero(currentPosition) ? 0 : 20;
-    const yGap = isZero(min) ? 0 : 20;
-    const x = currentPosition * itemWidth + xGap * currentPosition;
-    const y = isZero(min) ? 0 : min + yGap;
+    const xGap = isZero(currentPosition, gap);
+    const yGap = isZero(min, gap);
+    const x = currentPosition * (itemWidth + xGap) + padding.left;
+    const y = isZero(min, min + yGap) + padding.top;
     const height = elt.querySelector("img").offsetHeight;
 
     elt.style.position = "absolute";
-    elt.style.left = `${x + 10}px`;
+    elt.style.left = `${x}px`;
     elt.style.top = `${y}px`;
     elt.style.width = `${itemWidth}px`;
     elt.style.height = `${height}px`;

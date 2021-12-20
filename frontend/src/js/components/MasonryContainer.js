@@ -49,10 +49,17 @@ export default function MasonryContainer(apiUri, component) {
       container.append(fragment);
 
       if (initialize) {
+        const style = getComputedStyle(container);
+
         msnry = masonry({
           container,
           selector: ".post-item",
           elements,
+          padding: {
+            top: parseInt(style.paddingTop, 10),
+            left: parseInt(style.paddingLeft, 10),
+          },
+          gap: parseInt(style.rowGap, 10),
         });
       } else {
         msnry.append(elements);
