@@ -12,6 +12,20 @@ async function checkLocation(wideAddr, localAddr) {
   return location;
 }
 
+export async function findById(id) {
+  try {
+    const post = await Post.findById(id);
+    return post;
+  } catch (e) {
+    throw new Error("존재하지 않는 글입니다.");
+  }
+}
+
+export async function findByTitle(_title) {
+  const post = await Post.findOne({ title: _title });
+  return post;
+}
+
 export async function getAll(_location, page, perPage) {
   // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
@@ -47,7 +61,7 @@ export async function getAll(_location, page, perPage) {
   };
 }
 export async function createPost(postDto) {
-  const { title, content, photos, wideAddr, localAddr } = postDto;
+  const { title, content, photos, wideAddr, localAddr, authorId } = postDto;
 
   // 존재하는 지역인지 검증
   checkLocation(wideAddr, localAddr);
@@ -67,6 +81,7 @@ export async function createPost(postDto) {
       wideAddr,
       localAddr,
     },
+    author: authorId,
   });
 
   // location에 post data 추가
@@ -86,18 +101,6 @@ export async function createPost(postDto) {
   resizeFile(photos);
 
   return post.id;
-}
-export async function findById(id) {
-  try {
-    const post = await Post.findById(id);
-    return post;
-  } catch (e) {
-    throw new Error("존재하지 않는 글입니다.");
-  }
-}
-export async function findByTitle(_title) {
-  const post = await Post.findOne({ title: _title });
-  return post;
 }
 
 export async function updatePost(postId, newPostDto) {

@@ -107,6 +107,7 @@ describe("post 라우터 테스트", () => {
     expect(res.body.content).toEqual("content");
     expect(res.body.location.localAddr).toEqual("강남구");
     expect(res.body.likes).toBeGreaterThanOrEqual(0);
+    expect(typeof res.body.author).toEqual("string");
     expect(typeof res.body.createdAt).toEqual("string");
   });
 
