@@ -105,12 +105,16 @@ export async function createPost(postDto) {
 
 export async function updatePost(postId, newPostDto) {
   // eslint-disable-next-line no-unused-vars
-  const { title, content, _photos, wideAddr, localAddr } = newPostDto;
+  const { title, content, _photos, wideAddr, localAddr, authorId } = newPostDto;
+
   // 있는 지역인지 검증
   const newLocation = await checkLocation(wideAddr, localAddr);
   try {
     // 포스트 있는지 검증
     const post = await Post.findById(postId);
+    if (post.author.toString() !== authorId) {
+      throw new Error("권한이 없습니다.");
+    }
     // 새로운 포스트 내용 업데이트
     const newPost = await Post.findByIdAndUpdate(
       postId,
@@ -148,8 +152,13 @@ export async function updatePost(postId, newPostDto) {
   }
 }
 
-export async function deletePost(postId) {
+export async function deletePost(postId, authorId) {
   try {
+    const isExist = await Post.findById(postId);
+    if (isExist.author.toString() !== authorId) {
+      throw new Error("권한이 없습니다.");
+    }
+
     const post = await Post.findByIdAndDelete(postId);
     // 사진 삭제, DB에서는 삭제 되는지 확인 필요
     const { photos, location } = post;

@@ -2,10 +2,12 @@
 import "regenerator-runtime";
 import request from "supertest";
 import path from "path";
+import dotenv from "dotenv";
 import fs from "fs";
 import app from "../../app";
 import { Post } from "../../models/index.js";
 
+dotenv.config();
 jest.setTimeout(10000);
 
 describe("post 라우터 테스트", () => {
@@ -250,11 +252,6 @@ describe("post 라우터 테스트", () => {
     const createdAt = new Date(res.body.createdAt);
     const updatedAt = new Date(res.body.updatedAt);
     expect(createdAt <= updatedAt).toEqual(true);
-
-    const res2 = await request(app)
-      .delete("/api/posts/" + updatePostId)
-      .send();
-
-    expect(res2.statusCode).toEqual(200);
+    expect(res.body.author.toString()).toEqual(process.env.AUTHOR_ID);
   });
 });

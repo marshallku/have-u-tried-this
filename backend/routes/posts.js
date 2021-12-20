@@ -59,9 +59,9 @@ router.post(
     const photos = req.files;
     const { title, content, wideAddr, localAddr } = req.body;
 
-    const check = await findByTitle(title);
+    const isExists = await findByTitle(title);
     // 타이틀 중복 시 업로드된 이미지 제거
-    if (check) {
+    if (isExists) {
       photos.forEach((photo) => {
         // eslint-disable-next-line no-underscore-dangle
         const __dirname = path.resolve();
@@ -87,12 +87,14 @@ router.post(
 router.put(
   "/:id",
   asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
     const postId = req.params.id;
     const { title, content, wideAddr, localAddr } = req.body;
 
     // title 검증 필요
-    const check = await findByTitle(title);
-    if (check) {
+    const isExists = await findByTitle(title);
+    if (isExists) {
       throw new Error("이미 존재하는 제목입니다.");
     }
 
@@ -102,6 +104,7 @@ router.put(
       undefined,
       wideAddr,
       localAddr,
+      authorId,
     );
 
     const newPost = await updatePost(postId, newPostDto);
@@ -113,8 +116,10 @@ router.put(
 router.delete(
   "/:id",
   asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
     const postId = req.params.id;
-    await deletePost(postId);
+    await deletePost(postId, authorId);
     res.json({ success: true });
   }),
 );
