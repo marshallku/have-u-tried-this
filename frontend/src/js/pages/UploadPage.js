@@ -21,35 +21,23 @@ export default function UploadPage() {
   const imageContentDesc = document.createElement("textarea");
   const submitBtn = document.createElement("button");
 
-  const Img = (event) => {
+  const wrapperElement = (inner, element, className) => {
+    const el = document.createElement(`${element}`);
+    el.classList.add(`${className}`);
+    el.append(inner);
+    return el;
+  };
+
+  const createImgWithEvent = (event) => {
     const img = document.createElement("img");
     img.classList.add("imgStyle");
     img.src = event.target.result;
     return img;
   };
 
-  const ImgDiv = (img) => {
-    const div = document.createElement("div");
-    div.classList.add("imgDivStyle");
-    div.appendChild(img);
-    return div;
-  };
-
-  const Div = (imgDiv) => {
-    const div = document.createElement("div");
-    div.classList.add("divStyle");
-    div.append(imgDiv);
-    return div;
-  };
-
-  const HiddenDropBox = () => {
-    const dropBox = document.querySelector(".image-content__label");
-    dropBox.style.display = "none";
-  };
-
-  const ShowCompleteBox = () => {
-    const completeBox = document.querySelector(".image-content__completeBox");
-    completeBox.style.display = "block";
+  const changeStyleAttribute = (querySelector, attribute, value) => {
+    const el = document.querySelector(`${querySelector}`);
+    el.style[`${attribute}`] = `${value}`;
   };
 
   const handleUpdate = (filesInfo) => {
@@ -64,62 +52,113 @@ export default function UploadPage() {
     fileList.forEach((file) => {
       const reader = new FileReader();
       reader.addEventListener("load", async (event) => {
-        const img = Img(event);
+        const img = createImgWithEvent(event);
 
         try {
-          const [longitude, latitude] = await getGPSCoordinate(img);
-          const [wide_addr, local_addr] = await fetchAddressAPI(
-            latitude,
+          const { longitude, latitude } = await getGPSCoordinate(img);
+          const { wideAddr, localAddr } = await fetchAddressAPI(
             longitude,
+            latitude,
           );
-          updateLocation(wide_addr, local_addr);
+          updateLocation(wideAddr, localAddr);
         } catch (e) {
           console.log(e);
         }
 
-        const imgDiv = ImgDiv(img);
-        const div = Div(imgDiv);
+        const imgDiv = wrapperElement(img, "div", "imgDivStyle");
+        const div = wrapperElement(imgDiv, "div", "divStyle");
         preview.append(div);
       });
       reader.readAsDataURL(file);
     });
-    HiddenDropBox();
-    ShowCompleteBox();
+
+    changeStyleAttribute(".image-content__label", "display", "none");
+    changeStyleAttribute(".image-content__completeBox", "display", "block");
   };
 
-  function getGPSCoordinate(img) {
+  const getGPSTag = (library = EXIF, img) => {
+    return {
+      latitude: library.getTag(img, "GPSLatitude"),
+      latitudeRef: library.getTag(img, "GPSLatitudeRef"),
+      longitude: library.getTag(img, "GPSLongitude"),
+      longitudeRef: library.getTag(img, "GPSLongitudeRef"),
+    };
+  };
+
+  const getGPSCoordinate = (img) => {
     return new Promise((resolve, reject) => {
       img.addEventListener("load", function () {
-        EXIF.getData(this, async function () {
-          const GPSLatitude = EXIF.getTag(this, "GPSLatitude");
-          const GPSLatitudeRef = EXIF.getTag(this, "GPSLatitudeRef");
-          const GPSLongitude = EXIF.getTag(this, "GPSLongitude");
-          const GPSLongitudeRef = EXIF.getTag(this, "GPSLongitudeRef");
+        EXIF.getData(this, function () {
+          const { latitude, latitudeRef, longitude, longitudeRef } = getGPSTag(
+            EXIF,
+            this,
+          );
 
-          if (GPSLatitude === undefined || GPSLongitude === undefined) {
+          if (latitude === undefined || longitude === undefined) {
             reject("GPS 정보가 없습니다.");
             return;
           }
 
-          const [latitudeDecimal, longitudeDecimal] = [
-            convertCoordinateToDecimal(GPSLatitude, GPSLatitudeRef),
-            convertCoordinateToDecimal(GPSLongitude, GPSLongitudeRef),
-          ];
-          resolve([latitudeDecimal, longitudeDecimal]);
+          const coordinate = {
+            latitudeInfo: {
+              latitude,
+              latitudeRef,
+            },
+            longitudeInfo: {
+              longitude,
+              longitudeRef,
+            },
+          };
+
+          const { latitudeDecimal, longitudeDecimal } =
+            getDecimalCoordinate(coordinate);
+
+          resolve({
+            latitude: latitudeDecimal,
+            longitude: longitudeDecimal,
+          });
         });
       });
     });
-  }
+  };
 
-  function convertCoordinateToDecimal([d, m, s], direction) {
-    const sign = direction === "S" || direction === "W" ? -1 : 1;
-    return (sign * (d + m / 60 + s / 3600)).toFixed(8);
-  }
+  const getDecimalCoordinate = (coordinate) => {
+    const {
+      latitudeInfo: { latitude, latitudeRef },
+    } = coordinate;
+    const {
+      longitudeInfo: { longitude, longitudeRef },
+    } = coordinate;
 
-  function updateLocation(wide_addr, local_addr) {
+    const latitudeSign = getCoordinateSign(latitudeRef);
+    const latitudeDecimal = calculateDegreeToDecimal(latitude, latitudeSign);
+    const longitudeSign = getCoordinateSign(longitudeRef);
+    const longitudeDecimal = calculateDegreeToDecimal(longitude, longitudeSign);
+
+    return {
+      latitudeDecimal,
+      longitudeDecimal,
+    };
+  };
+
+  const getCoordinateSign = (direction) => {
+    return direction === "E" || direction === "N" ? 1 : -1;
+  };
+
+  const calculateDegreeToDecimal = (coordinate, sign) => {
+    const [degrees, minutes, seconds] = coordinate;
+    return sign * (degrees + minutes / 60 + seconds / 3600).toFixed(8);
+  };
+
+  const updateLocation = (wideAddr, localAddr) => {
     const input = document.querySelector("#image-upload__input");
-    input.value = `${wide_addr} ${local_addr}`;
-  }
+    input.value = `${wideAddr} ${localAddr}`;
+  };
+
+  const preventEvent = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+  };
 
   // image upload
   imageContentInput.addEventListener("change", (e) => {
@@ -129,22 +168,19 @@ export default function UploadPage() {
 
   // image drag & drop
   imageContentLabel.addEventListener("dragover", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    imageContentLabel.style.backgroundColor = "#616161";
+    preventEvent(e);
+    changeStyleAttribute(".image-content__label", "backgroundColor", "#616161");
   });
 
   imageContentLabel.addEventListener("dragleave", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    imageContentLabel.style.backgroundColor = "#434343";
+    preventEvent(e);
+    changeStyleAttribute(".image-content__label", "backgroundColor", "#434343");
   });
 
   imageContentLabel.addEventListener("drop", (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+    preventEvent(e);
     const fileInfo = e.dataTransfer.files;
-    imageContentLabel.style.backgroundColor = "#434343";
+    changeStyleAttribute(".image-content__label", "backgroundColor", "#434343");
     handleUpdate(fileInfo);
   });
 
