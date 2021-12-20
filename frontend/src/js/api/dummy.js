@@ -207,14 +207,13 @@ export async function fetchAddressAPI(longitude, latitude) {
     const address = await fetch(URL, request)
       .then((res) => res.json())
       .then((res) => {
-        const { documents: regionType } = res;
-        const legalDivision = regionType[0];
+        const [legalDivision, administrativeDivision] = res.documents;
         return legalDivision;
       });
 
-    const { region_1depth_name: wide_addr, region_2depth_name: local_addr } =
+    const { region_1depth_name: wideAddr, region_2depth_name: localAddr } =
       address;
-    return [wide_addr, local_addr];
+    return { wideAddr, localAddr };
   } catch (e) {
     console.log("API가 정상적으로 호출되지 않았습니다.");
   }
