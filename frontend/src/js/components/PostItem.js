@@ -1,7 +1,7 @@
+import el from "../utils/dom";
 import LikesCount from "./LikesCount";
 import { addClickEvent } from "../router";
 import "../../css/PostItem.css";
-import el from "../utils/dom";
 
 export default function PostItem({ title, thumbnail, slug, likes }) {
   const anchor = el(
