@@ -26,10 +26,6 @@ function Drawer(userPageRouter) {
         path: "/",
       }),
       Button({
-        text: "작성 댓글",
-        path: "/comment",
-      }),
-      Button({
         text: "추천한 글",
         path: "/liked",
       }),
@@ -42,7 +38,6 @@ export default function UserPage() {
   userPageRouter.base = "user";
   userPageRouter.routes = {
     "/": UserPagePost,
-    "/comment": UserPageComment,
     "/liked": UserPageLike,
   };
 

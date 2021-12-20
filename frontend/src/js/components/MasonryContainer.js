@@ -70,7 +70,7 @@ export default function MasonryContainer(apiUri, component) {
   io.observe(observeTarget);
 
   window.resizeHandler = handleResize;
-  window.addEventListener("resize", window.resizeHandler);
+  window.addEventListener("resize", window.resizeHandler, { passive: true });
 
   return container;
 }
