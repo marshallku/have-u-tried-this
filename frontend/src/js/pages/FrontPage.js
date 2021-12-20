@@ -10,11 +10,12 @@ export default function FrontPage() {
 
   fetchLocationListData().then((data) => {
     const container = GridContainer();
+    const fragment = document.createDocumentFragment();
 
     loader.remove();
 
     data.forEach((location) =>
-      container.append(
+      fragment.append(
         CityItem({
           wide: location.wideAddr,
           local: location.localAddr,
@@ -23,6 +24,7 @@ export default function FrontPage() {
       ),
     );
 
+    container.append(fragment);
     div.append(container);
   });
 
