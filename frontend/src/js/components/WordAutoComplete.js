@@ -1,5 +1,5 @@
 import el from "../utils/dom";
-import { fetchAddressData } from "../api/dummy";
+import { fetchAddressData } from "../api";
 
 export default function WordAutoComplete() {
   const dataList = el("datalist", {});

@@ -2,7 +2,7 @@ import el from "../utils/dom";
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
 import Modal from "../components/Modal";
-import { fetchPostData } from "../api/dummy";
+import { fetchPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
 import { formatToReadableTime } from "../utils/time";
