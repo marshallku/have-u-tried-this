@@ -10,6 +10,13 @@
   z-index: 5000;
 }
 
+.fixed-container > .loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
 .fixed-container > article {
   width: clamp(0px, 100%, 880px);
   margin: 0 auto;
