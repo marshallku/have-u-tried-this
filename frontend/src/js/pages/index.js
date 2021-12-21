@@ -17,8 +17,8 @@ function resetApp() {
   }
 }
 
-function reset({ page, initializing, isPopstate }) {
-  if (initializing) return;
+function isReset({ page, initializing, isPopstate }) {
+  if (initializing) return false;
 
   if (page !== "post") {
     const fixedContainer = document.querySelector(".fixed-container");
@@ -41,7 +41,7 @@ function reset({ page, initializing, isPopstate }) {
 
 export default function renderPage(page, isPopstate) {
   const initializing = !document.getElementById("app").firstChild;
-  const shouldAppend = reset({ page, initializing, isPopstate });
+  const shouldAppend = isReset({ page, initializing, isPopstate });
 
   switch (page) {
     case "":
