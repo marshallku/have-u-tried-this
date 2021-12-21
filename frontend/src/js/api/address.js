@@ -1,7 +1,7 @@
-import { addressData } from "./dummy";
+import instance from "./instance";
 
 export async function fetchAddressData() {
-  return addressData;
+  return instance.get("/locations/all");
 }
 
 export async function fetchAddressAPI(longitude, latitude) {
