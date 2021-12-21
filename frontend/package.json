@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prebuild": "node pre-build.js",
     "build": "webpack",
+    "postbuild": "node post-build.js",
     "dev": "webpack serve --open",
     "dummyApi": "node ./src/js/api/infiniteDummy.js"
   },
