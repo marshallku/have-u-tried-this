@@ -1,16 +1,14 @@
 export default function imagesLoaded(elements, func) {
-  const images = [];
+  const images = elements
+    .map((element) => [...element.querySelectorAll("img")])
+    .filter((x) => x.length)
+    .reduce((acc, cur) => acc.concat(cur), []);
+  const imagesLength = images.length;
   let loaded = 0;
   const tryCallback = () => {
     loaded += 1;
-    if (images.length === loaded) func();
+    if (imagesLength === loaded) func();
   };
-
-  elements.forEach((element) => {
-    element.querySelectorAll("img").forEach((img) => {
-      images.push(img);
-    });
-  });
 
   images.forEach((img) => {
     img.addEventListener("load", tryCallback, { once: true });
