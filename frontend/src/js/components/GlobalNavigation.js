@@ -13,7 +13,6 @@ export default function GlobalNavigation() {
   );
   const dataList = WordAutoComplete();
 
-  dataList.id = "address";
   addClickEvent(logoAnchor, "/");
   addClickEvent(createBtn, "/add");
   addClickEvent(profileAnchor, "/login");
@@ -45,6 +44,7 @@ export default function GlobalNavigation() {
         placeholder: "위치 검색",
         list: "address",
         className: "search__input search__input--gnb",
+        autocomplete: "off",
       }),
       dataList,
     ),

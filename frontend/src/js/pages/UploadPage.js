@@ -1,101 +1,88 @@
-import "../../css/UploadImage.css";
-import toast from "../utils/toast";
-import { fetchAddressAPI } from "../api";
 import EXIF from "exif-js";
+import el from "../utils/dom";
+import toast from "../utils/toast";
+import { fetchAddressAPI } from "../api/dummy";
+import "../../css/UploadImage.css";
 
 export default function UploadPage() {
-  const container = document.createElement("section");
-  const form = document.createElement("form");
-  const imageContent = document.createElement("div");
-  const imageContentPreview = document.createElement("div");
-  const imageUploadGPS = document.createElement("div");
-  const imageUploadInput = document.createElement("input");
-  const dataList = document.createElement("datalist");
-  const imageContentCompleteBox = document.createElement("div");
-  const imageContentLabel = document.createElement("label");
-  const imageContentInner = document.createElement("div");
-  const imageContentText = document.createElement("div");
-  const imageContentInput = document.createElement("input");
-  const imageContentInfo = document.createElement("div");
-  const imageContentTitle = document.createElement("input");
-  const imageContentDesc = document.createElement("textarea");
-  const submitBtn = document.createElement("button");
+  const MAX_UPLOAD_IMAGES = 4;
+  const SECONDS_PER_MINUTE = 60;
+  const SECONDS_PER_HOUR = 3600;
+  const POSITIVE_VALUE = 1;
+  const NEGATIVE_VALUE = -1;
 
-  const wrapperElement = (inner, element, className) => {
-    const el = document.createElement(`${element}`);
-    el.classList.add(`${className}`);
-    el.append(inner);
-    return el;
+  const wrapperElement = (
+    element,
+    className,
+    inner = document.createElement("div"),
+  ) => {
+    const elt = document.createElement(element);
+    elt.classList.add(className);
+    elt.append(inner);
+    return elt;
   };
 
-  const createImgWithEvent = (event) => {
-    const img = document.createElement("img");
-    img.classList.add("imgStyle");
+  const embedImgElement = (event) => {
+    const img = wrapperElement("img", "embed-image");
     img.src = event.target.result;
     return img;
   };
 
-  const changeStyleAttribute = (querySelector, attribute, value) => {
-    const el = document.querySelector(`${querySelector}`);
-    el.style[`${attribute}`] = `${value}`;
+  const preventEvent = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
   };
 
-  const handleUpdate = (filesInfo) => {
-    const fileList = [...filesInfo];
-    const preview = document.querySelector(".image-content__preview");
+  const getGPSTag = (img) => ({
+    latitude: EXIF.getTag(img, "GPSLatitude"),
+    latitudeRef: EXIF.getTag(img, "GPSLatitudeRef"),
+    longitude: EXIF.getTag(img, "GPSLongitude"),
+    longitudeRef: EXIF.getTag(img, "GPSLongitudeRef"),
+  });
 
-    if (filesInfo.length > 4) {
-      toast("사진은 최대 4장까지 올릴 수 있습니다.");
-      return;
-    }
+  const getCoordinateSign = (direction) =>
+    direction === "E" || direction === "N" ? POSITIVE_VALUE : NEGATIVE_VALUE;
 
-    fileList.forEach((file) => {
-      const reader = new FileReader();
-      reader.addEventListener("load", async (event) => {
-        const img = createImgWithEvent(event);
-
-        try {
-          const { longitude, latitude } = await getGPSCoordinate(img);
-          const { wideAddr, localAddr } = await fetchAddressAPI(
-            longitude,
-            latitude,
-          );
-          updateLocation(wideAddr, localAddr);
-        } catch (e) {
-          console.log(e);
-        }
-
-        const imgDiv = wrapperElement(img, "div", "imgDivStyle");
-        const div = wrapperElement(imgDiv, "div", "divStyle");
-        preview.append(div);
-      });
-      reader.readAsDataURL(file);
-    });
-
-    changeStyleAttribute(".image-content__label", "display", "none");
-    changeStyleAttribute(".image-content__completeBox", "display", "block");
+  const calculateDegreeToDecimal = (coordinate, sign) => {
+    const [degrees, minutes, seconds] = coordinate;
+    return (
+      sign *
+      (
+        degrees +
+        minutes / SECONDS_PER_MINUTE +
+        seconds / SECONDS_PER_HOUR
+      ).toFixed(8)
+    );
   };
 
-  const getGPSTag = (library = EXIF, img) => {
+  const getDecimalCoordinate = (coordinate) => {
+    const {
+      latitudeInfo: { latitude, latitudeRef },
+    } = coordinate;
+    const {
+      longitudeInfo: { longitude, longitudeRef },
+    } = coordinate;
+
+    const latitudeSign = getCoordinateSign(latitudeRef);
+    const latitudeDecimal = calculateDegreeToDecimal(latitude, latitudeSign);
+    const longitudeSign = getCoordinateSign(longitudeRef);
+    const longitudeDecimal = calculateDegreeToDecimal(longitude, longitudeSign);
+
     return {
-      latitude: library.getTag(img, "GPSLatitude"),
-      latitudeRef: library.getTag(img, "GPSLatitudeRef"),
-      longitude: library.getTag(img, "GPSLongitude"),
-      longitudeRef: library.getTag(img, "GPSLongitudeRef"),
+      latitudeDecimal,
+      longitudeDecimal,
     };
   };
 
-  const getGPSCoordinate = (img) => {
-    return new Promise((resolve, reject) => {
-      img.addEventListener("load", function () {
-        EXIF.getData(this, function () {
-          const { latitude, latitudeRef, longitude, longitudeRef } = getGPSTag(
-            EXIF,
-            this,
-          );
+  const getGPSCoordinate = (img) =>
+    new Promise((resolve, reject) => {
+      img.addEventListener("load", () => {
+        EXIF.getData(img, () => {
+          const { latitude, latitudeRef, longitude, longitudeRef } =
+            getGPSTag(img);
 
           if (latitude === undefined || longitude === undefined) {
-            reject("GPS 정보가 없습니다.");
+            reject(new Error("GPS 정보가 없습니다."));
             return;
           }
 
@@ -120,135 +107,184 @@ export default function UploadPage() {
         });
       });
     });
-  };
-
-  const getDecimalCoordinate = (coordinate) => {
-    const {
-      latitudeInfo: { latitude, latitudeRef },
-    } = coordinate;
-    const {
-      longitudeInfo: { longitude, longitudeRef },
-    } = coordinate;
-
-    const latitudeSign = getCoordinateSign(latitudeRef);
-    const latitudeDecimal = calculateDegreeToDecimal(latitude, latitudeSign);
-    const longitudeSign = getCoordinateSign(longitudeRef);
-    const longitudeDecimal = calculateDegreeToDecimal(longitude, longitudeSign);
-
-    return {
-      latitudeDecimal,
-      longitudeDecimal,
-    };
-  };
-
-  const getCoordinateSign = (direction) => {
-    return direction === "E" || direction === "N" ? 1 : -1;
-  };
-
-  const calculateDegreeToDecimal = (coordinate, sign) => {
-    const [degrees, minutes, seconds] = coordinate;
-    return sign * (degrees + minutes / 60 + seconds / 3600).toFixed(8);
-  };
 
   const updateLocation = (wideAddr, localAddr) => {
-    const input = document.querySelector("#image-upload__input");
+    const input = document.getElementById("image-upload-location");
     input.value = `${wideAddr} ${localAddr}`;
   };
 
-  const preventEvent = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
+  const handleUpdate = (filesInfo) => {
+    const fileList = [...filesInfo];
+    const preview = document.querySelector(".image-content__preview");
+
+    if (filesInfo.length > MAX_UPLOAD_IMAGES) {
+      toast(`사진은 최대 ${MAX_UPLOAD_IMAGES}장까지 올릴 수 있습니다.`);
+      return;
+    }
+
+    fileList.forEach((file) => {
+      const reader = new FileReader();
+      reader.addEventListener("load", async (event) => {
+        const img = embedImgElement(event);
+
+        try {
+          const { longitude, latitude } = await getGPSCoordinate(img);
+          const { wideAddr, localAddr } = await fetchAddressAPI(
+            longitude,
+            latitude,
+          );
+          updateLocation(wideAddr, localAddr);
+        } catch (error) {
+          console.log(error);
+        }
+
+        const imgDiv = wrapperElement("div", "grid-div__image", img);
+        const div = wrapperElement("div", "grid-div", imgDiv);
+        preview.append(div);
+      });
+      reader.readAsDataURL(file);
+    });
+
+    const completeBox = document.querySelector(".image-content__completeBox");
+    label.style.display = "none";
+    completeBox.style.display = "block";
   };
 
-  // image upload
-  imageContentInput.addEventListener("change", (e) => {
-    const filesInfo = e.target.files;
-    handleUpdate(filesInfo);
-  });
+  return el(
+    "section",
+    { className: "container" },
+    el(
+      "form",
+      {
+        id: "form",
+        className: "image-form",
+        method: "POST",
+      },
+      el(
+        "div",
+        { className: "image-content" },
+        el("div", { className: "image-content__preview" }),
+        el(
+          "div",
+          { className: "image-upload__gps" },
+          el("input", {
+            id: "image-upload-location",
+            className: "image-upload__input",
+            type: "text",
+            list: "address",
+            name: "location",
+            placeholder: "사진 촬영 장소",
+            autocomplete: "off",
+          }),
+          el("datalist", {
+            className: "image-upload_datalist",
+            id: "address",
+          }),
+        ),
+        el(
+          "div",
+          { className: "image-content__completeBox" },
+          "✅ 사진 업로드 완료",
+        ),
 
-  // image drag & drop
-  imageContentLabel.addEventListener("dragover", (e) => {
-    preventEvent(e);
-    changeStyleAttribute(".image-content__label", "backgroundColor", "#616161");
-  });
+        el(
+          "label",
+          {
+            id: "label",
+            className: "image-content__label",
+            for: "image-upload-images",
+            events: {
+              mouseover: (event) => {
+                preventEvent(event);
+                const label = document.getElementById("label");
+                label.classList.remove("image-content__label");
+                label.classList.add("image-content__label--status");
+              },
 
-  imageContentLabel.addEventListener("dragleave", (e) => {
-    preventEvent(e);
-    changeStyleAttribute(".image-content__label", "backgroundColor", "#434343");
-  });
+              mouseout: (event) => {
+                preventEvent(event);
+                const label = document.getElementById("label");
+                label.classList.remove("image-content__label--status");
+                label.classList.add("image-content__label");
+              },
 
-  imageContentLabel.addEventListener("drop", (e) => {
-    preventEvent(e);
-    const fileInfo = e.dataTransfer.files;
-    changeStyleAttribute(".image-content__label", "backgroundColor", "#434343");
-    handleUpdate(fileInfo);
-  });
-
-  // container
-  container.classList.add("container");
-  form.classList.add("image-form");
-  form.method = "post";
-  form.action = "/post/tmp";
-  imageContent.classList.add("image-content");
-  submitBtn.innerText = "제출";
-  submitBtn.classList.add("image-content__submit");
-
-  // preview
-  imageContentPreview.classList.add("image-content__preview");
-
-  // upload
-  imageUploadGPS.classList.add("image-upload__gps");
-  imageUploadInput.classList.add("image-upload__input");
-  imageUploadInput.type = "text";
-  imageUploadInput.setAttribute("list", "address");
-  imageUploadInput.id = "image-upload__input";
-  imageUploadInput.name = "image-upload__input";
-  imageUploadInput.placeholder = "사진 촬영 장소";
-  dataList.classList.add("image-content__datalist");
-  dataList.id = "address";
-  imageUploadGPS.append(imageUploadInput, dataList);
-
-  // completeBox
-  imageContentCompleteBox.classList.add("image-content__completeBox");
-  imageContentCompleteBox.innerText = "✅ 사진 업로드 완료";
-
-  // drag & drop
-  imageContentLabel.classList.add("image-content__label");
-  imageContentLabel.for = "#image-content__label";
-  imageContentInner.classList.add("image-content__inner");
-  imageContentText.classList.add("image-content__text");
-  imageContentText.innerText = "드래그하거나 클릭하여 업로드";
-  imageContentInput.classList.add("image-content__input");
-  imageContentInput.id = "image-content__input";
-  imageContentInput.name = "image-content__input";
-  imageContentInput.accept = "image/*";
-  imageContentInput.type = "file";
-  imageContentInput.required = true;
-  imageContentInput.multiple = true;
-  imageContentText.append(imageContentInput);
-  imageContentInner.append(imageContentText);
-  imageContentLabel.append(imageContentInner);
-
-  // info
-  imageContentInfo.classList.add("image-content__info");
-  imageContentTitle.classList.add("image-content__title");
-  imageContentTitle.type = "text";
-  imageContentTitle.name = "image-content__title";
-  imageContentTitle.placeholder = "게시글 제목";
-  imageContentDesc.classList.add("image-content__desc");
-  imageContentDesc.name = "image-content__desc";
-  imageContentDesc.maxLength = "100";
-  imageContentDesc.placeholder = "게시글 설명(100자 이내)";
-  imageContentInfo.append(imageContentTitle, imageContentDesc);
-
-  // image content
-  imageContent.append(imageContentPreview, imageUploadGPS);
-  imageContent.append(imageContentCompleteBox, imageContentLabel);
-  imageContent.append(imageContentInfo);
-
-  // append
-  form.append(imageContent, submitBtn);
-  container.append(form);
-
-  return container;
+              dragover: (event) => {
+                preventEvent(event);
+                const label = document.getElementById("label");
+                label.classList.remove("image-content__label");
+                label.classList.add("image-content__label--status");
+              },
+              dragleave: (event) => {
+                preventEvent(event);
+                const label = document.getElementById("label");
+                label.classList.remove("image-content__label--status");
+                label.classList.add("image-content__label");
+              },
+              drop: (event) => {
+                preventEvent(event);
+                const label = document.getElementById("label");
+                label.classList.remove("image-content__label--status");
+                label.classList.add("image-content__label");
+                const fileInfo = event.dataTransfer.files;
+                handleUpdate(fileInfo);
+              },
+            },
+          },
+          el(
+            "div",
+            { className: "image-content__inner" },
+            el(
+              "div",
+              { className: "image-content__text" },
+              "드래그하거나 클릭하여 업로드",
+            ),
+            el("input", {
+              id: "image-upload-images",
+              className: "image-content__input",
+              name: "images",
+              accept: "image/*",
+              type: "file",
+              required: true,
+              multiple: true,
+              events: {
+                change: (event) => {
+                  const filesInfo = event.target.files;
+                  handleUpdate(filesInfo);
+                },
+              },
+            }),
+          ),
+        ),
+        el(
+          "div",
+          { className: "image-content__info" },
+          el("input", {
+            className: "image-content__title",
+            type: "text",
+            name: "title",
+            placeholder: "게시글 제목",
+          }),
+          el("textarea", {
+            className: "image-content__desc",
+            name: "description",
+            placeholder: "게시글 설명",
+          }),
+        ),
+      ),
+      el(
+        "button",
+        {
+          className: "image-content__submit",
+          type: "submit",
+          events: {
+            submit: (event) => {
+              console.log(event);
+              event.preventDefault();
+            },
+          },
+        },
+        "제출",
+      ),
+    ),
+  );
 }
