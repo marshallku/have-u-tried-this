@@ -1,10 +1,11 @@
 import { fetchAddressData, fetchAddressAPI } from "./address";
 import fetchLocationListData from "./location";
-import fetchPostData from "./post";
+import { fetchPostListData, fetchPostData } from "./post";
 
 export {
   fetchAddressData,
   fetchAddressAPI,
   fetchLocationListData,
+  fetchPostListData,
   fetchPostData,
 };

@@ -1,5 +1,5 @@
-import { locationListData } from "./dummy";
+import instance from "./instance";
 
-export default async function fetchLocationListData() {
-  return locationListData;
+export default async function fetchLocationListData(page = 1) {
+  return instance.get(`/locations?page=${page}`);
 }
