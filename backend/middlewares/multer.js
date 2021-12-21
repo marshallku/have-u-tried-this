@@ -1,4 +1,7 @@
 import multer, { MulterError } from "multer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 function fileFilter(req, file, cb) {
   const fileType = file.mimetype.split("/")[0];
@@ -13,7 +16,7 @@ export default function uploadFile(req, res, next) {
   const upload = multer({
     storage: multer.diskStorage({
       destination(_req, file, cb) {
-        cb(null, "public/uploads");
+        cb(null, process.env.UPLOAD_PATH);
       },
     }),
     limits: { fileSize: 1024 * 1024 * 2 },

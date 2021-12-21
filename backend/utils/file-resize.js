@@ -1,13 +1,13 @@
 import sharp from "sharp";
 import path from "path";
+import dotenv from "dotenv";
 import { writeFile } from "fs";
 
-export default (files) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const __dirname = path.resolve();
+dotenv.config();
 
+export default (files) => {
   files.forEach((file) => {
-    const filePath = path.join(__dirname, "public/uploads", file.filename);
+    const filePath = path.join(process.env.UPLOAD_PATH, file.filename);
 
     sharp(filePath)
       .resize({ width: 1080 })

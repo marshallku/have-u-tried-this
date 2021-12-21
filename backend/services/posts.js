@@ -1,8 +1,11 @@
 /* eslint-disable import/extensions */
 import fs from "fs";
 import path from "path";
+import dotenv from "dotenv";
 import { Post, Location } from "../models/index.js";
 import resizeFile from "../utils/file-resize.js";
+
+dotenv.config();
 
 function parseTitle(title) {
   return title.trim().replace("\n", " ");
@@ -76,8 +79,9 @@ export async function createPost(postDto) {
     content,
     photos: photos.reduce((prev, curr) => {
       prev.push({
-        url: curr.filename,
-        text: postDto.title,
+        url: process.env.IMG_PATH + curr.filename,
+        text: parseTitle(postDto.title),
+        filename: curr.filename,
       });
       return prev;
     }, []),
@@ -131,7 +135,7 @@ export async function updatePost(postId, newPostDto) {
         },
         photos: post.photos.map((photo) => {
           // eslint-disable-next-line no-param-reassign
-          photo.text = title;
+          photo.text = parseTitle(title);
           return photo;
         }),
         updatedAt: Date.now(),
@@ -162,16 +166,12 @@ export async function deletePost(postId, authorId) {
     if (isExist.author.toString() !== authorId) {
       throw new Error("권한이 없습니다.");
     }
-
     const post = await Post.findByIdAndDelete(postId);
     // 사진 삭제, DB에서는 삭제 되는지 확인 필요
     const { photos, location } = post;
-    // eslint-disable-next-line no-underscore-dangle
-    const __dirname = path.resolve();
     photos.forEach((photo) => {
-      fs.unlinkSync(path.join(__dirname, "public/uploads", photo.url));
+      fs.unlinkSync(path.join(process.env.UPLOAD_PATH, photo.filename));
     });
-
     await Location.updateOne(
       {
         wideAddr: location.wideAddr,

@@ -14,6 +14,7 @@ const PostSchema = new mongoose.Schema(
       {
         url: String,
         text: String,
+        filename: String,
       },
     ],
     likes: {

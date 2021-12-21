@@ -22,7 +22,7 @@ describe("post 라우터 테스트", () => {
 
     // 업로드된 파일 모두 지우기
     const __dirname = path.resolve();
-    const uploadPath = path.join(__dirname, "public/uploads");
+    const uploadPath = path.join(process.env.UPLOAD_PATH);
     if (fs.existsSync(uploadPath)) {
       fs.readdirSync(uploadPath).forEach((file, index) => {
         var curPath = uploadPath + "/" + file;
@@ -108,6 +108,10 @@ describe("post 라우터 테스트", () => {
     expect(res.body.title).toEqual("title");
     expect(res.body.content).toEqual("content");
     expect(res.body.location.localAddr).toEqual("강남구");
+    expect(res.body.photos[0].url).toEqual(
+      expect.stringContaining(process.env.IMG_PATH),
+    );
+    expect(typeof res.body.photos[0].filename).toEqual("string");
     expect(res.body.likes).toBeGreaterThanOrEqual(0);
     expect(typeof res.body.author).toEqual("string");
     expect(typeof res.body.createdAt).toEqual("string");
