@@ -31,8 +31,7 @@ export async function getAll(page, perPage) {
     data: parsedLocations,
     pagination: {
       page,
-      perPage,
-      totalPage,
+      nextPage: page < totalPage,
     },
   };
 }

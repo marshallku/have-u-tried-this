@@ -62,8 +62,7 @@ export async function getAll(_location, page, perPage) {
     }),
     pagination: {
       page,
-      perPage,
-      totalPage,
+      nextPage: page < totalPage,
     },
   };
 }
