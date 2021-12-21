@@ -5,7 +5,7 @@ import { Post, Location } from "../models/index.js";
 import resizeFile from "../utils/file-resize.js";
 
 function parseTitle(title) {
-  return title.replace("\n", " ");
+  return title.trim().replace("\n", " ");
 }
 
 async function checkLocation(wideAddr, localAddr) {

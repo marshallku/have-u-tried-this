@@ -264,7 +264,7 @@ describe("post 라우터 테스트", () => {
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
-      .field("title", "title\ngg")
+      .field("title", "title\ngg     ")
       .field("content", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
