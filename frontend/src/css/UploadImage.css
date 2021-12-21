@@ -25,6 +25,10 @@
   border-radius: 4px;
 }
 
+.image-content__preview--hidden {
+  display: none;
+}
+
 .image-upload__gps {
   width: 100%;
   color: var(--text);
@@ -44,17 +48,6 @@ input::-webkit-calendar-picker-indicator {
   opacity: 1;
 }
 
-.image-content__completeBox {
-  display: none;
-  width: 100%;
-  background-color: var(--lightest-bg);
-  color: var(--text);
-  font-size: 20px;
-  margin-bottom: 32px;
-  padding: 16px;
-  border-radius: 4px;
-}
-
 .image-content__label {
   display: inline-block;
   cursor: pointer;
@@ -67,28 +60,8 @@ input::-webkit-calendar-picker-indicator {
   border-radius: 4px;
 }
 
-.image-content__label--status {
-  display: inline-block;
-  cursor: pointer;
-  width: 100%;
-  line-height: 360px;
-  background-color: var(--lightest-bg);
-  color: var(--text);
-  text-align: center;
-  margin-bottom: 32px;
-  border-radius: 4px;
-}
-
-.image-content__label--status {
-  display: inline-block;
-  cursor: pointer;
-  width: 100%;
-  line-height: 360px;
+.image-content__label--hovered {
   background-color: var(--hover-bg);
-  color: var(--text);
-  text-align: center;
-  margin-bottom: 32px;
-  border-radius: 4px;
 }
 
 .image-content__input {
