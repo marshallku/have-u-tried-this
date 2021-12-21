@@ -258,4 +258,30 @@ describe("post 라우터 테스트", () => {
       .delete("/api/posts/" + updatePostId)
       .send();
   });
+
+  test("개행 문자 넣은 타이틀 생성 후 확인, 삭제까지", async () => {
+    const __dirname = path.resolve();
+    const pwd = path.join(__dirname, "tests/integration/test-image");
+    const res = await request(app)
+      .post("/api/posts")
+      .field("title", "title\ngg")
+      .field("content", "content")
+      .field("wideAddr", "서울특별시")
+      .field("localAddr", "강남구")
+      .attach("photos", pwd + "/1.JPG");
+
+    expect(res.statusCode).toEqual(201);
+    expect(Object.keys(res.body)).toEqual(expect.arrayContaining(["id"]));
+
+    const res2 = await request(app)
+      .get("/api/posts/" + res.body.id)
+      .send();
+
+    expect(res2.statusCode).toEqual(200);
+    expect(res2.body.title).toEqual("title gg");
+
+    await request(app)
+      .delete("/api/posts/" + res.body.id)
+      .send();
+  });
 });
