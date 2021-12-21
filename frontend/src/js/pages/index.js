@@ -18,7 +18,7 @@ function resetApp() {
 }
 
 function isReset({ page, initializing, isPopstate }) {
-  if (initializing) return false;
+  if (initializing) return true;
 
   if (page !== "post") {
     const fixedContainer = document.querySelector(".fixed-container");
