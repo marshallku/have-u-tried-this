@@ -4,6 +4,10 @@ import path from "path";
 import { Post, Location } from "../models/index.js";
 import resizeFile from "../utils/file-resize.js";
 
+function parseTitle(title) {
+  return title.replace("\n", " ");
+}
+
 async function checkLocation(wideAddr, localAddr) {
   const location = await Location.findOne({ wideAddr, localAddr });
   if (!location) {
@@ -68,7 +72,7 @@ export async function createPost(postDto) {
 
   // post 인스턴스 생성
   const post = new Post({
-    title,
+    title: parseTitle(title),
     content,
     photos: photos.reduce((prev, curr) => {
       prev.push({
@@ -119,7 +123,7 @@ export async function updatePost(postId, newPostDto) {
     const newPost = await Post.findByIdAndUpdate(
       postId,
       {
-        title,
+        title: parseTitle(title),
         content,
         location: {
           wideAddr,
