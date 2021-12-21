@@ -1,5 +1,4 @@
 import el from "../utils/dom";
-import { addQuery } from "../utils/location";
 import toast from "../utils/toast";
 import imagesLoaded from "../utils/imagesLoaded";
 import { debounce } from "../utils/optimize";
@@ -7,8 +6,8 @@ import Loader from "./Loader";
 import masonry from "../utils/masonry";
 import "../../css/MasonryContainer.css";
 
-export default function MasonryContainer(apiUri, component) {
-  let currentPage = 1;
+export default function MasonryContainer({ fetcher, args, component }) {
+  let page = 1;
   let isDone = false;
   let isLoading = false;
   let msnry;
@@ -20,26 +19,19 @@ export default function MasonryContainer(apiUri, component) {
     isLoading = true;
     container.append(loader);
 
-    const requestUri = addQuery({
-      uri: apiUri,
-      param: "page",
-      value: currentPage,
-    });
-
     try {
-      const response = await fetch(requestUri);
-      const json = await response.json();
+      const { data, pagination } = await fetcher(...args, page);
       const fragment = el("fragment", {});
-      const elements = json.data.map((x) => component(x));
+      const elements = data.map((x) => component(x));
 
-      if (!json.pagination.nextPage) {
+      if (!pagination.nextPage) {
         isDone = true;
         // eslint-disable-next-line no-use-before-define
         io.unobserve(observeTarget);
       }
 
       await imagesLoaded(elements, () => {
-        currentPage += 1;
+        page += 1;
         isLoading = false;
       });
 

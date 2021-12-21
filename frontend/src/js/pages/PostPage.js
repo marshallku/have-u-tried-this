@@ -7,6 +7,7 @@ import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
 import { formatToReadableTime } from "../utils/time";
 import { removeBackSpace, removeLineBreak } from "../utils/string";
+import { getPaths } from "../utils/location";
 import "../../css/PostDetails.css";
 
 function renderPostDetails(data) {
@@ -14,7 +15,7 @@ function renderPostDetails(data) {
     title,
     author,
     content,
-    pictures,
+    photos,
     likes,
     location,
     createdAt,
@@ -75,6 +76,25 @@ function renderPostDetails(data) {
 
     editing.status = nextStatus;
   };
+  const editButtons = data.isAuthor
+    ? [
+        el("button", {
+          events: {
+            click: handleEditButtonClick,
+          },
+          className: "icon-create",
+        }),
+        el("button", {
+          events: {
+            click: () => {
+              const app = document.getElementById("app");
+              app.append(Modal(author, content));
+            },
+          },
+          className: "icon-delete",
+        }),
+      ]
+    : [];
 
   // Location
   addClickEvent(
@@ -88,7 +108,7 @@ function renderPostDetails(data) {
   return el(
     "fragment",
     {},
-    Carousel(pictures),
+    Carousel(photos),
     el(
       "div",
       { className: "small-container details" },
@@ -110,34 +130,13 @@ function renderPostDetails(data) {
           { className: "details__location" },
           el("i", { className: "icon-location_on" }, locationAnchor),
         ),
-        el(
-          "div",
-          { className: "details__buttons" },
-          likesElt,
-          data.isAuthor &&
-            el("button", {
-              events: {
-                click: handleEditButtonClick,
-              },
-              className: "icon-create",
-            }),
-          data.isAuthor &&
-            el("button", {
-              events: {
-                click: () => {
-                  const app = document.getElementById("app");
-                  app.append(Modal(author, content));
-                },
-              },
-              className: "icon-delete",
-            }),
-        ),
+        el("div", { className: "details__buttons" }, likesElt, ...editButtons),
         titleElt,
         el(
           "div",
           { className: "details__author" },
           el("img", { src: author.profile }),
-          el("span", {}, `by ${author.nickname}`),
+          el("span", {}, `by ${author.lastName} ${author.firstName}`),
         ),
       ),
       descElt,
@@ -163,8 +162,9 @@ export default function PostDetails(fixed) {
     loader,
     article,
   );
+  const postId = getPaths().pop();
 
-  fetchPostData().then((data) => {
+  fetchPostData(postId).then((data) => {
     loader.remove();
     article.append(renderPostDetails(data, fixed));
   });

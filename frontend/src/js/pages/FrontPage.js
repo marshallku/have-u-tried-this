@@ -14,7 +14,7 @@ export default function FrontPage() {
 
     loader.remove();
 
-    data.forEach((location) =>
+    data.data.forEach((location) =>
       fragment.append(
         CityItem({
           wide: location.wideAddr,

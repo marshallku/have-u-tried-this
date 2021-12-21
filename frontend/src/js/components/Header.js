@@ -40,7 +40,7 @@ function checkHeader({ title }) {
 }
 
 export default function renderHeader(page) {
-  const [wideAddr, localAddr] = getPaths().slice(1);
+  const [wideAddr, localAddr] = getPaths(2);
 
   switch (page) {
     case "":
