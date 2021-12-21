@@ -78,6 +78,7 @@
   font-size: 32px;
   top: 50%;
   transform: translateY(-50%);
+  text-shadow: #000 1px 0 10px;
 }
 
 .carousel__button--back {

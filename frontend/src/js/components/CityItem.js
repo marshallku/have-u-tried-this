@@ -15,7 +15,7 @@ export default function CityItem({ wide, local, thumbnail }) {
       "header",
       { className: "city-item__header" },
       el("h2", {}, wide),
-      el("h2", {}, local),
+      el("h3", {}, local),
     ),
   );
 

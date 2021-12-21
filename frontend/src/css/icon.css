@@ -117,6 +117,9 @@
 .icon-share:before {
   content: "\e91a";
 }
+.icon-delete:before {
+  content: "\e92c";
+}
 .icon-favorite:before {
   content: "\e91b";
 }
@@ -137,6 +140,9 @@
 }
 .icon-thumb_up:before {
   content: "\e920";
+}
+.icon-delete_forever:before {
+  content: "\e92d";
 }
 .icon-calendar_today:before {
   content: "\e921";
