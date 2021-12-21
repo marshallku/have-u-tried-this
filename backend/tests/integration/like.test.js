@@ -5,7 +5,7 @@ import path from "path";
 import app from "../../app";
 
 describe("북마크 기능 테스트", () => {
-  let postId;
+  let postIdLike;
 
   test("테스트 케이스 글 생성", async () => {
     const __dirname = path.resolve();
@@ -21,12 +21,12 @@ describe("북마크 기능 테스트", () => {
     expect(res.statusCode).toEqual(201);
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(["id"]));
 
-    postId = res.body.id;
+    postIdLike = res.body.id;
   });
 
   test("성공 좋아요 클릭", async () => {
     const res = await request(app)
-      .post("/api/posts/" + postId + "/like")
+      .post("/api/posts/" + postIdLike + "/like")
       .send();
 
     expect(res.statusCode).toEqual(201);
@@ -35,7 +35,7 @@ describe("북마크 기능 테스트", () => {
 
   test("성공 좋아요 클릭 시 좋아요 갯수 확인", async () => {
     const res = await request(app)
-      .get("/api/posts/" + postId)
+      .get("/api/posts/" + postIdLike)
       .send();
 
     expect(res.body.likes).toEqual(1);
@@ -59,7 +59,7 @@ describe("북마크 기능 테스트", () => {
 
   test("성공 좋아요 취소 클릭", async () => {
     const res = await request(app)
-      .delete("/api/posts/" + postId + "/unlike")
+      .delete("/api/posts/" + postIdLike + "/unlike")
       .send();
 
     expect(res.statusCode).toEqual(204);
@@ -67,7 +67,7 @@ describe("북마크 기능 테스트", () => {
 
   test("성공 좋아요 취소 클릭 시 좋아요 갯수 확인", async () => {
     const res = await request(app)
-      .get("/api/posts/" + postId)
+      .get("/api/posts/" + postIdLike)
       .send();
 
     expect(res.body.likes).toEqual(0);
@@ -91,7 +91,7 @@ describe("북마크 기능 테스트", () => {
 
   test("Success DELETE /api/posts/:id 포스트 삭제", async () => {
     const res = await request(app)
-      .delete("/api/posts/" + postId)
+      .delete("/api/posts/" + postIdLike)
       .send();
 
     expect(res.status).toEqual(200);
