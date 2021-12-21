@@ -45,7 +45,7 @@ describe("post 라우터 테스트", () => {
       expect.arrayContaining(["data", "pagination"]),
     );
     expect(Object.keys(res.body.pagination)).toEqual(
-      expect.arrayContaining(["page", "perPage", "totalPage"]),
+      expect.arrayContaining(["page", "nextPage"]),
     );
   });
 
