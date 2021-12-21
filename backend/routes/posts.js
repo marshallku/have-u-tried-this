@@ -29,7 +29,7 @@ router.get(
     };
 
     const page = req.query.page || 1;
-    const perPage = req.query.page || 9;
+    const perPage = req.query.perPage || 9;
 
     const isExists = await validation(location);
     if (!isExists) {
