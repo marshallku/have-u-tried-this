@@ -7,6 +7,8 @@
     "prebuild": "node pre-build.js",
     "build": "webpack",
     "postbuild": "node post-build.js",
+    "predeploy": "npm run build",
+    "deploy": "scp -r ./dist/* kdt02@elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com:/var/www/html",
     "dev": "webpack serve --open",
     "dummyApi": "node ./src/js/api/infiniteDummy.js"
   },

@@ -16,7 +16,13 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
+        test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,
+        generator: {
+          filename: "[name][ext]",
+        },
+      },
+      {
+        test: /\.js$/,
         exclude: /node_modules/,
       },
       {
@@ -29,6 +35,7 @@ module.exports = {
     new MiniCssExtractPlugin({ filename: "[name].css" }),
     new HtmlWebpackPlugin({
       template: "./index.html",
+      filename: "index.html",
     }),
   ],
   optimization: {

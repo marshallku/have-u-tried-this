@@ -24,4 +24,15 @@ fs.cp("./static", "./dist", { recursive: true }, async (err) => {
   fs.writeFileSync("./dist/main.js", newValue, "utf-8");
 
   console.log("Replaced [/static] to [] in [./dist/main.js]");
+
+  // Replace path in html
+  const htmlData = fs.readFileSync("./dist/index.html", "utf-8");
+  const newHtmlValue = htmlData
+    .replaceAll("/static", "")
+    // eslint-disable-next-line quotes
+    .replace(/(src|href)="([a-zA-Z])/gim, '$1="/$2');
+
+  fs.writeFileSync("./dist/index.html", newHtmlValue, "utf-8");
+
+  console.log("Replaced values in [./dist/index.html]");
 });
