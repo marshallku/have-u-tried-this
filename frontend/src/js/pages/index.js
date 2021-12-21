@@ -4,6 +4,7 @@ import SignInPage from "./SignInPage";
 import UploadPage from "./UploadPage";
 import UserPage from "./UserPage";
 import ListPage from "./ListPage";
+import ErrorComponent from "../components/ErrorComponent";
 
 const app = document.getElementById("app");
 
@@ -43,28 +44,37 @@ export default function renderPage(page, isPopstate) {
   const initializing = !document.getElementById("app").firstChild;
   const shouldAppend = isReset({ page, initializing, isPopstate });
 
-  switch (page) {
-    case "":
-      app.append(FrontPage());
-      break;
-    case "location":
-      if (shouldAppend) {
-        app.append(ListPage());
-      }
-      break;
-    case "post":
-      app.append(PostPage(!initializing));
-      break;
-    case "add":
-      app.append(UploadPage());
-      break;
-    case "login":
-      app.append(SignInPage());
-      break;
-    case "user":
-      app.append(UserPage());
-      break;
-    default:
-      app.innerText = "ERROR";
+  try {
+    switch (page) {
+      case "":
+        app.append(FrontPage());
+        break;
+      case "location":
+        if (shouldAppend) {
+          app.append(ListPage());
+        }
+        break;
+      case "post":
+        app.append(PostPage(!initializing));
+        break;
+      case "add":
+        app.append(UploadPage());
+        break;
+      case "login":
+        app.append(SignInPage());
+        break;
+      case "user":
+        app.append(UserPage());
+        break;
+      default:
+        app.append(ErrorComponent());
+    }
+  } catch (err) {
+    console.log(err);
+
+    const header = document.querySelector(".header");
+    if (header) header.remove();
+
+    app.append(ErrorComponent());
   }
 }

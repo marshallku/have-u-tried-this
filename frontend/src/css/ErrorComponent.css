@@ -1,0 +1,20 @@
+.error {
+  display: flex;
+  padding: 10vmax 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.error > :not(:last-child) {
+  margin-bottom: 5vmax;
+}
+
+.error__title {
+  font-size: 2rem;
+  line-height: 2;
+}
+
+.error__link {
+  font-size: 1.8rem;
+}
