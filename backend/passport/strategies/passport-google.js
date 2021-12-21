@@ -20,7 +20,7 @@ const passportConfig = {
 
 export default new GoogleStrategy(
   passportConfig,
-  async (accessToken, refreshToken, params, profiles, done) => {
+  async (req, accessToken, refreshToken, profiles, done) => {
     const googleId = profiles.id;
     const email = profiles.emails[0].value;
     const firstName = profiles.name.givenName;
@@ -40,6 +40,11 @@ export default new GoogleStrategy(
       });
       return done(null, newUser.googleId);
     }
+    // for test
+    console.log("accessToken");
+    console.log(accessToken);
+    console.log("refreshToken");
+    console.log(refreshToken);
 
     if (currentUser.source !== "google") {
       // return error

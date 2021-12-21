@@ -13,7 +13,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 
 import callPassport from "./passport/index.js";
-
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
@@ -54,7 +53,8 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 60 * 1000, // 60 secs
     },
   }),
 );
