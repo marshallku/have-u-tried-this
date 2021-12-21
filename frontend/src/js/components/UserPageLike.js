@@ -2,6 +2,7 @@ import PostItem from "../components/PostItem";
 import MasonryContainer from "../components/MasonryContainer";
 
 export default function UserPageLike() {
+  // TODO: 작성자 작업 완료시 API 호출 방식 수정
   return MasonryContainer("http://localhost:9980/tmp", (article) =>
     PostItem({
       title: article.title,

@@ -80,8 +80,12 @@ export default function Carousel(items) {
     }px, 0, 0)`;
   };
 
-  const CarouselItem = (src) =>
-    el("li", { className: "carousel__item" }, el("img", { src }));
+  const CarouselItem = (item) =>
+    el(
+      "li",
+      { className: "carousel__item" },
+      el("img", { src: item.url, alt: item.text }),
+    );
 
   const Button = (text, direction) => {
     const button = document.createElement("button");

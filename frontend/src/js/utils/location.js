@@ -9,9 +9,9 @@ export function addQuery({ uri, param, value }) {
   return url.toString();
 }
 
-export function getPaths() {
+export function getPaths(index = 1) {
   return window.location.pathname
     .split("/")
-    .slice(1)
+    .slice(index)
     .map((x) => decodeURI(x));
 }
