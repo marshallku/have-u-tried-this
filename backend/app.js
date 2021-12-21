@@ -10,6 +10,7 @@ import passport from "passport";
 import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 import callPassport from "./passport/index.js";
 
@@ -27,6 +28,7 @@ callPassport();
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 

@@ -20,7 +20,7 @@ describe("location 라우터 통합 테스트", () => {
       expect.arrayContaining(["wideAddr", "localAddr", "photo"]),
     );
     expect(Object.keys(res.body["pagination"])).toEqual(
-      expect.arrayContaining(["page", "perPage", "totalPage"]),
+      expect.arrayContaining(["page", "nextPage"]),
     );
   });
 
