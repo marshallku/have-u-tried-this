@@ -253,5 +253,9 @@ describe("post 라우터 테스트", () => {
     const updatedAt = new Date(res.body.updatedAt);
     expect(createdAt <= updatedAt).toEqual(true);
     expect(res.body.author.toString()).toEqual(process.env.AUTHOR_ID);
+
+    await request(app)
+      .delete("/api/posts/" + updatePostId)
+      .send();
   });
 });
