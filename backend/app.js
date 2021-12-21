@@ -16,6 +16,7 @@ import callPassport from "./passport/index.js";
 import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
+import usersRouter from "./routes/users.js";
 
 // to test
 import mockLogin from "./utils/mock-login.js";
@@ -68,6 +69,7 @@ if (process.env.NODE_ENV === "test") {
 app.use("/api/locations", locationRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/users", usersRouter);
 
 // server listen
 if (process.env.NODE_ENV !== "test") {
