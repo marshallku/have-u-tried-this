@@ -13,7 +13,11 @@ router.get("/", (req, res) => {
 // Google OAuth2
 router.get(
   "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] }),
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    accessType: "offline",
+    prompt: "consent",
+  }),
 );
 
 router.get(
