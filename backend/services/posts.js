@@ -21,7 +21,7 @@ async function checkLocation(wideAddr, localAddr) {
 
 export async function findById(id) {
   try {
-    const post = await Post.findById(id);
+    const post = await Post.findById(id).populate("author");
     return post;
   } catch (e) {
     throw new Error("존재하지 않는 글입니다.");

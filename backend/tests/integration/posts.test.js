@@ -113,7 +113,7 @@ describe("post 라우터 테스트", () => {
     );
     expect(typeof res.body.photos[0].filename).toEqual("string");
     expect(res.body.likes).toBeGreaterThanOrEqual(0);
-    expect(typeof res.body.author).toEqual("string");
+    expect(typeof res.body.author).toEqual("object");
     expect(typeof res.body.createdAt).toEqual("string");
   });
 
