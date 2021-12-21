@@ -6,6 +6,7 @@ import { fetchPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
 import { formatToReadableTime } from "../utils/time";
+import { removeBackSpace, removeLineBreak } from "../utils/string";
 import "../../css/PostDetails.css";
 
 function renderPostDetails(data) {
@@ -40,6 +41,13 @@ function renderPostDetails(data) {
     descElt.contentEditable = nextStatus;
 
     if (editing.status) {
+      const inputtedTitle = removeBackSpace(
+        removeLineBreak(titleElt.innerText.trim() || editing.title),
+      );
+      const inputtedDesc = removeLineBreak(
+        descElt.innerText.trim() || editing.desc,
+      );
+
       // End editing
       target.className = "icon-create";
       // Remove Attributes
@@ -48,13 +56,9 @@ function renderPostDetails(data) {
       descElt.removeAttribute("role");
       descElt.classList.remove("details__desc--editing");
 
-      // Fill Text if empty
-      if (!titleElt.innerText) titleElt.innerText = editing.title;
-      if (!descElt.innerText) descElt.innerText = editing.desc;
-
-      // Validate text
-      if (titleElt.innerText.includes("\n"))
-        titleElt.innerText = titleElt.innerText.replaceAll("\n", " ");
+      // Fill text with valid string
+      titleElt.innerText = inputtedTitle;
+      descElt.innerText = inputtedDesc;
 
       // TODO: Update post with api
     } else {

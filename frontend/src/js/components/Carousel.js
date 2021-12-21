@@ -14,7 +14,6 @@ export default function Carousel(items) {
   let containerWidth;
   let initialX;
   let diffX;
-  let scrollLocked = false;
 
   const setContainerWidth = () => {
     containerWidth = container.offsetWidth;
@@ -103,12 +102,8 @@ export default function Carousel(items) {
   const Dot = () => el("button", { className: "carousel__dot" });
 
   const handleTouchMove = (event) => {
-    if (scrollLocked && event.cancelable) event.preventDefault();
-
     const currentX = event.touches[0].clientX;
     diffX = initialX - currentX;
-
-    if (!scrollLocked && Math.abs(diffX) > 50) scrollLocked = true;
 
     slider.style.transform = `translate3d(${
       containerWidth * currentIndex * -1 - diffX
@@ -118,7 +113,6 @@ export default function Carousel(items) {
   const handleTouchEnd = () => {
     slider.classList.remove("carousel__items--transition-removed");
     window.removeEventListener("touchmove", handleTouchMove);
-    scrollLocked = false;
 
     if (Math.abs(diffX) > 100) slide(diffX > 0 ? 1 : -1);
     else slide(0);
@@ -131,8 +125,11 @@ export default function Carousel(items) {
     initialX = event.touches[0].clientX;
     slider.classList.add("carousel__items--transition-removed");
 
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd, { once: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, {
+      passive: true,
+      once: true,
+    });
   };
 
   const resizeObserver = new ResizeObserver(() => {
@@ -169,7 +166,7 @@ export default function Carousel(items) {
   });
   buttons[0].classList.add("carousel__button--disabled");
 
-  container.addEventListener("touchstart", handleTouchStart);
+  container.addEventListener("touchstart", handleTouchStart, { passive: true });
   container.append(carousel);
 
   resizeObserver.observe(carousel);
