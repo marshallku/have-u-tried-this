@@ -55,7 +55,7 @@ export async function getAll(_location, page, perPage) {
         wideAddr: _location.wideAddr,
         localAddr: _location.localAddr,
         photo: post.photos[0].url,
-        title: post.photos[0].title,
+        title: post.photos[0].text,
         likes: post.likes,
       };
       return data;
