@@ -11,6 +11,7 @@ import {
   updatePost,
   deletePost,
 } from "../services/posts.js";
+import { pushLike, pushUnlike } from "../services/bookmark.js";
 import uploadFile from "../middlewares/multer.js";
 import PostDto from "../models/DTO/Post.js";
 import asyncHandler from "../utils/async-handler.js";
@@ -109,6 +110,30 @@ router.put(
 
     const newPost = await updatePost(postId, newPostDto);
     res.json(newPost);
+  }),
+);
+
+// 좋아요
+router.post(
+  "/:id/like",
+  asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
+    const postId = req.params.id;
+    await pushLike(authorId, postId);
+    res.status(201).json({ success: true });
+  }),
+);
+
+// 좋아요 취소
+router.delete(
+  "/:id/unlike",
+  asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
+    const postId = req.params.id;
+    await pushUnlike(authorId, postId);
+    res.status(204).json();
   }),
 );
 
