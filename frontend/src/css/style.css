@@ -1,3 +1,12 @@
+@font-face {
+  font-family: "SeoulHangangM";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/SeoulHangangM.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --text: #bbb;
   --dark-text: #1b1b1b;
@@ -9,6 +18,7 @@
   --primary: #fff263;
   --light: #ffff95;
   --dark: #c9c02f;
+  --highlight-font: "SeoulHangangM", sans-serif;
 }
 
 a {
@@ -26,6 +36,7 @@ a:hover {
 html {
   background-color: var(--bg);
   color: var(--text);
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 body {

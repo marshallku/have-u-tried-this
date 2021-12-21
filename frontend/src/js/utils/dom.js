@@ -26,7 +26,11 @@ export default function el(nodeName, attributes, ...children) {
 
   children.forEach((childNode) => {
     if (typeof childNode === "string") {
-      node.appendChild(document.createTextNode(childNode));
+      if (childNode.includes("\n")) {
+        node.innerText = childNode;
+      } else {
+        node.appendChild(document.createTextNode(childNode));
+      }
     } else {
       node.appendChild(childNode);
     }

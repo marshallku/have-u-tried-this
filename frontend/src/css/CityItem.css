@@ -24,6 +24,7 @@
 }
 
 .city-item__header {
+  font-family: var(--highlight-font);
   position: absolute;
   top: 0;
   left: 0;

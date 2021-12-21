@@ -129,7 +129,7 @@ function renderPostDetails(data) {
                   app.append(Modal(author, content));
                 },
               },
-              className: "icon-clear",
+              className: "icon-delete",
             }),
         ),
         titleElt,
