@@ -2,15 +2,14 @@ import EXIF from "exif-js";
 import el from "../utils/dom";
 import toast from "../utils/toast";
 import { fetchAddressAPI } from "../api";
+import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
 import "../../css/UploadImage.css";
 
-export default function UploadPage() {
-  const MAX_UPLOAD_IMAGES = 4;
-  const SECONDS_PER_MINUTE = 60;
-  const SECONDS_PER_HOUR = 3600;
-  const POSITIVE_VALUE = 1;
-  const NEGATIVE_VALUE = -1;
+const MAX_UPLOAD_IMAGES = 4;
+const POSITIVE_VALUE = 1;
+const NEGATIVE_VALUE = -1;
 
+export default function UploadPage() {
   const wrapperElement = (
     element,
     className,
@@ -47,11 +46,9 @@ export default function UploadPage() {
     const [degrees, minutes, seconds] = coordinate;
     return (
       sign *
-      (
-        degrees +
-        minutes / SECONDS_PER_MINUTE +
-        seconds / SECONDS_PER_HOUR
-      ).toFixed(8)
+      (degrees + minutes / MINUTE_TO_SECOND + seconds / HOUR_TO_SECOND).toFixed(
+        8,
+      )
     );
   };
 
@@ -145,9 +142,8 @@ export default function UploadPage() {
       reader.readAsDataURL(file);
     });
 
-    const completeBox = document.querySelector(".image-content__completeBox");
-    label.style.display = "none";
-    completeBox.style.display = "block";
+    preview.classList.remove("image-content__preview--hidden");
+    document.getElementById("label")?.remove();
   };
 
   return el(
@@ -163,30 +159,9 @@ export default function UploadPage() {
       el(
         "div",
         { className: "image-content" },
-        el("div", { className: "image-content__preview" }),
-        el(
-          "div",
-          { className: "image-upload__gps" },
-          el("input", {
-            id: "image-upload-location",
-            className: "image-upload__input",
-            type: "text",
-            list: "address",
-            name: "location",
-            placeholder: "사진 촬영 장소",
-            autocomplete: "off",
-          }),
-          el("datalist", {
-            className: "image-upload_datalist",
-            id: "address",
-          }),
-        ),
-        el(
-          "div",
-          { className: "image-content__completeBox" },
-          "✅ 사진 업로드 완료",
-        ),
-
+        el("div", {
+          className: "image-content__preview image-content__preview--hidden",
+        }),
         el(
           "label",
           {
@@ -197,35 +172,35 @@ export default function UploadPage() {
               mouseover: (event) => {
                 preventEvent(event);
                 const label = document.getElementById("label");
-                label.classList.remove("image-content__label");
-                label.classList.add("image-content__label--status");
+
+                label.classList.add("image-content__label--hovered");
               },
 
               mouseout: (event) => {
                 preventEvent(event);
                 const label = document.getElementById("label");
-                label.classList.remove("image-content__label--status");
-                label.classList.add("image-content__label");
+
+                label.classList.remove("image-content__label--hovered");
               },
 
               dragover: (event) => {
                 preventEvent(event);
                 const label = document.getElementById("label");
-                label.classList.remove("image-content__label");
-                label.classList.add("image-content__label--status");
+
+                label.classList.add("image-content__label--hovered");
               },
               dragleave: (event) => {
                 preventEvent(event);
                 const label = document.getElementById("label");
-                label.classList.remove("image-content__label--status");
-                label.classList.add("image-content__label");
+
+                label.classList.remove("image-content__label--hovered");
               },
               drop: (event) => {
                 preventEvent(event);
                 const label = document.getElementById("label");
-                label.classList.remove("image-content__label--status");
-                label.classList.add("image-content__label");
                 const fileInfo = event.dataTransfer.files;
+
+                label.classList.remove("image-content__label--hovered");
                 handleUpdate(fileInfo);
               },
             },
@@ -254,6 +229,23 @@ export default function UploadPage() {
               },
             }),
           ),
+        ),
+        el(
+          "div",
+          { className: "image-upload__gps" },
+          el("input", {
+            id: "image-upload-location",
+            className: "image-upload__input",
+            type: "text",
+            list: "address",
+            name: "location",
+            placeholder: "사진 촬영 장소",
+            autocomplete: "off",
+          }),
+          el("datalist", {
+            className: "image-upload_datalist",
+            id: "address",
+          }),
         ),
         el(
           "div",
