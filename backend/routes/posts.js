@@ -13,6 +13,7 @@ import {
 } from "../services/posts.js";
 import { pushLike, pushUnlike } from "../services/bookmark.js";
 import uploadFile from "../middlewares/multer.js";
+import loginRequired from "../middlewares/login-required.js";
 import PostDto from "../models/DTO/Post.js";
 import asyncHandler from "../utils/async-handler.js";
 
@@ -53,6 +54,7 @@ router.get(
 // 포스트 등록
 router.post(
   "/",
+  loginRequired,
   uploadFile,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
@@ -87,6 +89,7 @@ router.post(
 // 포스트 수정 로직
 router.put(
   "/:id",
+  loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
@@ -116,6 +119,7 @@ router.put(
 // 좋아요
 router.post(
   "/:id/like",
+  loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
@@ -128,6 +132,7 @@ router.post(
 // 좋아요 취소
 router.delete(
   "/:id/unlike",
+  loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
@@ -140,6 +145,7 @@ router.delete(
 // 포스트 삭제 로직
 router.delete(
   "/:id",
+  loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
