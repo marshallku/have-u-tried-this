@@ -2,7 +2,7 @@ import el from "../utils/dom";
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
 import Modal from "../components/Modal";
-import { fetchPostData } from "../api";
+import { getPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
 import { formatToReadableTime } from "../utils/time";
@@ -189,7 +189,7 @@ export default function PostDetails(fixed) {
   );
   const postId = getPaths().pop();
 
-  fetchPostData(postId).then((data) => {
+  getPostData(postId).then((data) => {
     loader.remove();
     article.append(renderPostDetails(data, fixed));
   });

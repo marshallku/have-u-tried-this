@@ -1,4 +1,4 @@
-import { fetchPostListData } from "../api";
+import { getPostListData } from "../api";
 import PostItem from "../components/PostItem";
 import MasonryContainer from "../components/MasonryContainer";
 import { getPaths } from "../utils/location";
@@ -7,7 +7,7 @@ export default function ListPage() {
   const [wideAddr, localAddr] = getPaths(2);
 
   return MasonryContainer({
-    fetcher: fetchPostListData,
+    fetcher: getPostListData,
     args: [wideAddr, localAddr],
     component: (article) =>
       PostItem({

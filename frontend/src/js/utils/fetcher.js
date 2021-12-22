@@ -7,9 +7,9 @@ export default function createInstance({ baseUrl }) {
         message,
       };
     },
-    async get(resource) {
+    async get(resource, init) {
       try {
-        const response = await fetch(`${baseUrl}${resource}`);
+        const response = await fetch(`${baseUrl}${resource}`, init);
         const json = await response.json();
 
         return json;

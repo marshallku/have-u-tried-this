@@ -3,7 +3,7 @@ import el from "../utils/dom";
 import toast from "../utils/toast";
 import { debounce } from "../utils/optimize";
 import { checkLock, lock } from "../router/lock";
-import { fetchAddressAPI } from "../api/address";
+import { getAddressAPI } from "../api";
 import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
 import "../../css/UploadImage.css";
 
@@ -131,7 +131,7 @@ export default function UploadPage() {
 
         try {
           const { longitude, latitude } = await getGPSCoordinate(img);
-          const { wideAddr, localAddr } = await fetchAddressAPI(
+          const { wideAddr, localAddr } = await getAddressAPI(
             longitude,
             latitude,
           );
