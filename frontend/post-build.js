@@ -29,8 +29,7 @@ fs.cp("./static", "./dist", { recursive: true }, async (err) => {
   const htmlData = fs.readFileSync("./dist/index.html", "utf-8");
   const newHtmlValue = htmlData
     .replaceAll("/static", "")
-    // eslint-disable-next-line quotes
-    .replace(/(src|href)="([a-zA-Z])/gim, '$1="/$2');
+    .replace(/main\.(js|css)/gim, "/main.$1");
 
   fs.writeFileSync("./dist/index.html", newHtmlValue, "utf-8");
 
