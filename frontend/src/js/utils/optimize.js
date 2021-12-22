@@ -30,10 +30,10 @@ export function throttle(func, wait = DEFAULT_WAIT) {
 export function debounce(func, wait = DEFAULT_WAIT) {
   let timer;
 
-  return () => {
+  return (...args) => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      func();
+      func(...args);
     }, wait);
   };
 }

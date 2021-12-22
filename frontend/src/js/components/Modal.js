@@ -1,7 +1,17 @@
 import el from "../utils/dom";
 import "../../css/Modal.css";
+import { unlock } from "../router/lock";
 
-export default function Modal(author, content) {
+function checkType(data) {
+  if (data) {
+    console.log(data); // delete data (author, content)
+  } else {
+    unlock();
+  }
+}
+
+export default function Modal({ title, content, callback }) {
+  const app = document.getElementById("app");
   const backdrop = el("div", {
     className: "backdrop",
     events: { click: () => backdrop.remove() },
@@ -17,8 +27,8 @@ export default function Modal(author, content) {
         el(
           "div",
           { className: "modal__title" },
-          el("div", {}, "삭제하면 되돌릴 수 없어요!"),
-          el("div", {}, "그래도 삭제하시겠습니까?"),
+          el("div", {}, title),
+          el("div", {}, content),
         ),
         el(
           "div",
@@ -30,13 +40,17 @@ export default function Modal(author, content) {
           ),
           el(
             "button",
-            { events: { click: () => console.log(author, content) } },
-            "네, 삭제할게요",
+            {
+              events: {
+                click: callback,
+              },
+            },
+            "네, 해주세요",
           ),
         ),
       ),
     ),
   );
 
-  return backdrop;
+  app.append(backdrop);
 }

@@ -1,6 +1,8 @@
 import EXIF from "exif-js";
 import el from "../utils/dom";
 import toast from "../utils/toast";
+import { debounce } from "../utils/optimize";
+import { checkLock, lock } from "../router/lock";
 import { fetchAddressAPI } from "../api/address";
 import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
 import "../../css/UploadImage.css";
@@ -125,6 +127,7 @@ export default function UploadPage() {
       const reader = new FileReader();
       reader.addEventListener("load", async (event) => {
         const img = embedImgElement(event);
+        lock();
 
         try {
           const { longitude, latitude } = await getGPSCoordinate(img);
@@ -265,11 +268,21 @@ export default function UploadPage() {
             type: "text",
             name: "title",
             placeholder: "게시글 제목",
+            events: {
+              input: debounce((event) => {
+                checkLock(event);
+              }),
+            },
           }),
           el("textarea", {
             className: "image-content__desc",
             name: "description",
             placeholder: "게시글 설명",
+            events: {
+              input: debounce((event) => {
+                checkLock(event);
+              }),
+            },
           }),
         ),
       ),

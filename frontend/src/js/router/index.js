@@ -1,5 +1,8 @@
 import renderHeader from "../components/Header";
+import Modal from "../components/Modal";
 import renderPage from "../pages";
+import removeHash from "../utils/history";
+import { unlock } from "./lock";
 
 export function route(isPopstate) {
   const path = window.location.pathname.split("/")[1];
@@ -46,7 +49,26 @@ export function customRouter() {
   return router;
 }
 
+export function replacePath(path) {
+  window.history.replaceState("", document.title, path);
+  route();
+}
+
 export function updatePath(path) {
+  // Check if router is locked
+  if (window.location.hash === "#locked") {
+    Modal({
+      title: "내용이 사라집니다!",
+      content: "페이지를 벗어나시겠습니까?",
+      callback: () => {
+        unlock();
+        replacePath(path);
+      },
+    });
+
+    return;
+  }
+
   window.history.pushState("", document.title, path);
   route();
 }
@@ -60,9 +82,15 @@ export function addClickEvent(elt, path) {
 }
 
 export function initializeRouter() {
+  // Remove location hash
+  if (window.location.hash) {
+    removeHash();
+  }
+
   route();
 
   window.addEventListener("popstate", (event) => {
+    if (window.location.pathname === "/add" && window.location.hash) return;
     event.preventDefault();
     route(true);
   });

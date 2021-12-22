@@ -88,7 +88,17 @@ function renderPostDetails(data) {
           events: {
             click: () => {
               const app = document.getElementById("app");
-              app.append(Modal(author, content));
+              app.append(
+                Modal({
+                  title: "삭제하면 되돌릴 수 없어요!",
+                  content: "그래도 삭제하시겠습니까?",
+                  callback: () => {
+                    // TODO: 삭제 요청
+                    // eslint-disable-next-line no-console
+                    console.log(`Delete ${data.id}`);
+                  },
+                }),
+              );
             },
           },
           className: "icon-delete",
