@@ -4,6 +4,7 @@ import { unlink } from "fs";
 import path from "path";
 import { validation } from "../services/locations.js";
 import {
+  getAllPost,
   getAll,
   findById,
   findByTitle,
@@ -41,6 +42,17 @@ router.get(
 
     const postsByAddr = await getAll(location, page, perPage);
     res.json(postsByAddr);
+  }),
+);
+
+router.get(
+  "/all",
+  asyncHandler(async (req, res) => {
+    const page = req.query.page || 1;
+    const perPage = req.query.perPage || 9;
+
+    const posts = await getAllPost(page, perPage);
+    res.status(200).json(posts);
   }),
 );
 

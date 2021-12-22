@@ -202,6 +202,13 @@ describe("post 라우터 테스트", () => {
     expect(res.body).toEqual({ success: true });
   });
 
+  test("모든 포스트 호출", async () => {
+    const res = await request(app).get("/api/posts/all").send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.data.length).toBeGreaterThanOrEqual(1);
+  });
+
   test("Failure DELETE /api/posts/:id 포스트 삭제", async () => {
     const res = await request(app).delete("/api/posts/123").send();
 
