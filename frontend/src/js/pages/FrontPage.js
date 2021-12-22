@@ -1,10 +1,10 @@
 import MasonryContainer from "../components/MasonryContainer";
 import CityItem from "../components/CityItem";
-import { fetchLocationListData } from "../api";
+import { getLocationListData } from "../api";
 
 export default function FrontPage() {
   return MasonryContainer({
-    fetcher: fetchLocationListData,
+    fetcher: getLocationListData,
     args: [],
     component: (location) =>
       CityItem({
