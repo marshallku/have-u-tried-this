@@ -1,17 +1,27 @@
+@keyframes toast {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate3d(-50%, 20px, 0);
+  }
+
+  10%,
+  90% {
+    opacity: 1;
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 .toast {
   position: fixed;
   bottom: 10px;
   left: 50%;
   padding: 10px 20px;
   opacity: 0;
-  transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 20px, 0);
   background-color: var(--lightest-bg);
   border-radius: 5px;
   line-height: 1.7;
-  transition: opacity 0.2s ease-in-out;
+  animation: 2s toast ease-in-out;
   z-index: 100;
-}
-
-.toast--reveal {
-  opacity: 1;
 }

@@ -1,27 +1,19 @@
+import el from "./dom";
 import "../../css/toast.css";
 
-export default function toast(str, timeout = 3000) {
-  const div = document.createElement("div");
+export default function toast(str) {
+  document.querySelectorAll(".toast").forEach((elt) => elt.remove());
 
-  // Remove toast messages if exist
-  document
-    .querySelectorAll(".toast")
-    .forEach((elt) => elt.classList.remove("toast--reveal"));
-
-  div.innerText = str;
-  div.classList.add("toast", "toast--reveal");
-
-  div.addEventListener(
-    "transitionend",
-    () => {
-      div.remove();
-    },
-    { once: true },
+  document.body.append(
+    el(
+      "div",
+      {
+        className: "toast",
+        events: {
+          animationend: (event) => event.target.remove(),
+        },
+      },
+      str,
+    ),
   );
-
-  setTimeout(() => {
-    div.classList.remove("toast--reveal");
-  }, timeout);
-
-  document.body.append(div);
 }
