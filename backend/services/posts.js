@@ -33,6 +33,24 @@ export async function findByTitle(_title) {
   return post;
 }
 
+export async function getAllPost(page, perPage) {
+  const total = await Post.find({}).countDocuments();
+  const totalPage = Math.ceil(total / perPage);
+  const posts = await Post.find({})
+    .sort({ likes: -1 })
+    .skip((page - 1) * perPage)
+    .limit(perPage)
+    .populate("location");
+
+  return {
+    data: posts,
+    pagination: {
+      page,
+      nextPage: page < totalPage,
+    },
+  };
+}
+
 export async function getAll(_location, page, perPage) {
   // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
