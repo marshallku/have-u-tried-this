@@ -41,5 +41,6 @@ export const getUserBookmarks = async (_id) => {
   if (bookmarks.length === 0) {
     throw new Error("저장된 글이 없습니다.");
   }
+  User.populate(bookmarks, { path: "author" });
   return bookmarks.map((bookmark) => bookmark.post);
 };
