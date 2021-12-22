@@ -1,4 +1,6 @@
+/* eslint-disable import/extensions */
 import mongoose from "mongoose";
+import CommentSchema from "./Comment.js";
 
 const PostSchema = new mongoose.Schema(
   {
@@ -35,6 +37,7 @@ const PostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    comments: [CommentSchema],
   },
   {
     timestamps: true,

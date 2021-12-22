@@ -12,6 +12,9 @@ import {
   deletePost,
 } from "../services/posts.js";
 import { pushLike, pushUnlike } from "../services/bookmark.js";
+
+import commentRouter from "./comments.js";
+
 import uploadFile from "../middlewares/multer.js";
 import loginRequired from "../middlewares/login-required.js";
 import PostDto from "../models/DTO/Post.js";
@@ -43,10 +46,10 @@ router.get(
 
 // 포스트 상세 페이지
 router.get(
-  "/:id",
+  "/:postId",
   asyncHandler(async (req, res) => {
-    const { id } = req.params;
-    const post = await findById(id);
+    const { postId } = req.params;
+    const post = await findById(postId);
     res.json(post);
   }),
 );
@@ -88,12 +91,12 @@ router.post(
 
 // 포스트 수정 로직
 router.put(
-  "/:id",
+  "/:postId",
   loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
-    const postId = req.params.id;
+    const { postId } = req.params;
     const { title, content, wideAddr, localAddr } = req.body;
 
     // title 검증 필요
@@ -118,12 +121,12 @@ router.put(
 
 // 좋아요
 router.post(
-  "/:id/like",
+  "/:postId/like",
   loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
-    const postId = req.params.id;
+    const { postId } = req.params;
     await pushLike(authorId, postId);
     res.status(201).json({ success: true });
   }),
@@ -131,25 +134,29 @@ router.post(
 
 // 좋아요 취소
 router.delete(
-  "/:id/unlike",
+  "/:postId/unlike",
   loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
-    const postId = req.params.id;
+    const { postId } = req.params;
     await pushUnlike(authorId, postId);
     res.status(204).json();
   }),
 );
 
+// 코멘트
+
+router.use("/:postId/comments", commentRouter);
+
 // 포스트 삭제 로직
 router.delete(
-  "/:id",
+  "/:postId",
   loginRequired,
   asyncHandler(async (req, res) => {
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
-    const postId = req.params.id;
+    const { postId } = req.params;
     await deletePost(postId, authorId);
     res.json({ success: true });
   }),
