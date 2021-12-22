@@ -1,5 +1,6 @@
 import multer, { MulterError } from "multer";
 import dotenv from "dotenv";
+import path from "path";
 
 dotenv.config();
 
@@ -17,6 +18,9 @@ export default function uploadFile(req, res, next) {
     storage: multer.diskStorage({
       destination(_req, file, cb) {
         cb(null, process.env.UPLOAD_PATH);
+      },
+      fileName(_req, file, cb) {
+        cb(null, `${new Date().valueOf()}${path.extname(file.originalname)}`);
       },
     }),
     limits: { fileSize: 1024 * 1024 * 2 },
