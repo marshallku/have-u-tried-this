@@ -7,20 +7,41 @@
 
 .nav__items {
   display: flex;
+  padding: 30px 0;
   justify-content: center;
+  background-color: var(--lighter-bg);
+  border-radius: 5px;
 }
 
 .nav__item {
+  position: relative;
   display: inline-block;
   padding: 10px 20px;
   text-align: center;
   font-size: 20px;
-  border-bottom: 2px solid var(--bg);
+  border-bottom: 2px solid transparent;
   cursor: pointer;
+  transition: border-color 0.25s ease-in-out, transform 0.25s ease-in-out;
+}
+
+.nav__item > i {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 16px;
+  transform: translate3d(-50%, 10px, 0);
+  opacity: 0;
+  transition: transform 0.25s ease-in-out, opacity 0.25s ease-in-out;
 }
 
 .nav__item.highlight {
   border-color: var(--primary);
+  transform: translate3d(0, 10px, 0);
+}
+
+.nav__item.highlight > i {
+  transform: translate3d(-50%, -20px, 0);
+  opacity: 1;
 }
 
 .nav__photo {

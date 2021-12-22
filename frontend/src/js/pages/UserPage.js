@@ -6,7 +6,12 @@ import "../../css/userPage.css";
 
 function Drawer(userPageRouter) {
   const Button = ({ text, path }) => {
-    const a = el("a", { className: "nav__item" }, text);
+    const a = el(
+      "a",
+      { className: "nav__item" },
+      el("i", { className: "icon-utensil-spoon-solid" }),
+      text,
+    );
 
     userPageRouter.addNavigator(a, path);
 

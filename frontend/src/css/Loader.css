@@ -40,7 +40,7 @@
 }
 
 .pacman {
-  animation: movePacman 6s linear infinite;
+  animation: movePacman 3s linear infinite;
 }
 
 .pacman::before,
@@ -53,7 +53,7 @@
   border-radius: 50%;
   border-right-color: transparent;
   border-bottom-color: transparent;
-  animation: mouthTop 0.5s linear infinite;
+  animation: mouthTop 0.25s linear infinite;
   z-index: 1;
 }
 
@@ -61,7 +61,7 @@
   border-color: var(--primary);
   border-right-color: transparent;
   border-top-color: transparent;
-  animation: mouthBottom 0.5s linear infinite;
+  animation: mouthBottom 0.25s linear infinite;
 }
 
 .food {
@@ -73,7 +73,7 @@
   font-size: 24px;
   opacity: 1;
   transform: translate3d(-50%, -50%, 0);
-  animation: clipPath 6s linear infinite;
+  animation: clipPath 3s linear infinite;
 }
 
 .food > div {

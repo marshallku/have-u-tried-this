@@ -34,7 +34,7 @@
 .footer__slogan {
   padding-top: 1.2rem;
   margin-top: 1.2rem;
-  border-top: 2px solid var(--text);
+  border-top: 2px solid var(--primary);
   font-size: 1.6em;
 }
 

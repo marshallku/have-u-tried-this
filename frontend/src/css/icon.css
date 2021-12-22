@@ -21,6 +21,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-utensil-spoon-solid:before {
+  content: "\e92e";
+}
 .icon-location_on:before {
   content: "\e900";
 }
