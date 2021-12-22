@@ -41,6 +41,28 @@ describe("북마크 기능 테스트", () => {
     expect(res.body.likes).toEqual(1);
   });
 
+  test("유저 북마크 기능 테스트", async () => {
+    const res = await request(app)
+      .get("/api/users/" + process.env.AUTHOR_ID + "/likes")
+      .send();
+
+    expect(res.statusCode).toEqual(200);
+    expect(Object.keys(res.body[0])).toEqual(
+      expect.arrayContaining([
+        "location",
+        "_id",
+        "title",
+        "content",
+        "photos",
+        "likes",
+        "author",
+        "createdAt",
+        "updatedAt",
+        "__v",
+      ]),
+    );
+  });
+
   test("실패 좋아요 클릭, 없는 게시물", async () => {
     const res = await request(app).post("/api/posts/notexist/like").send();
 
