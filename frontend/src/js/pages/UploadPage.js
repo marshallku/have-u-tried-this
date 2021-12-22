@@ -1,7 +1,7 @@
 import EXIF from "exif-js";
 import el from "../utils/dom";
 import toast from "../utils/toast";
-import { fetchAddressAPI } from "../api";
+import { fetchAddressAPI } from "../api/address";
 import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
 import "../../css/UploadImage.css";
 
@@ -79,7 +79,9 @@ export default function UploadPage() {
             getGPSTag(img);
 
           if (latitude === undefined || longitude === undefined) {
-            reject(new Error("GPS 정보가 없습니다."));
+            reject(
+              new Error("GPS 정보가 없습니다. 사진 촬영 장소를 입력해주세요."),
+            );
             return;
           }
 
@@ -132,7 +134,15 @@ export default function UploadPage() {
           );
           updateLocation(wideAddr, localAddr);
         } catch (error) {
-          console.log(error);
+          if (error instanceof TypeError) {
+            console.log(error);
+            toast(
+              "위도와 경도의 값이 올바르지 않습니다. 사진 촬영 장소를 입력해주세요.",
+            );
+          } else {
+            console.log(error);
+            toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
+          }
         }
 
         const imgDiv = wrapperElement("div", "grid-div__image", img);
