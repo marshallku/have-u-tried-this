@@ -10,6 +10,18 @@ import "../../css/UploadImage.css";
 const MAX_UPLOAD_IMAGES = 4;
 const POSITIVE_VALUE = 1;
 const NEGATIVE_VALUE = -1;
+const IMAGE_TYPES = [
+  "image/apng",
+  "image/bmp",
+  "image/jpeg",
+  "image/pjpeg",
+  "image/png",
+  "image/tiff",
+  "image/webp",
+];
+const MEGA_BYTES = 20;
+const BASE_UNIT = 1024;
+const MAXIMUM_IMAGE_SIZE = MEGA_BYTES * BASE_UNIT * BASE_UNIT;
 
 export default function UploadPage() {
   const wrapperElement = (
@@ -114,8 +126,17 @@ export default function UploadPage() {
     input.value = `${wideAddr} ${localAddr}`;
   };
 
+  const isValidSize = (fileSize) => MAXIMUM_IMAGE_SIZE > fileSize;
+
+  const isValidType = (fileType) =>
+    IMAGE_TYPES.filter((imageType) => imageType === fileType).length >= 1;
+
   const handleUpdate = (filesInfo) => {
     const fileList = [...filesInfo];
+    const validTypeList = fileList
+      .filter((file) => isValidType(file.type))
+      .filter((file) => isValidSize(file.size));
+
     const preview = document.querySelector(".image-content__preview");
 
     if (filesInfo.length > MAX_UPLOAD_IMAGES) {
@@ -123,7 +144,7 @@ export default function UploadPage() {
       return;
     }
 
-    fileList.forEach((file) => {
+    validTypeList.forEach((file) => {
       const reader = new FileReader();
       reader.addEventListener("load", async (event) => {
         const img = embedImgElement(event);
