@@ -1,4 +1,4 @@
-export default function createInstance({ baseUrl }) {
+export default function createInstance({ baseUrl, timeOut }) {
   const fetcher = {
     baseUrl,
     error(message = "Failed to fetch") {
@@ -7,9 +7,19 @@ export default function createInstance({ baseUrl }) {
         message,
       };
     },
-    async get(resource, init) {
+    _dummyPromise: new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(this.error("Took too long to fetch"));
+      }, timeOut);
+    }),
+    async fetch(resource, init) {
       try {
-        const response = await fetch(`${baseUrl}${resource}`, init);
+        const response = timeOut
+          ? await Promise.race([
+              setTimeout(() => {}, timeOut),
+              fetch(`${baseUrl}${resource}`, init),
+            ])
+          : await fetch(`${baseUrl}${resource}`, init);
         const json = await response.json();
 
         return json;
@@ -17,15 +27,12 @@ export default function createInstance({ baseUrl }) {
         return this.error(err.message);
       }
     },
-    async post(resource, init) {
-      try {
-        const response = await fetch(`${baseUrl}${resource}`, init);
-        const json = await response.json();
-
-        return json;
-      } catch (err) {
-        return this.error(err.message);
-      }
+    async get(resource, init) {
+      return this.fetch(resource, init);
+    },
+    async post(resource, init = { method: "POST" }) {
+      if (init.method !== "POST") return this.error("Invalid method");
+      return this.fetch(resource, init);
     },
   };
 
