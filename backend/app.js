@@ -11,6 +11,9 @@ import session from "express-session";
 import MongoDBSession from "connect-mongodb-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import morgan from "morgan";
+
+import logger from "./logger/winston.js";
 
 import callPassport from "./passport/index.js";
 import postRouter from "./routes/posts.js";
@@ -21,11 +24,17 @@ import usersRouter from "./routes/users.js";
 // to test
 import mockLogin from "./utils/mock-login.js";
 
-dotenv.config();
-callPassport();
-
 const app = express();
 const port = process.env.PORT || 3000;
+
+// log
+const combined =
+  ":remote-addr - :remote-user ':method :url HTTP/:http-version' :status :res[content-length] ':referrer' ':user-agent'";
+const morganFormat = process.env.NODE_ENV !== "production" ? "dev" : combined;
+app.use(morgan(morganFormat, { stream: logger.stream }));
+
+dotenv.config();
+callPassport();
 
 app.use(cors());
 app.use(express.json());
@@ -76,7 +85,7 @@ app.use("/api/users", usersRouter);
 // server listen
 if (process.env.NODE_ENV !== "test") {
   app.listen(port, () => {
-    // console.log("Server start");
+    logger.info(`Server Start Listening at ${port}`);
   });
 }
 
@@ -88,6 +97,7 @@ app.use((req, res, next) => {
 
 // eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
+  logger.error(err);
   res.status(500).json({ error: true, message: err });
 });
 
