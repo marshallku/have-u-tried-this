@@ -45,7 +45,7 @@ export default function MasonryContainer({ fetcher, args, component }) {
 
         msnry = masonry({
           container,
-          selector: ".post-item",
+          selector: "article",
           elements,
           padding: {
             top: parseInt(style.paddingTop, 10),
