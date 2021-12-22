@@ -1,3 +1,16 @@
+.details-nav {
+  padding: 20px 10px;
+}
+
+.details-nav > button {
+  font-size: 24px;
+}
+
+.details-nav .icon-arrow_forward_ios {
+  display: block;
+  transform: scaleX(-1);
+}
+
 .fixed-container {
   position: fixed;
   top: 0;
@@ -25,7 +38,12 @@
 .small-container {
   width: clamp(0px, 100%, 880px);
   margin: 3rem auto 0 auto;
-  padding: 0 10px;
+  padding: 0 10px 5vmax;
+}
+
+.details__location,
+.details__buttons i {
+  color: var(--primary);
 }
 
 .details__location,
@@ -55,6 +73,7 @@
 }
 
 .details__title {
+  font-family: var(--highlight-font);
   margin: 1rem 0;
   font-size: 2rem;
   line-height: 1.7;
@@ -89,6 +108,10 @@
 }
 
 @media screen and (min-width: 1150px) {
+  .details-nav {
+    display: none;
+  }
+
   .fixed-container {
     display: flex;
     background-color: rgba(0, 0, 0, 0.8);
@@ -106,6 +129,7 @@
 
   .fixed-container .small-container {
     margin-top: 0;
+    padding-bottom: 0;
     max-height: 80vh;
     overflow-y: auto;
   }

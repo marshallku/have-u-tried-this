@@ -108,6 +108,21 @@ function renderPostDetails(data) {
   return el(
     "fragment",
     {},
+    el(
+      "nav",
+      { className: "details-nav" },
+      el(
+        "button",
+        {
+          events: {
+            click: [() => window.history.back(), { once: true }],
+          },
+        },
+        el("i", {
+          className: "icon-arrow_forward_ios",
+        }),
+      ),
+    ),
     Carousel(photos),
     el(
       "div",

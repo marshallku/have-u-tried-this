@@ -11,3 +11,11 @@ export function resetWithSize(arr, size, number) {
     arr.push(number);
   }
 }
+
+export function pick(arr, len, random = false) {
+  return arr
+    .map((x, i) => ({ x, sort: random ? Math.random() : i }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ x }) => x)
+    .filter((_, i) => i < len);
+}

@@ -20,7 +20,7 @@ export default function GlobalNavigation() {
   return el(
     "nav",
     { className: "gnb" },
-    el("div", { className: "gnb__logo" }, logoAnchor),
+    el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
     el(
       "form",
       {
@@ -48,8 +48,12 @@ export default function GlobalNavigation() {
       }),
       dataList,
     ),
-    createBtn,
-    el("div", { className: "gnb__profile-image" }, profileAnchor),
+    el(
+      "div",
+      { className: "gnb__expand" },
+      createBtn,
+      el("div", { className: "gnb__profile-image" }, profileAnchor),
+    ),
   );
 }
 

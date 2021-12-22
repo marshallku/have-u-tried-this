@@ -6,8 +6,12 @@ export default function el(nodeName, attributes, ...children) {
 
   Object.entries(attributes).forEach(([key, value]) => {
     if (key === "events") {
-      Object.entries(value).forEach(([type, listener]) => {
-        node.addEventListener(type, listener);
+      Object.entries(value).forEach(([type, args]) => {
+        if (Array.isArray(args)) {
+          node.addEventListener(type, ...args);
+        } else {
+          node.addEventListener(type, args);
+        }
       });
 
       return;
