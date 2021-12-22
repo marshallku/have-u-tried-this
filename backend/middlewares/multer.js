@@ -5,8 +5,17 @@ import path from "path";
 dotenv.config();
 
 function fileFilter(req, file, cb) {
-  const fileType = file.mimetype.split("/")[0];
-  if (fileType === "image") {
+  const imageType = [
+    "image/apng",
+    "image/bmp",
+    "image/jpeg",
+    "image/pjpeg",
+    "image/png",
+    "image/tiff",
+    "image/webp",
+  ];
+  const fileType = file.mimetype;
+  if (imageType.includes(fileType)) {
     cb(null, true);
   } else {
     cb("이미지 파일만 업로드 가능합니다.");
