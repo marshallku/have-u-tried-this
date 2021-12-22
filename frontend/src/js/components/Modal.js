@@ -1,14 +1,5 @@
 import el from "../utils/dom";
 import "../../css/Modal.css";
-import { unlock } from "../router/lock";
-
-function checkType(data) {
-  if (data) {
-    console.log(data); // delete data (author, content)
-  } else {
-    unlock();
-  }
-}
 
 export default function Modal({ title, content, callback }) {
   const app = document.getElementById("app");
