@@ -14,7 +14,7 @@ import {
   updatePost,
   deletePost,
 } from "../services/posts.js";
-import { pushLike, pushUnlike } from "../services/bookmark.js";
+import { pushLike, pushUnlike, checkLike } from "../services/bookmark.js";
 
 import commentRouter from "./comments.js";
 
@@ -134,6 +134,18 @@ router.put(
 );
 
 // 좋아요
+router.get(
+  "/:postId/like",
+  loginRequired,
+  asyncHandler(async (req, res) => {
+    // eslint-disable-next-line no-underscore-dangle
+    const authorId = req.user._id;
+    const { postId } = req.params;
+    const isLike = await checkLike(authorId, postId);
+    res.status(200).json({ isLike });
+  }),
+);
+
 router.post(
   "/:postId/like",
   loginRequired,
