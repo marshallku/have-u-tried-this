@@ -8,3 +8,22 @@ export async function getPostListData(wide, local, page = 1) {
 export async function getPostData(id) {
   return instance.get(`/posts/${id}`);
 }
+
+export async function deletePost(postId) {
+  return instance.delete(`/posts/${postId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.user?.token}`,
+    },
+  });
+}
+
+export async function editPostData(postId, body) {
+  return instance.put(`/posts/${postId}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.user?.token}`,
+    },
+    body: JSON.stringify(body),
+  });
+}
