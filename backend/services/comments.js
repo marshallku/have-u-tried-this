@@ -48,7 +48,7 @@ export async function createComment(postId, userId, contents) {
 export async function deleteComment(postId, commentId, userId) {
   try {
     const comment = await Comment.findById(commentId);
-    if (comment.author.toString() !== userId) {
+    if (comment.author.toString() !== userId.toString()) {
       throw new Error();
     }
 

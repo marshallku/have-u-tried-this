@@ -180,7 +180,7 @@ export async function updatePost(postId, newPostDto) {
 export async function deletePost(postId, authorId) {
   try {
     const isExist = await Post.findById(postId);
-    if (isExist.author.toString() !== authorId) {
+    if (isExist.author.toString() !== authorId.toString()) {
       throw new Error("권한이 없습니다.");
     }
     const post = await Post.findByIdAndDelete(postId);
