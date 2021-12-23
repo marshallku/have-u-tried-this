@@ -57,14 +57,18 @@ export function replacePath(path) {
 export function updatePath(path) {
   // Check if router is locked
   if (window.location.hash === "#locked") {
-    Modal({
-      title: "내용이 사라집니다!",
-      content: "페이지를 벗어나시겠습니까?",
-      callback: () => {
-        unlock();
-        replacePath(path);
-      },
-    });
+    const app = document.getElementById("app");
+
+    app.append(
+      Modal({
+        title: "내용이 사라집니다!",
+        content: "페이지를 벗어나시겠습니까?",
+        callback: () => {
+          unlock();
+          replacePath(path);
+        },
+      }),
+    );
 
     return;
   }
