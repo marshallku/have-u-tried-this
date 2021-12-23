@@ -2,6 +2,8 @@
 import { Router } from "express";
 import { unlink } from "fs";
 import path from "path";
+import sanitizeHtml from "sanitize-html";
+
 import { validation } from "../services/locations.js";
 import {
   getAllPost,
@@ -32,8 +34,8 @@ router.get(
       localAddr: req.query.local,
     };
 
-    const page = req.query.page || 1;
-    const perPage = req.query.perPage || 9;
+    const page = Number(req.query.page) || 1;
+    const perPage = Number(req.query.perPage) || 9;
 
     const isExists = await validation(location);
     if (!isExists) {
@@ -48,8 +50,8 @@ router.get(
 router.get(
   "/all",
   asyncHandler(async (req, res) => {
-    const page = req.query.page || 1;
-    const perPage = req.query.perPage || 9;
+    const page = Number(req.query.page) || 1;
+    const perPage = Number(req.query.perPage) || 9;
 
     const posts = await getAllPost(page, perPage);
     res.status(200).json(posts);
@@ -89,8 +91,8 @@ router.post(
     }
 
     const post = new PostDto(
-      title,
-      content,
+      sanitizeHtml(title),
+      sanitizeHtml(content),
       photos,
       wideAddr,
       localAddr,
@@ -118,8 +120,8 @@ router.put(
     }
 
     const newPostDto = new PostDto(
-      title,
-      content,
+      sanitizeHtml(title),
+      sanitizeHtml(content),
       undefined,
       wideAddr,
       localAddr,
