@@ -7,3 +7,8 @@ import "../css/icon.css";
 
 document.body.prepend(GlobalNavigation());
 initializeRouter();
+
+// Register service worker
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/service-worker.js");
+}
