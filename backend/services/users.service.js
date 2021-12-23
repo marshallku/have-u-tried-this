@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable import/extensions */
 import mongoose from "mongoose";
-import { User, Post, Bookmark } from "../models/index.js";
+import { User, Post, Bookmark, Comment } from "../models/index.js";
 
 export const addGoogleUser = ({
   googleId,
@@ -31,9 +31,16 @@ export const getUserById = async (googleId) => {
 
 export const getPostByUserId = async (_id) => {
   const objId = mongoose.Types.ObjectId(_id);
-  const myPosts = await Post.find({ author: objId });
+  const myPosts = await Post.find({ author: objId }).populate("author");
 
   return myPosts;
+};
+
+export const getCommentsByUserId = async (_id) => {
+  const objId = mongoose.Types.ObjectId(_id);
+  const comments = await Comment.find({ author: objId }).populate("author");
+  console.log(comments);
+  return comments;
 };
 
 export const getUserBookmarks = async (_id) => {
