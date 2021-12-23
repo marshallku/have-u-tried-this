@@ -1,7 +1,5 @@
 /* eslint-disable import/extensions */
 import { Router } from "express";
-import { unlink } from "fs";
-import path from "path";
 import sanitizeHtml from "sanitize-html";
 
 import { validation } from "../services/locations.js";
@@ -9,7 +7,6 @@ import {
   getAllPost,
   getAll,
   findById,
-  findByTitle,
   createPost,
   updatePost,
   deletePost,
@@ -79,17 +76,6 @@ router.post(
     const photos = req.files;
     const { title, contents, wideAddr, localAddr } = req.body;
 
-    const isExists = await findByTitle(title);
-    // 타이틀 중복 시 업로드된 이미지 제거
-    if (isExists) {
-      photos.forEach((photo) => {
-        // eslint-disable-next-line no-underscore-dangle
-        const __dirname = path.resolve();
-        unlink(path.join(__dirname, photo.path), () => {});
-      });
-      throw new Error("이미 존재하는 제목입니다.");
-    }
-
     const post = new PostDto(
       sanitizeHtml(title),
       sanitizeHtml(contents),
@@ -111,24 +97,19 @@ router.put(
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
     const { postId } = req.params;
-    const { title, contents, wideAddr, localAddr } = req.body;
-
-    // title 검증 필요
-    const isExists = await findByTitle(title);
-    if (isExists) {
-      throw new Error("이미 존재하는 제목입니다.");
-    }
+    const { title, contents } = req.body;
 
     const newPostDto = new PostDto(
       sanitizeHtml(title),
       sanitizeHtml(contents),
       undefined,
-      wideAddr,
-      localAddr,
+      undefined,
+      undefined,
       authorId,
     );
-    const newPost = await updatePost(postId, newPostDto);
-    res.json(newPost);
+
+    await updatePost(postId, newPostDto);
+    res.status(200).json({ success: true });
   }),
 );
 

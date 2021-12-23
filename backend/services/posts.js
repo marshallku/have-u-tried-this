@@ -130,11 +130,9 @@ export async function createPost(postDto) {
 
 export async function updatePost(postId, newPostDto) {
   // eslint-disable-next-line no-unused-vars
-  const { title, contents, _photos, wideAddr, localAddr, authorId } =
+  const { title, content, _photos, _wideAddr, _localAddr, authorId } =
     newPostDto;
 
-  // 있는 지역인지 검증
-  const newLocation = await checkLocation(wideAddr, localAddr);
   try {
     // 포스트 있는지 검증
 
@@ -147,11 +145,7 @@ export async function updatePost(postId, newPostDto) {
       postId,
       {
         title: parseTitle(title),
-        contents,
-        location: {
-          wideAddr,
-          localAddr,
-        },
+        content,
         photos: post.photos.map((photo) => {
           // eslint-disable-next-line no-param-reassign
           photo.text = parseTitle(title);
@@ -161,16 +155,6 @@ export async function updatePost(postId, newPostDto) {
       },
       { new: true },
     );
-    // 로케이션 배열 정리
-    await Location.findOneAndUpdate(
-      { wideAddr: post.location.wideAddr, localAddr: post.location.localAddr },
-      {
-        $pull: { posts: { _id: postId } },
-      },
-    );
-    await Location.findByIdAndUpdate(newLocation.id, {
-      $push: { posts: newPost },
-    });
     return newPost;
   } catch (err) {
     // throw new Error(err);
