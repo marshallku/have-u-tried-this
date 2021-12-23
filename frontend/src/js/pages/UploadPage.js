@@ -1,15 +1,11 @@
-import EXIF from "exif-js";
 import el from "../utils/dom";
 import toast from "../utils/toast";
 import { debounce } from "../utils/optimize";
 import { checkLock, lock } from "../router/lock";
-import { getAddressAPI } from "../api";
-import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
+import { getWideAddrLocalAddr } from "../utils/gps";
 import "../../css/UploadImage.css";
 
 const MAX_UPLOAD_IMAGES = 4;
-const POSITIVE_VALUE = 1;
-const NEGATIVE_VALUE = -1;
 const IMAGE_TYPES = [
   "image/apng",
   "image/bmp",
@@ -46,81 +42,6 @@ export default function UploadPage() {
     event.preventDefault();
   };
 
-  const getGPSTag = (img) => ({
-    latitude: EXIF.getTag(img, "GPSLatitude"),
-    latitudeRef: EXIF.getTag(img, "GPSLatitudeRef"),
-    longitude: EXIF.getTag(img, "GPSLongitude"),
-    longitudeRef: EXIF.getTag(img, "GPSLongitudeRef"),
-  });
-
-  const getCoordinateSign = (direction) =>
-    direction === "E" || direction === "N" ? POSITIVE_VALUE : NEGATIVE_VALUE;
-
-  const calculateDegreeToDecimal = (coordinate, sign) => {
-    const [degrees, minutes, seconds] = coordinate;
-    return (
-      sign *
-      (degrees + minutes / MINUTE_TO_SECOND + seconds / HOUR_TO_SECOND).toFixed(
-        8,
-      )
-    );
-  };
-
-  const getDecimalCoordinate = (coordinate) => {
-    const {
-      latitudeInfo: { latitude, latitudeRef },
-    } = coordinate;
-    const {
-      longitudeInfo: { longitude, longitudeRef },
-    } = coordinate;
-
-    const latitudeSign = getCoordinateSign(latitudeRef);
-    const latitudeDecimal = calculateDegreeToDecimal(latitude, latitudeSign);
-    const longitudeSign = getCoordinateSign(longitudeRef);
-    const longitudeDecimal = calculateDegreeToDecimal(longitude, longitudeSign);
-
-    return {
-      latitudeDecimal,
-      longitudeDecimal,
-    };
-  };
-
-  const getGPSCoordinate = (img) =>
-    new Promise((resolve, reject) => {
-      img.addEventListener("load", () => {
-        EXIF.getData(img, () => {
-          const { latitude, latitudeRef, longitude, longitudeRef } =
-            getGPSTag(img);
-
-          if (latitude === undefined || longitude === undefined) {
-            reject(
-              new Error("GPS 정보가 없습니다. 사진 촬영 장소를 입력해주세요."),
-            );
-            return;
-          }
-
-          const coordinate = {
-            latitudeInfo: {
-              latitude,
-              latitudeRef,
-            },
-            longitudeInfo: {
-              longitude,
-              longitudeRef,
-            },
-          };
-
-          const { latitudeDecimal, longitudeDecimal } =
-            getDecimalCoordinate(coordinate);
-
-          resolve({
-            latitude: latitudeDecimal,
-            longitude: longitudeDecimal,
-          });
-        });
-      });
-    });
-
   const updateLocation = (wideAddr, localAddr) => {
     const input = document.getElementById("image-upload-location");
     input.value = `${wideAddr} ${localAddr}`;
@@ -151,22 +72,10 @@ export default function UploadPage() {
         lock();
 
         try {
-          const { longitude, latitude } = await getGPSCoordinate(img);
-          const { wideAddr, localAddr } = await getAddressAPI(
-            longitude,
-            latitude,
-          );
+          const { wideAddr, localAddr } = await getWideAddrLocalAddr(img);
           updateLocation(wideAddr, localAddr);
         } catch (error) {
-          if (error instanceof TypeError) {
-            console.log(error);
-            toast(
-              "위도와 경도의 값이 올바르지 않습니다. 사진 촬영 장소를 입력해주세요.",
-            );
-          } else {
-            console.log(error);
-            toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
-          }
+          toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
         }
 
         const imgDiv = wrapperElement("div", "grid-div__image", img);
