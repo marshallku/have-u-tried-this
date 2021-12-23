@@ -18,18 +18,14 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    session: false,
-    failureRedirect: "/api/auth/failure",
+    failureRedirect: "/",
   }),
   async (req, res) => {
     const user = await createToken(req.user);
-    res.json(user);
+    res.cookie("user", JSON.stringify(user));
+    res.redirect("/?redirected=true");
   },
 );
-
-router.get("/failure", (req, res) => {
-  res.json({ error: true });
-});
 
 // logout
 router.get("/logout", (req, res) => {
