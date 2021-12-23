@@ -53,6 +53,8 @@ export default function renderHeader(page) {
         title: `${wideAddr} ${localAddr} 맛식`,
       });
       break;
+    case "post":
+      break;
     default:
       document.body.querySelector(".header")?.remove();
   }

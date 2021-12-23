@@ -40,6 +40,10 @@ html {
   font-family: "Noto Sans KR", sans-serif;
 }
 
+html.overflow-hidden {
+  overflow: hidden;
+}
+
 body {
   padding-top: 70px;
 }
