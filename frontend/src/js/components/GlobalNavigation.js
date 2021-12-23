@@ -11,7 +11,6 @@ export default function GlobalNavigation() {
     {},
     el("img", { src: "/static/images/default_profile.png" }),
   );
-  const dataList = WordAutoComplete();
 
   addClickEvent(logoAnchor, "/");
   addClickEvent(createBtn, "/add");
@@ -21,23 +20,11 @@ export default function GlobalNavigation() {
     "nav",
     { className: "gnb" },
     el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
-    el(
-      "form",
-      {
+    WordAutoComplete({
+      formAttr: {
         className: "search search--gnb",
-        events: {
-          submit: (event) => {
-            event.preventDefault();
-            // TODO: 입력받은 지역 올바른 지역인지 검증
-            const input = document.querySelector(".search__input");
-            if (!input) return;
-            const [wideAddr, localAddr] = input.value.split(" ");
-
-            updatePath(`/location/${wideAddr}/${localAddr}`);
-          },
-        },
       },
-      el("input", {
+      inputAttr: {
         type: "text",
         id: "search",
         name: "search",
@@ -45,9 +32,16 @@ export default function GlobalNavigation() {
         list: "address",
         className: "search__input search__input--gnb",
         autocomplete: "off",
-      }),
-      dataList,
-    ),
+      },
+      onSubmit: () => {
+        // TODO: 입력받은 지역 올바른 지역인지 검증
+        const input = document.querySelector(".search__input");
+        if (!input) return;
+        const [wideAddr, localAddr] = input.value.split(" ");
+
+        updatePath(`/location/${wideAddr}/${localAddr}`);
+      },
+    }),
     el(
       "div",
       { className: "gnb__expand" },
