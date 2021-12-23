@@ -7,6 +7,11 @@ async function updateLikes(postId, count) {
   });
 }
 
+export async function checkLike(authorId, postId) {
+  const bookmark = await Bookmark.findOne({ authorId, postId });
+  return !!bookmark;
+}
+
 export async function pushLike(authorId, postId) {
   try {
     await Bookmark.findOne({ post: postId, user: authorId });
