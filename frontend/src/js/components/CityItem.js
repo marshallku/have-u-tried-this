@@ -14,8 +14,13 @@ export default function CityItem({ wide, local, thumbnail }) {
     el(
       "header",
       { className: "city-item__header" },
-      el("h2", {}, wide),
-      el("h3", {}, local),
+      el("div", {}, el("h2", {}, local), el("h3", {}, wide)),
+    ),
+    el(
+      "span",
+      { className: "city-item__button" },
+      el("span", {}, "더보기"),
+      el("i", { className: "icon-arrow_forward_ios" }),
     ),
   );
 
