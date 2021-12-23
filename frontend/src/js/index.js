@@ -1,6 +1,6 @@
-import { initializeRouter } from "./router";
-import GlobalNavigation from "./components/GlobalNavigation";
 import { saveUserOnLogin, loadUser } from "./data/user";
+import GlobalNavigation from "./components/GlobalNavigation";
+import { initializeRouter } from "./router";
 import "../css/reset.css";
 import "../css/style.css";
 import "../css/footer.css";

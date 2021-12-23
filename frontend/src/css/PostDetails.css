@@ -41,6 +41,10 @@
   padding: 0 10px 5vmax;
 }
 
+.small-container::-webkit-scrollbar {
+  display: none;
+}
+
 .details__location,
 .details__buttons i {
   color: var(--primary);
