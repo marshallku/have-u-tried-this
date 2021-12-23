@@ -6,6 +6,7 @@ import CommentList from "../components/CommentList";
 import { getPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
+import { deletePost, editPostData } from "../api/post";
 import { formatToReadableTime } from "../utils/time";
 import { removeBackSpace, removeLineBreak } from "../utils/string";
 import { getPaths } from "../utils/location";
@@ -36,7 +37,7 @@ function renderPostDetails(data) {
     title: "",
     desc: "",
   };
-  const handleEditButtonClick = (event) => {
+  const handleEditButtonClick = async (event) => {
     const { target } = event;
     const nextStatus = !editing.status;
 
@@ -59,11 +60,26 @@ function renderPostDetails(data) {
       descElt.removeAttribute("role");
       descElt.classList.remove("details__desc--editing");
 
-      // Fill text with valid string
-      titleElt.innerText = inputtedTitle;
-      descElt.innerText = inputtedDesc;
+      const edited = await editPostData(data._id, {
+        title: inputtedTitle,
+        contents: inputtedDesc,
+      });
 
-      // TODO: Update post with api
+      if (edited && !edited.error) {
+        // Fill text with valid string
+        titleElt.innerText = inputtedTitle;
+        descElt.innerText = inputtedDesc;
+
+        // Update list item
+        const element = document
+          .querySelector(`a[href$="${data._id}"]`)
+          ?.querySelector(".post-item__title");
+
+        if (element) {
+          element.innerText = inputtedTitle;
+          window.handleResize();
+        }
+      }
     } else {
       // Start editing
       target.className = "icon-save";
@@ -78,35 +94,47 @@ function renderPostDetails(data) {
 
     editing.status = nextStatus;
   };
-  const editButtons = data.isAuthor
-    ? [
-        el("button", {
-          events: {
-            click: handleEditButtonClick,
-          },
-          className: "icon-create",
-        }),
-        el("button", {
-          events: {
-            click: () => {
-              const app = document.getElementById("app");
-              app.append(
-                Modal({
-                  title: "삭제하면 되돌릴 수 없어요!",
-                  content: "그래도 삭제하시겠습니까?",
-                  callback: () => {
-                    // TODO: 삭제 요청
-                    // eslint-disable-next-line no-console
-                    console.log(`Delete ${data.id}`);
-                  },
-                }),
-              );
+  const editButtons =
+    data.author._id === window.user.id
+      ? [
+          el("button", {
+            events: {
+              click: handleEditButtonClick,
             },
-          },
-          className: "icon-delete",
-        }),
-      ]
-    : [];
+            className: "icon-create",
+          }),
+          el("button", {
+            events: {
+              click: () => {
+                const app = document.getElementById("app");
+                app.append(
+                  Modal({
+                    title: "삭제하면 되돌릴 수 없어요!",
+                    content: "그래도 삭제하시겠습니까?",
+                    callback: async () => {
+                      const deleted = await deletePost(data._id);
+
+                      if (deleted && !deleted.error) {
+                        window.history.back();
+                        // Remove list item
+                        const element = document.querySelector(
+                          `a[href$="${data._id}"]`,
+                        )?.parentElement;
+
+                        if (element) {
+                          element.remove();
+                          window.handleResize();
+                        }
+                      }
+                    },
+                  }),
+                );
+              },
+            },
+            className: "icon-delete",
+          }),
+        ]
+      : [];
 
   // Location
   addClickEvent(
