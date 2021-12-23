@@ -20,37 +20,93 @@ const BASE_UNIT = 1024;
 const MAXIMUM_IMAGE_SIZE = MEGA_BYTES * BASE_UNIT * BASE_UNIT;
 
 export default function UploadPage() {
-  const wrapperElement = (
-    element,
-    className,
-    inner = document.createElement("div"),
-  ) => {
-    const elt = document.createElement(element);
-    elt.classList.add(className);
-    elt.append(inner);
-    return elt;
-  };
-
-  const embedImgElement = (event) => {
-    const img = wrapperElement("img", "embed-image");
-    img.src = event.target.result;
-    return img;
-  };
-
   const preventEvent = (event) => {
     event.stopPropagation();
     event.preventDefault();
   };
 
   const updateLocation = (wideAddr, localAddr) => {
-    const input = document.getElementById("image-upload-location");
-    input.value = `${wideAddr} ${localAddr}`;
+    const location = document.getElementById("image-upload-location");
+    location.value = `${wideAddr} ${localAddr}`;
   };
-
-  const isValidSize = (fileSize) => MAXIMUM_IMAGE_SIZE > fileSize;
 
   const isValidType = (fileType) =>
     IMAGE_TYPES.filter((imageType) => imageType === fileType).length >= 1;
+
+  const isValidSize = (fileSize) => MAXIMUM_IMAGE_SIZE > fileSize;
+
+  const moreUpdate = (fileInfo, id) => {
+    const file = [...fileInfo];
+    const [validFile] = file
+      .filter((item) => isValidType(item.type))
+      .filter((item) => isValidSize(item.size));
+
+    if (!validFile) {
+      toast("이미지가 규격에 맞지 않습니다. 다른 이미지를 올려주세요.");
+      return;
+    }
+
+    const parents = document.querySelector(`.grid-div__${id}`);
+    parents.removeChild(parents.firstElementChild);
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", async (event) => {
+      const img = el("img", {
+        className: "embed-image",
+        src: event.target.result,
+      });
+
+      try {
+        const { wideAddr, localAddr } = await getWideAddrLocalAddr(img);
+        updateLocation(wideAddr, localAddr);
+      } catch (error) {
+        const location = document.getElementById("image-upload-location");
+        if (!location.value) {
+          toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
+        }
+      }
+
+      const imgContainer = el("div", { className: "grid-div__image" }, img);
+      parents.append(imgContainer);
+    });
+    reader.readAsDataURL(validFile);
+  };
+
+  const emptyBox = (id) =>
+    el(
+      "div",
+      {
+        className: `grid-div__${id}`,
+      },
+      el(
+        "label",
+        {
+          className: "grid-div__image grid-div__image--cursor",
+          for: `empty-input__${id}`,
+        },
+        el(
+          "div",
+          {
+            className: "empty-div",
+            events: {
+              change: (event) => {
+                const fileInfo = event.target.files;
+                moreUpdate(fileInfo, id);
+              },
+            },
+          },
+          el("input", {
+            className: "empty-box__input",
+            id: `empty-input__${id}`,
+            type: "file",
+          }),
+          el("i", {
+            className: "icon-add_circle",
+          }),
+        ),
+      ),
+    );
 
   const handleUpdate = (filesInfo) => {
     const fileList = [...filesInfo];
@@ -65,10 +121,14 @@ export default function UploadPage() {
       return;
     }
 
+    let currentIndex = 0;
     validTypeList.forEach((file) => {
       const reader = new FileReader();
       reader.addEventListener("load", async (event) => {
-        const img = embedImgElement(event);
+        const img = el("img", {
+          className: "embed-image",
+          src: event.target.result,
+        });
         lock();
 
         try {
@@ -78,9 +138,27 @@ export default function UploadPage() {
           toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
         }
 
-        const imgDiv = wrapperElement("div", "grid-div__image", img);
-        const div = wrapperElement("div", "grid-div", imgDiv);
-        preview.append(div);
+        const imgContainer = el(
+          "div",
+          { className: "grid-div" },
+          el(
+            "div",
+            {
+              className: "grid-div__image",
+            },
+            img,
+          ),
+        );
+        preview.append(imgContainer);
+
+        currentIndex += 1;
+
+        if (currentIndex === fileList.length) {
+          const emptyBoxLimit = MAX_UPLOAD_IMAGES - currentIndex;
+          for (let i = 0; i < emptyBoxLimit; i += 1) {
+            preview.append(emptyBox(i + 1));
+          }
+        }
       });
       reader.readAsDataURL(file);
     });
@@ -104,6 +182,7 @@ export default function UploadPage() {
         { className: "image-content" },
         el("div", {
           className: "image-content__preview image-content__preview--hidden",
+          id: "preview",
         }),
         el(
           "label",
