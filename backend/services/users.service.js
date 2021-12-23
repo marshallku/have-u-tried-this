@@ -32,6 +32,7 @@ export const getUserById = async (googleId) => {
 export const getPostByUserId = async (_id) => {
   const objId = mongoose.Types.ObjectId(_id);
   const myPosts = await Post.find({ author: objId });
+
   return myPosts;
 };
 

@@ -7,12 +7,10 @@ import path from "path";
 import favicon from "serve-favicon";
 import httpError from "http-errors";
 import passport from "passport";
-import session from "express-session";
-import MongoDBSession from "connect-mongodb-session";
 import cookieParser from "cookie-parser";
+
 import cors from "cors";
 import morgan from "morgan";
-
 import logger from "./logger/winston.js";
 
 import callPassport from "./passport/index.js";
@@ -50,26 +48,7 @@ app.use(express.static(`${__dirname}/public`));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.use(cookieParser());
 
-const MongoDBStore = MongoDBSession(session);
-const sessionStore = new MongoDBStore({
-  uri: mongoUri,
-  collection: "mySessions",
-});
-app.use(
-  session({
-    secret: "secret-key",
-    store: sessionStore,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      // maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      maxAge: 60 * 1000, // 60 secs
-    },
-  }),
-);
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 // to test
 if (process.env.NODE_ENV === "test") {
