@@ -4,17 +4,16 @@ import WordAutoComplete from "./WordAutoComplete";
 import el from "../utils/dom";
 
 export default function GlobalNavigation() {
+  const { profile } = window.user;
   const logoAnchor = el("a", {}, el("img", { src: "/static/images/logo.svg" }));
   const createBtn = el("a", { className: "gnb__add-post icon-add_a_photo" });
-  const profileAnchor = el(
-    "a",
-    {},
-    el("img", { src: "/static/images/default_profile.png" }),
-  );
+  const profileAnchor = profile
+    ? el("a", { className: "gnb__profile" }, el("img", { src: profile }))
+    : el("a", { className: "gnb__login" }, "로그인");
 
   addClickEvent(logoAnchor, "/");
   addClickEvent(createBtn, "/add");
-  addClickEvent(profileAnchor, "/login");
+  addClickEvent(profileAnchor, window.user ? "/user" : "/login");
 
   return el(
     "nav",
@@ -46,7 +45,15 @@ export default function GlobalNavigation() {
       "div",
       { className: "gnb__expand" },
       createBtn,
-      el("div", { className: "gnb__profile-image" }, profileAnchor),
+      el(
+        "div",
+        {
+          className: `gnb__profile-image ${
+            window.user ? "signed-in" : "signed-out"
+          }`,
+        },
+        profileAnchor,
+      ),
     ),
   );
 }
