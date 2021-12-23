@@ -15,12 +15,11 @@ const passportConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
-  passReqToCallback: true,
 };
 
 export default new GoogleStrategy(
   passportConfig,
-  async (req, accessToken, refreshToken, profiles, done) => {
+  async (_req, accessToken, refreshToken, profiles, done) => {
     const googleId = profiles.id;
     const email = profiles.emails[0].value;
     const firstName = profiles.name.givenName;
@@ -30,7 +29,7 @@ export default new GoogleStrategy(
 
     const currentUser = await getUserById(googleId);
     if (!currentUser) {
-      const newUser = addGoogleUser({
+      const newUser = await addGoogleUser({
         googleId,
         email,
         firstName,
@@ -38,13 +37,9 @@ export default new GoogleStrategy(
         profile,
         source,
       });
-      return done(null, newUser.googleId);
+
+      return done(null, newUser);
     }
-    // for test
-    console.log("accessToken");
-    console.log(accessToken);
-    console.log("refreshToken");
-    console.log(refreshToken);
 
     if (currentUser.source !== "google") {
       // return error
@@ -52,9 +47,8 @@ export default new GoogleStrategy(
         message: "You have previously signed up with a different signin method",
       });
     }
-
     currentUser.lastVisited = moment();
     currentUser.save();
-    return done(null, currentUser.googleId);
+    return done(null, currentUser);
   },
 );

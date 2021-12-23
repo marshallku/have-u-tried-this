@@ -2,33 +2,34 @@
 import { Router } from "express";
 import passport from "passport";
 
-const router = Router();
+import { createToken } from "../utils/jwt.js";
 
-// Get current authorized user
-router.get("/", (req, res) => {
-  const user = req?.user || null;
-  res.json({ user });
-});
+const router = Router();
 
 // Google OAuth2
 router.get(
   "/google",
   passport.authenticate("google", {
+    session: false,
     scope: ["profile", "email"],
-    accessType: "offline",
-    prompt: "consent",
   }),
 );
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/api/auth?type=failed",
+    session: false,
+    failureRedirect: "/api/auth/failure",
   }),
-  (req, res) => {
-    res.redirect("/api/auth");
+  async (req, res) => {
+    const user = await createToken(req.user);
+    res.json(user);
   },
 );
+
+router.get("/failure", (req, res) => {
+  res.json({ error: true });
+});
 
 // logout
 router.get("/logout", (req, res) => {
