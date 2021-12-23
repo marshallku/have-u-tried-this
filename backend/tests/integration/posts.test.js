@@ -88,7 +88,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
@@ -106,7 +106,7 @@ describe("post 라우터 테스트", () => {
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.title).toEqual("title");
-    expect(res.body.content).toEqual("content");
+    expect(res.body.contents).toEqual("content");
     expect(res.body.location.localAddr).toEqual("강남구");
     expect(res.body.photos[0].url).toEqual(
       expect.stringContaining(process.env.IMG_PATH),
@@ -123,7 +123,7 @@ describe("post 라우터 테스트", () => {
     const dummy = await request(app)
       .post("/api/posts")
       .field("title", "already")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
@@ -133,7 +133,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "already")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
@@ -148,7 +148,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG")
@@ -167,7 +167,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG")
@@ -183,7 +183,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title-aa")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG")
@@ -222,7 +222,7 @@ describe("post 라우터 테스트", () => {
   test("수정 기능 실패 테스트, 없는 게시물", async () => {
     const res = await request(app).put("/api/posts/1233").send({
       title: "update title",
-      content: "content update",
+      contents: "content update",
       wideAddr: "서울특별시",
       localAddr: "성북구",
     });
@@ -235,7 +235,7 @@ describe("post 라우터 테스트", () => {
       .put("/api/posts/" + updatePostId)
       .send({
         title: "already",
-        content: "content update",
+        contents: "content update",
         wideAddr: "서울특별시",
         localAddr: "성북구",
       });
@@ -249,7 +249,7 @@ describe("post 라우터 테스트", () => {
       .put("/api/posts/" + updatePostId)
       .send({
         title: "update title",
-        content: "content update",
+        contents: "content update",
         wideAddr: "서울특별시",
         localAddr: "성북구",
       });
@@ -257,7 +257,7 @@ describe("post 라우터 테스트", () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body._id).toEqual(updatePostId);
     expect(res.body.title).toEqual("update title");
-    expect(res.body.content).toEqual("content update");
+    expect(res.body.contents).toEqual("content update");
     expect(res.body.location.wideAddr).toEqual("서울특별시");
     expect(res.body.location.localAddr).toEqual("성북구");
     const createdAt = new Date(res.body.createdAt);
@@ -276,7 +276,7 @@ describe("post 라우터 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "title\ngg     ")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");

@@ -13,7 +13,7 @@ describe("북마크 기능 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "like test case")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
@@ -52,7 +52,7 @@ describe("북마크 기능 테스트", () => {
         "location",
         "_id",
         "title",
-        "content",
+        "contents",
         "photos",
         "likes",
         "author",

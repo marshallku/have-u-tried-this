@@ -14,7 +14,7 @@ describe("댓글 기능 테스트", () => {
     const res = await request(app)
       .post("/api/posts")
       .field("title", "comment test")
-      .field("content", "content")
+      .field("contents", "content")
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");

@@ -85,7 +85,7 @@ export async function getAll(_location, page, perPage) {
   };
 }
 export async function createPost(postDto) {
-  const { title, content, photos, wideAddr, localAddr, authorId } = postDto;
+  const { title, contents, photos, wideAddr, localAddr, authorId } = postDto;
 
   // 존재하는 지역인지 검증
   checkLocation(wideAddr, localAddr);
@@ -93,7 +93,7 @@ export async function createPost(postDto) {
   // post 인스턴스 생성
   const post = new Post({
     title: parseTitle(title),
-    content,
+    contents,
     photos: photos.reduce((prev, curr) => {
       prev.push({
         url: process.env.IMG_PATH + curr.filename,
@@ -130,14 +130,16 @@ export async function createPost(postDto) {
 
 export async function updatePost(postId, newPostDto) {
   // eslint-disable-next-line no-unused-vars
-  const { title, content, _photos, wideAddr, localAddr, authorId } = newPostDto;
+  const { title, contents, _photos, wideAddr, localAddr, authorId } =
+    newPostDto;
 
   // 있는 지역인지 검증
   const newLocation = await checkLocation(wideAddr, localAddr);
   try {
     // 포스트 있는지 검증
+
     const post = await Post.findById(postId);
-    if (post.author.toString() !== authorId) {
+    if (post.author.toString() !== authorId.toString()) {
       throw new Error("권한이 없습니다.");
     }
     // 새로운 포스트 내용 업데이트
@@ -145,7 +147,7 @@ export async function updatePost(postId, newPostDto) {
       postId,
       {
         title: parseTitle(title),
-        content,
+        contents,
         location: {
           wideAddr,
           localAddr,
@@ -159,7 +161,6 @@ export async function updatePost(postId, newPostDto) {
       },
       { new: true },
     );
-
     // 로케이션 배열 정리
     await Location.findOneAndUpdate(
       { wideAddr: post.location.wideAddr, localAddr: post.location.localAddr },

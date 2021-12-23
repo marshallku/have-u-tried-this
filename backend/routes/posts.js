@@ -77,7 +77,7 @@ router.post(
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
     const photos = req.files;
-    const { title, content, wideAddr, localAddr } = req.body;
+    const { title, contents, wideAddr, localAddr } = req.body;
 
     const isExists = await findByTitle(title);
     // 타이틀 중복 시 업로드된 이미지 제거
@@ -92,7 +92,7 @@ router.post(
 
     const post = new PostDto(
       sanitizeHtml(title),
-      sanitizeHtml(content),
+      sanitizeHtml(contents),
       photos,
       wideAddr,
       localAddr,
@@ -111,7 +111,7 @@ router.put(
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
     const { postId } = req.params;
-    const { title, content, wideAddr, localAddr } = req.body;
+    const { title, contents, wideAddr, localAddr } = req.body;
 
     // title 검증 필요
     const isExists = await findByTitle(title);
@@ -121,13 +121,12 @@ router.put(
 
     const newPostDto = new PostDto(
       sanitizeHtml(title),
-      sanitizeHtml(content),
+      sanitizeHtml(contents),
       undefined,
       wideAddr,
       localAddr,
       authorId,
     );
-
     const newPost = await updatePost(postId, newPostDto);
     res.json(newPost);
   }),
