@@ -53,6 +53,8 @@ export default function MasonryContainer({ fetcher, args, component }) {
           },
           gap: parseInt(style.rowGap, 10),
         });
+        // eslint-disable-next-line no-use-before-define
+        io.observe(observeTarget);
       } else {
         msnry.append(elements);
       }
@@ -66,7 +68,6 @@ export default function MasonryContainer({ fetcher, args, component }) {
   }, 500);
 
   fetchData(true);
-  io.observe(observeTarget);
 
   window.resizeHandler = handleResize;
   window.addEventListener("resize", window.resizeHandler, { passive: true });
