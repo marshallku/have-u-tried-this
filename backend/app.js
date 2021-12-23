@@ -8,6 +8,7 @@ import favicon from "serve-favicon";
 import httpError from "http-errors";
 import passport from "passport";
 import cookieParser from "cookie-parser";
+import session from "express-session";
 
 import cors from "cors";
 import morgan from "morgan";
@@ -18,9 +19,6 @@ import postRouter from "./routes/posts.js";
 import locationRouter from "./routes/locations.js";
 import authRouter from "./routes/auth.js";
 import usersRouter from "./routes/users.js";
-
-// to test
-import mockLogin from "./utils/mock-login.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -46,14 +44,17 @@ mongoose.connect(mongoUri);
 const __dirname = path.resolve();
 app.use(express.static(`${__dirname}/public`));
 app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(
+  session({
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 app.use(cookieParser());
 
 app.use(passport.initialize());
-
-// to test
-if (process.env.NODE_ENV === "test") {
-  app.use(mockLogin);
-}
+app.use(passport.session());
 
 // routes
 app.use("/api/locations", locationRouter);
