@@ -1,19 +1,7 @@
 import el from "../utils/dom";
-import { addClickEvent } from "../router";
 import "../../css/SignInPage.css";
 
 export default function SignInPage() {
-  const signInButton = el(
-    "button",
-    {
-      className: "sign-in__button",
-    },
-    el("img", { src: "/static/images/google.svg" }),
-    el("span", {}, "Google 계정으로 로그인"),
-  );
-
-  addClickEvent(signInButton, "/user");
-
   return el(
     "div",
     { className: "sign-in" },
@@ -31,7 +19,15 @@ export default function SignInPage() {
         { className: "sign-in__info" },
         "구글로 간편하게 로그인 하고 맛식 저장, 공유 하세요!",
       ),
-      signInButton,
+      el(
+        "a",
+        {
+          className: "sign-in__button",
+          href: "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/api/auth/google",
+        },
+        el("img", { src: "/static/images/google.svg" }),
+        el("span", {}, "Google 계정으로 로그인"),
+      ),
     ),
   );
 }
