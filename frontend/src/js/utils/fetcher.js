@@ -9,7 +9,10 @@ export default function createInstance({ baseUrl, timeOut }) {
     },
     _dummyPromise: new Promise((resolve) => {
       setTimeout(() => {
-        resolve(this.error("Took too long to fetch"));
+        resolve({
+          error: true,
+          message: "Took too long to fetch",
+        });
       }, timeOut);
     }),
     async fetch(resource, init) {
