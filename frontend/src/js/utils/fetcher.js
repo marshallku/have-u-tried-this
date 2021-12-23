@@ -23,6 +23,7 @@ export default function createInstance({ baseUrl, timeOut }) {
               fetch(`${baseUrl}${resource}`, init),
             ])
           : await fetch(`${baseUrl}${resource}`, init);
+        if (response.status === 204) return { success: true };
         const json = await response.json();
 
         return json;
@@ -33,8 +34,19 @@ export default function createInstance({ baseUrl, timeOut }) {
     async get(resource, init) {
       return this.fetch(resource, init);
     },
-    async post(resource, init = { method: "POST" }) {
-      if (init.method !== "POST") return this.error("Invalid method");
+    async post(resource, init = {}) {
+      // eslint-disable-next-line no-param-reassign
+      init.method = "POST";
+      return this.fetch(resource, init);
+    },
+    async delete(resource, init = {}) {
+      // eslint-disable-next-line no-param-reassign
+      init.method = "DELETE";
+      return this.fetch(resource, init);
+    },
+    async put(resource, init = {}) {
+      // eslint-disable-next-line no-param-reassign
+      init.method = "PUT";
       return this.fetch(resource, init);
     },
   };

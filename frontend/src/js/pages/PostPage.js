@@ -2,6 +2,7 @@ import el from "../utils/dom";
 import Carousel from "../components/Carousel";
 import LikesCount from "../components/LikesCount";
 import Modal from "../components/Modal";
+import CommentList from "../components/CommentList";
 import { getPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
@@ -12,6 +13,7 @@ import "../../css/PostDetails.css";
 
 function renderPostDetails(data) {
   const {
+    _id,
     title,
     author,
     content,
@@ -165,6 +167,7 @@ function renderPostDetails(data) {
         ),
       ),
       descElt,
+      CommentList(_id),
     ),
   );
 }
