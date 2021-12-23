@@ -141,8 +141,8 @@ router.get(
     // eslint-disable-next-line no-underscore-dangle
     const authorId = req.user._id;
     const { postId } = req.params;
-    const isLike = await checkLike(authorId, postId);
-    res.status(200).json({ isLike });
+    const isLiked = await checkLike(authorId, postId);
+    res.status(200).json({ isLiked });
   }),
 );
 
