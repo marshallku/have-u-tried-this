@@ -12,7 +12,12 @@ export default (req, res, next) => {
   verifyToken(token, async (error, decoded) => {
     if (error) {
       next("허용되지 않은 접근입니다.");
+      return;
     }
+    // console.log(typeof decoded);
+    // if (typeof decoded === "undefined") {
+    //   next("허용되지 않은 접근입니다.");
+    // }
 
     req.user = await User.findOne({ googleId: decoded.data });
     next();

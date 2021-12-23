@@ -3,16 +3,29 @@ import { Router } from "express";
 import asyncHandler from "../utils/async-handler.js";
 import {
   getPostByUserId,
+  getCommentsByUserId,
   getUserBookmarks,
 } from "../services/users.service.js";
+import loginRequired from "../middlewares/login-required.js";
 
 const router = Router();
 
+function isValidUser(userId, _id) {
+  return userId === _id.toString();
+}
+
 // 내 게시글 목록
 router.get(
-  "/:userId/myposts",
+  "/:userId/posts",
+  loginRequired,
   asyncHandler(async (req, res) => {
     const { userId } = req.params;
+    const { _id } = req.user;
+
+    if (!isValidUser(userId, _id)) {
+      throw new Error("권한이 없습니다.");
+    }
+
     const myPosts = await getPostByUserId(userId);
 
     res.json(myPosts);
@@ -20,10 +33,32 @@ router.get(
 );
 
 router.get(
-  "/:userId/likes",
+  "/:userId/comments",
+  loginRequired,
   asyncHandler(async (req, res) => {
     const { userId } = req.params;
-    // const { _id } = req.user;
+    const { _id } = req.user;
+
+    if (!isValidUser(userId, _id)) {
+      throw new Error("권한이 없습니다.");
+    }
+
+    const comments = await getCommentsByUserId(userId);
+    res.json(comments);
+  }),
+);
+
+router.get(
+  "/:userId/likes",
+  loginRequired,
+  asyncHandler(async (req, res) => {
+    const { userId } = req.params;
+    const { _id } = req.user;
+
+    if (!isValidUser(userId, _id)) {
+      throw new Error("권한이 없습니다.");
+    }
+
     const bookmarks = await getUserBookmarks(userId);
     res.status(200).json(bookmarks);
   }),
