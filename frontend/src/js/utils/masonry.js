@@ -29,6 +29,8 @@ export default function masonry({
     elt.style.width = `${itemWidth}px`;
     elt.style.height = `${height}px`;
 
+    elt.classList.add("revealed");
+
     if (stack[currentPosition] !== undefined) {
       stack[currentPosition] = min + height + yGap;
     }
