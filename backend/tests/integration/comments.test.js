@@ -43,11 +43,10 @@ describe("댓글 기능 테스트", () => {
         "_id",
         "createdAt",
         "updatedAt",
-        "__v",
       ]),
     );
 
-    commentId = res.body.id;
+    commentId = res.body._id;
   });
 
   test("댓글 생성 테스트 실패 케이스(없는 게시물)", async () => {
