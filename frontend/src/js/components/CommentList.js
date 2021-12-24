@@ -76,10 +76,19 @@ function CommentInput(postId) {
     {
       className: "comment-input",
       events: {
-        submit: (event) => {
+        submit: async (event) => {
           event.preventDefault();
-          postComment(postId, textarea.value);
-          // TODO: 댓글 DOM에 추가
+          const newComment = await postComment(postId, textarea.value);
+
+          if (newComment && !newComment.error) {
+            const container = document.querySelector(".comments");
+            const newCommentElt = CommentItem(newComment, postId);
+
+            container?.prepend(newCommentElt);
+            document.querySelector(".comment-input")?.reset();
+          } else {
+            toast("댓글이 추가되지 않았습니다.");
+          }
         },
       },
     },
