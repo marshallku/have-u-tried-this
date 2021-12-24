@@ -42,12 +42,12 @@ export default (app) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { userId } = req.params;
-      const { id } = req.user;
+      const { _id } = req.user;
 
       const page = Number(req.query.page) || 1;
       const perPage = Number(req.query.perPage) || 9;
 
-      if (!isValidUser(userId, id)) {
+      if (!isValidUser(userId, _id)) {
         throw new Error("권한이 없습니다.");
       }
 
@@ -61,11 +61,11 @@ export default (app) => {
     loginRequired,
     asyncHandler(async (req, res) => {
       const { userId } = req.params;
-      const { id } = req.user;
+      const { _id } = req.user;
       const page = Number(req.query.page) || 1;
       const perPage = Number(req.query.perPage) || 9;
 
-      if (!isValidUser(userId, id)) {
+      if (!isValidUser(userId, _id)) {
         throw new Error("권한이 없습니다.");
       }
 

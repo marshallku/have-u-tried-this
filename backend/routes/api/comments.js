@@ -34,15 +34,11 @@ router.post(
   asyncHandler(async (req, res) => {
     const { postId } = req.params;
     const { contents } = req.body;
-    const userId = req.user.id;
+    const { _id } = req.user;
 
     filterEmptyString(contents);
 
-    const commentId = await createComment(
-      postId,
-      userId,
-      sanitizeHtml(contents),
-    );
+    const commentId = await createComment(postId, _id, sanitizeHtml(contents));
     res.status(201).json({ id: commentId });
   }),
 );
@@ -52,8 +48,8 @@ router.delete(
   loginRequired,
   asyncHandler(async (req, res) => {
     const { postId, commentId } = req.params;
-    const userId = req.user.id;
-    await deleteComment(postId, commentId, userId);
+    const { _id } = req.user;
+    await deleteComment(postId, commentId, _id);
     res.status(204).json();
   }),
 );

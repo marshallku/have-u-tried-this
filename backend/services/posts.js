@@ -24,13 +24,17 @@ export async function findById(id, user) {
     const post = await Post.findById(id).populate("author");
     let bookmarks = [];
     if (user) {
-      bookmarks = await Bookmark.find({ user: user.id });
+      // eslint-disable-next-line no-underscore-dangle
+      bookmarks = await Bookmark.find({ user: user._id });
     }
     return {
       post,
       isLiked:
         bookmarks.length > 0
-          ? bookmarks.some((bookmark) => bookmark.post.toString() === post.id)
+          ? bookmarks.some(
+              // eslint-disable-next-line no-underscore-dangle
+              (bookmark) => bookmark.post.toString() === post._id.toString(),
+            )
           : false,
     };
   } catch (e) {
@@ -78,7 +82,8 @@ export async function getAllLocation(user, _location, page, perPage) {
 
   let bookmarks = [];
   if (user) {
-    bookmarks = await Bookmark.find({ user: user.id });
+    // eslint-disable-next-line no-underscore-dangle
+    bookmarks = await Bookmark.find({ user: user._id });
   }
 
   return {

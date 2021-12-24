@@ -60,6 +60,7 @@ export async function deleteComment(postId, commentId, userId) {
         comments: { _id: commentId },
       },
     });
+    await Comment.findByIdAndDelete(commentId);
   } catch (err) {
     throw new Error("잘못된 접근입니다.");
   }
