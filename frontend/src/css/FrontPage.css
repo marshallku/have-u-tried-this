@@ -1,0 +1,39 @@
+.front-intro {
+  position: absolute;
+  display: flex;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: var(--bg);
+  z-index: 10000;
+}
+
+.front-intro--pseudo {
+  position: static;
+  pointer-events: none;
+  margin-bottom: 100px;
+}
+
+.front-intro > * {
+  width: clamp(0px, 100%, 1140px);
+}
+
+.front-intro__title {
+  font-size: 2.5rem;
+  line-height: 2;
+  margin-bottom: 10px;
+}
+
+.input-box__input {
+  display: block;
+  width: clamp(0px, 100%, 500px);
+  margin: 0 auto;
+  padding: 10px 20px;
+  border-radius: 2rem;
+  background-color: var(--lighter-bg);
+}

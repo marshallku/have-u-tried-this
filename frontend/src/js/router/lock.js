@@ -7,15 +7,19 @@ function handlePopState() {
   if (hash !== "#locked") {
     window.location.hash = "locked";
   } else {
-    Modal({
-      title: "내용이 사라집니다!",
-      content: "페이지를 벗어나시겠습니까?",
-      callback: () => {
-        // eslint-disable-next-line no-use-before-define
-        unlock();
-        window.history.go(-2);
-      },
-    });
+    const app = document.getElementById("app");
+
+    app.append(
+      Modal({
+        title: "내용이 사라집니다!",
+        content: "페이지를 벗어나시겠습니까?",
+        callback: () => {
+          // eslint-disable-next-line no-use-before-define
+          unlock();
+          window.history.go(-2);
+        },
+      }),
+    );
   }
 }
 
