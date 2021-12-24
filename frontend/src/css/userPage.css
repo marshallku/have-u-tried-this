@@ -64,6 +64,15 @@
   padding: 10px;
 }
 
+.settings > .masonry-container {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.settings > .masonry-container[style] {
+  background-color: var(--lighter-bg);
+}
+
 /* User Page - Comment */
 .comment-list {
   display: grid;

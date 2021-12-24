@@ -4,10 +4,9 @@ import { getUserLikeData } from "../api";
 
 export default function UserPageLike() {
   const { id } = window.user;
-
   return MasonryContainer({
     fetcher: getUserLikeData,
-    args: id,
+    args: [id],
     component: (article) =>
       PostItem({
         title: article.title,

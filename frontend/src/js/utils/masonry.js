@@ -35,7 +35,7 @@ export default function masonry({
       stack[currentPosition] = min + height + yGap;
     }
 
-    container.style.height = `${Math.max(...stack)}px`;
+    container.style.height = `${Math.max(...stack) + padding.top * 2}px`;
   };
 
   const recalculate = () => {
