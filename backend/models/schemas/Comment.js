@@ -6,6 +6,10 @@ export default new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Post",
+    },
     contents: {
       type: String,
       required: true,

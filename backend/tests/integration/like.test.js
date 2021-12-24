@@ -52,18 +52,14 @@ describe("북마크 기능 테스트", () => {
       .send();
 
     expect(res.statusCode).toEqual(200);
-    expect(Object.keys(res.body[0])).toEqual(
+    expect(Object.keys(res.body.data[0])).toEqual(
       expect.arrayContaining([
-        "location",
-        "_id",
+        "id",
         "title",
-        "contents",
-        "photos",
+        "photo",
         "likes",
-        "author",
-        "createdAt",
-        "updatedAt",
-        "__v",
+        "wideAddr",
+        "localAddr",
       ]),
     );
   });
@@ -85,7 +81,7 @@ describe("북마크 기능 테스트", () => {
       .send();
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toBeGreaterThanOrEqual(1);
+    expect(res.body.data.length).toBeGreaterThanOrEqual(1);
   });
 
   test("성공 좋아요 취소 클릭", async () => {
