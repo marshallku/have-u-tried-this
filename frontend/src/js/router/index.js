@@ -1,4 +1,3 @@
-import renderHeader from "../components/Header";
 import Modal from "../components/Modal";
 import renderPage from "../pages";
 import removeHash from "../utils/history";
@@ -7,7 +6,6 @@ import { unlock } from "./lock";
 export function route(isPopstate) {
   const path = window.location.pathname.split("/")[1];
 
-  renderHeader(path);
   renderPage(path, isPopstate);
 }
 

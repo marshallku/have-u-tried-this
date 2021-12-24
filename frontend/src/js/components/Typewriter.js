@@ -4,7 +4,7 @@ export default function Typewriter(texts, speed = 250) {
   let i = 0;
   let j = 0;
 
-  const element = el("div", {});
+  const element = el("span", {});
 
   const txtNum = () => (j === texts.length - 1 ? 0 : j + 1);
 
