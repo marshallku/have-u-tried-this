@@ -184,6 +184,34 @@ export default function UploadPage() {
       el(
         "div",
         { className: "image-content" },
+        el(
+          "div",
+          { className: "image-header-wrapper" },
+          el("i", {
+            className: "icon-utensil-spoon-solid",
+          }),
+          el("div", { className: "image-header" }, "맛식 등록"),
+        ),
+        el(
+          "div",
+          {
+            className: "image-content__info",
+          },
+          el("input", {
+            className: "image-content__title",
+            type: "text",
+            name: "title",
+            placeholder: "맛식 제목을 입력해주세요",
+            required: true,
+            autocomplete: "off",
+            spellcheck: "false",
+            events: {
+              input: debounce((event) => {
+                checkLock(event);
+              }),
+            },
+          }),
+        ),
         el("div", {
           className: "image-content__preview image-content__preview--hidden",
           id: "preview",
@@ -234,10 +262,11 @@ export default function UploadPage() {
           el(
             "div",
             { className: "image-content__inner" },
+            el("i", { className: "icon-insert_photo" }),
             el(
               "div",
               { className: "image-content__text" },
-              "드래그하거나 클릭하여 업로드",
+              "드래그하거나 클릭해서 업로드",
             ),
           ),
         ),
@@ -260,6 +289,9 @@ export default function UploadPage() {
         el(
           "div",
           { className: "image-upload__gps" },
+          el("i", {
+            className: "icon-location_on",
+          }),
           WordAutoComplete({
             formAttr: {},
             inputAttr: {
@@ -273,6 +305,7 @@ export default function UploadPage() {
             },
             onSubmit: {},
           }),
+
           el("datalist", {
             className: "image-upload_datalist",
             id: "address",
@@ -280,25 +313,13 @@ export default function UploadPage() {
         ),
         el(
           "div",
-          { className: "image-content__info" },
-          el("input", {
-            className: "image-content__title",
-            type: "text",
-            name: "title",
-            placeholder: "게시글 제목",
-            required: true,
-            autocomplete: "off",
-            spellcheck: "false",
-            events: {
-              input: debounce((event) => {
-                checkLock(event);
-              }),
-            },
-          }),
+          {
+            className: "image-content__info",
+          },
           el("textarea", {
             className: "image-content__desc",
             name: "contents",
-            placeholder: "게시글 설명",
+            placeholder: "맛식에 대해 설명해주세요.",
             required: true,
             autocomplete: "off",
             spellcheck: "false",
@@ -335,7 +356,7 @@ export default function UploadPage() {
               },
             },
           },
-          "제출",
+          "등록하기",
         ),
       ),
     ),
