@@ -32,7 +32,7 @@ export default function uploadFile(req, res, next) {
         cb(null, `${new Date().valueOf()}${path.extname(file.originalname)}`);
       },
     }),
-    limits: { fileSize: 1024 * 1024 * 2 },
+    limits: { fileSize: 1024 * 1024 * 20 },
     fileFilter,
   }).array("photos", 4);
 
