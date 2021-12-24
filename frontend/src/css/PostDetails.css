@@ -111,7 +111,7 @@
   border-color: var(--primary);
 }
 
-@media screen and (min-width: 1150px) {
+@media screen and (min-width: 860px) {
   .details-nav {
     display: none;
   }

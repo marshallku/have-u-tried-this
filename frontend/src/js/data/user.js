@@ -23,8 +23,6 @@ export function loadUser() {
   window.user = {
     token: localStorage.getItem("token"),
     id: localStorage.getItem("userId"),
-    profile:
-      localStorage.getItem("userProfile") ||
-      "/static/images/default_profile.png",
+    profile: localStorage.getItem("userProfile") || "/static/images/person.svg",
   };
 }
