@@ -8,16 +8,13 @@ export default function GlobalNavigation() {
   const logoAnchor = el("a", {}, el("img", { src: "/static/images/logo.svg" }));
   const createBtn = el("a", { className: "gnb__add-post icon-add_a_photo" });
   const loginAnchor = el("a", { className: "gnb__login" }, "로그인");
-  const profileAnchor = window.user.token
+  const profileAnchor = window.user?.token
     ? el(
         "button",
         {
           className: "gnb__profile",
           events: {
-            click: () => {
-              const app = document.getElementById("app");
-              app.append(DropDown());
-            },
+            click: () => document.body.append(DropDown()),
           },
         },
         el("img", { src: window.user.profile }),
@@ -33,7 +30,7 @@ export default function GlobalNavigation() {
     { className: "gnb" },
     el(
       "div",
-      { className: "gnb__container" },
+      { className: "gnb__inner" },
 
       el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
       WordAutoComplete({

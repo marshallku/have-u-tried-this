@@ -13,6 +13,8 @@ export function removeUser() {
   localStorage.removeItem("token");
   localStorage.removeItem("userId");
   localStorage.removeItem("userProfile");
+  window.user = null;
+  window.location.reload();
 }
 
 export function saveUserOnLogin() {
