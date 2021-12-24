@@ -10,12 +10,13 @@
   z-index: 1000;
 }
 
-.gnb__container {
+.gnb__inner {
   display: flex;
+  width: clamp(0px, 100%, 1140px);
   height: 100%;
-  align-items: center;
-  width: clamp(0px, 100%, 1120px);
   margin: 0 auto;
+  padding: 0 10px;
+  align-items: center;
 }
 
 .gnb__logo,
