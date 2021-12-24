@@ -29,7 +29,7 @@ function renderPostDetails(data) {
     {},
     `${location.wideAddr} ${location.localAddr}`,
   );
-  const likesElt = LikesCount("button", likes);
+  const likesElt = LikesCount({ type: "button", likes, postId: _id });
   const titleElt = el("h2", { className: "details__title" }, title);
   const descElt = el("p", { className: "details__desc" }, contents);
   const editing = {

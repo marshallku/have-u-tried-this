@@ -16,7 +16,11 @@ export default function PostItem({ title, thumbnail, slug, likes }) {
       "header",
       { className: "post-item__header" },
       el("h2", { className: "post-item__title" }, title),
-      el("div", { className: "post-item__info" }, LikesCount("div", likes)),
+      el(
+        "div",
+        { className: "post-item__info" },
+        LikesCount({ type: "div", likes }),
+      ),
     ),
   );
 
