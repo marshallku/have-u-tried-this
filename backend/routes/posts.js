@@ -18,6 +18,7 @@ import commentRouter from "./comments.js";
 import uploadFile from "../middlewares/multer.js";
 import loginRequired from "../middlewares/login-required.js";
 import PostDto from "../models/DTO/Post.js";
+import filterEmptyString from "../utils/empty-string-fliter.js";
 import asyncHandler from "../utils/async-handler.js";
 
 const router = Router();
@@ -76,6 +77,8 @@ router.post(
     const photos = req.files;
     const { title, contents, wideAddr, localAddr } = req.body;
 
+    filterEmptyString(title, contents);
+
     const post = new PostDto(
       sanitizeHtml(title),
       sanitizeHtml(contents),
@@ -98,6 +101,8 @@ router.put(
     const authorId = req.user._id;
     const { postId } = req.params;
     const { title, contents } = req.body;
+
+    filterEmptyString(title, contents);
 
     const newPostDto = new PostDto(
       sanitizeHtml(title),

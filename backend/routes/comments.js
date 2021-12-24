@@ -3,6 +3,7 @@ import { Router } from "express";
 import sanitizeHtml from "sanitize-html";
 
 import loginRequired from "../middlewares/login-required.js";
+import filterEmptyString from "../utils/empty-string-fliter.js";
 import asyncHandler from "../utils/async-handler.js";
 
 import {
@@ -35,6 +36,8 @@ router.post(
     const { postId } = req.params;
     const { contents } = req.body;
     const { _id } = req.user;
+
+    filterEmptyString(contents);
 
     const commentId = await createComment(postId, _id, sanitizeHtml(contents));
     res.status(201).json({ id: commentId });
