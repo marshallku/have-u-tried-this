@@ -6,21 +6,8 @@ import { getWideAddrLocalAddr } from "../utils/gps";
 import WordAutoComplete from "../components/WordAutoComplete";
 import { postData } from "../api/post";
 import { updatePath } from "../router";
+import { MAX_UPLOAD_IMAGES, isValidType, isValidSize } from "../utils/upload";
 import "../../css/UploadImage.css";
-
-const MAX_UPLOAD_IMAGES = 4;
-const IMAGE_TYPES = [
-  "image/apng",
-  "image/bmp",
-  "image/jpeg",
-  "image/pjpeg",
-  "image/png",
-  "image/tiff",
-  "image/webp",
-];
-const MEGA_BYTES = 20;
-const BASE_UNIT = 1024;
-const MAXIMUM_IMAGE_SIZE = MEGA_BYTES * BASE_UNIT * BASE_UNIT;
 
 export default function UploadPage() {
   const preventEvent = (event) => {
@@ -32,11 +19,6 @@ export default function UploadPage() {
     const location = document.getElementById("location");
     location.value = `${wideAddr} ${localAddr}`;
   };
-
-  const isValidType = (fileType) =>
-    IMAGE_TYPES.filter((imageType) => imageType === fileType).length >= 1;
-
-  const isValidSize = (fileSize) => MAXIMUM_IMAGE_SIZE > fileSize;
 
   const moreUpdate = (fileInfo, id) => {
     const file = [...fileInfo];
