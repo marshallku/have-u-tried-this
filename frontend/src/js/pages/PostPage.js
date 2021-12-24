@@ -17,7 +17,7 @@ function renderPostDetails(data) {
     _id,
     title,
     author,
-    content,
+    contents,
     photos,
     likes,
     location,
@@ -31,7 +31,7 @@ function renderPostDetails(data) {
   );
   const likesElt = LikesCount("button", likes);
   const titleElt = el("h2", { className: "details__title" }, title);
-  const descElt = el("p", { className: "details__desc" }, content);
+  const descElt = el("p", { className: "details__desc" }, contents);
   const editing = {
     status: false,
     title: "",
