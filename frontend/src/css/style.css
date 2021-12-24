@@ -38,10 +38,11 @@ html {
   background-color: var(--bg);
   color: var(--text);
   font-family: "Noto Sans KR", sans-serif;
+  overflow-x: hidden;
 }
 
 html.overflow-hidden {
-  overflow: hidden;
+  overflow-y: hidden;
 }
 
 body {
