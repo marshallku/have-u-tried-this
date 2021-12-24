@@ -12,10 +12,10 @@ export default function EmptyBox({ message, icon, link, linkMessage }) {
 
   return el(
     "div",
-    { className: "emptyBox" },
+    { className: "empty-box" },
     el(
       "div",
-      { className: "emptyBox__content" },
+      { className: "empty-box__content" },
       el("i", { className: icon }),
       el("div", {}, message),
       anchor(linkMessage, link),

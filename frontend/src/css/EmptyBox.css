@@ -1,28 +1,31 @@
-.emptyBox {
-  background-color: var(--lighter-bg);
-  height: calc(100vh - 230px);
-  text-align: center;
+.empty-box {
   display: flex;
+  width: clamp(0px, 100%, 1120px);
+  height: calc(100vh - 230px);
+  margin: 0 auto;
+  padding: 10px;
+  background-color: var(--lighter-bg);
+  text-align: center;
   flex-direction: column;
   align-content: center;
   justify-content: center;
 }
 
-.emptyBox__content {
+.empty-box__content {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
   height: 250px;
 }
 
-.emptyBox__content > i {
+.empty-box__content > i {
   font-size: 120px;
 }
 
-.emptyBox__content > div {
+.empty-box__content > div {
   font-size: 18px;
 }
 
-.emptyBox__content > a {
+.empty-box__content > a {
   color: var(--primary);
 }
