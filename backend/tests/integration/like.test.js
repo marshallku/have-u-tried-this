@@ -6,12 +6,15 @@ import app from "../../app";
 
 describe("북마크 기능 테스트", () => {
   let postIdLike;
+  const token =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjY2MjEsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjE4MjF9.uaEIqJw5De5MXifwqOtSB3Yv1CRV65LIQyI876GwvCI";
 
   test("테스트 케이스 글 생성", async () => {
     const __dirname = path.resolve();
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "like test case")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -27,6 +30,7 @@ describe("북마크 기능 테스트", () => {
   test("성공 좋아요 클릭", async () => {
     const res = await request(app)
       .post("/api/posts/" + postIdLike + "/like")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(201);
@@ -44,6 +48,7 @@ describe("북마크 기능 테스트", () => {
   test("유저 북마크 기능 테스트", async () => {
     const res = await request(app)
       .get("/api/users/" + process.env.AUTHOR_ID + "/likes")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -64,7 +69,10 @@ describe("북마크 기능 테스트", () => {
   });
 
   test("실패 좋아요 클릭, 없는 게시물", async () => {
-    const res = await request(app).post("/api/posts/notexist/like").send();
+    const res = await request(app)
+      .post("/api/posts/notexist/like")
+      .set("authorization", token)
+      .send();
 
     expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("잘못된 접근입니다.");
@@ -73,6 +81,7 @@ describe("북마크 기능 테스트", () => {
   test("유저 북마크 리스트 출력", async () => {
     const res = await request(app)
       .get("/api/users/" + process.env.AUTHOR_ID + "/likes")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(200);
@@ -82,6 +91,7 @@ describe("북마크 기능 테스트", () => {
   test("성공 좋아요 취소 클릭", async () => {
     const res = await request(app)
       .delete("/api/posts/" + postIdLike + "/unlike")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(204);
@@ -98,6 +108,7 @@ describe("북마크 기능 테스트", () => {
   test("유저 북마크 리스트 없을 때 출력", async () => {
     const res = await request(app)
       .get("/api/users/" + process.env.AUTHOR_ID + "/likes")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(500);
@@ -105,7 +116,10 @@ describe("북마크 기능 테스트", () => {
   });
 
   test("실패 좋아요 취소 클릭, 없는 게시물", async () => {
-    const res = await request(app).delete("/api/posts/notexist/unlike").send();
+    const res = await request(app)
+      .delete("/api/posts/notexist/unlike")
+      .set("authorization", token)
+      .send();
 
     expect(res.statusCode).toEqual(500);
     expect(res.body.message).toEqual("잘못된 접근입니다.");
@@ -114,6 +128,7 @@ describe("북마크 기능 테스트", () => {
   test("Success DELETE /api/posts/:id 포스트 삭제", async () => {
     const res = await request(app)
       .delete("/api/posts/" + postIdLike)
+      .set("authorization", token)
       .send();
 
     expect(res.status).toEqual(200);

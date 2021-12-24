@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 import { Post, Location } from "../models/index.js";
-import resizeFile from "../utils/file-resize.js";
+import { resizeFile } from "../utils/index.js";
 
 dotenv.config();
 

@@ -5,7 +5,7 @@ import { writeFile } from "fs";
 
 dotenv.config();
 
-export default (files) => {
+export default function resizeFile(files) {
   files.forEach((file) => {
     const filePath = path.join(process.env.UPLOAD_PATH, file.filename);
 
@@ -19,4 +19,4 @@ export default (files) => {
         });
       });
   });
-};
+}
