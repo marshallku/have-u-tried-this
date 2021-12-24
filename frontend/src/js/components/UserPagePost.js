@@ -7,7 +7,7 @@ export default function UserPagePost() {
 
   return MasonryContainer({
     fetcher: getUserPostData,
-    args: id,
+    args: [id],
     component: (article) =>
       PostItem({
         title: article.title,
