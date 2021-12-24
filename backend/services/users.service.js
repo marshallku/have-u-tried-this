@@ -44,7 +44,7 @@ export const getPostByUserId = async (_id, page, perPage) => {
     id: post._id,
     wideAddr: post.location.wideAddr,
     localAddr: post.location.localAddr,
-    photos: post.photos[0].url,
+    photo: post.photos[0].url,
     title: post.title,
     likes: post.likes,
   }));
