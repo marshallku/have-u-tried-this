@@ -3,6 +3,27 @@
   margin: 45px auto;
 }
 
+.image-header-wrapper{
+  width: 100%;
+  background-color: var(--dark);
+  padding: 12px 20px 12px 12px;
+  border-radius: 4px;
+  font-family: var(--highlight-font);
+  font-size: 20px;
+  color: white;
+  margin-bottom: 16px;
+}
+
+.image-header-wrapper > i {
+  display: inline;
+  margin-right: 4px;
+  font-size: 24px;
+}
+
+.image-header-wrapper > div {
+  display: inline-block;
+}
+
 .image-form {
   width: 100%;
   padding: 16px;
@@ -16,11 +37,12 @@
 .image-content__preview {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
   justify-items: center;
   align-items: center;
   background-color: var(--lightest-bg);
-  padding: 12px;
-  margin-bottom: 32px;
+  padding: 32px;
+  margin-bottom: 16px;
   border-radius: 4px;
 }
 
@@ -29,16 +51,27 @@
 }
 
 .image-upload__gps {
+  display: flex;
+  align-items: center;
   width: 100%;
   color: var(--text);
   background-color: var(--lightest-bg);
   border-radius: 4px;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
+}
+
+.image-upload__gps > i {
+  font-size: 24px;
+  padding-left: 24px;
+}
+
+.image-upload__gps > form {
+  width: 100%;
 }
 
 .image-upload__gps > form > input {
   width: 100%;
-  padding: 16px;
+  padding: 16px 16px 16px 6px;
   font-size: 20px;
   cursor: pointer;
 }
@@ -47,11 +80,11 @@
   display: inline-block;
   cursor: pointer;
   width: 100%;
-  line-height: 360px;
+  padding: 156px;
   background-color: var(--lightest-bg);
   color: var(--text);
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   border-radius: 4px;
 }
 
@@ -59,18 +92,20 @@
   background-color: var(--hover-bg);
 }
 
-.image-content__inner > input{
+.image-content__inner > i{
   position: absolute;
-  height: 0;
-  opacity: 0;
+  top: 48%;
+  left: 47%;
+  font-size: 64px;
 }
 
 .image-content__inner > div {
-  font-size: 20px;
+  padding-top: 16px;
+  font-size: 22px;
 }
 
 .image-content__info {
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 }
 
 .image-content__info > input {
@@ -78,8 +113,7 @@
   background-color: var(--lightest-bg);
   color: var(--text);
   font-size: 20px;
-  margin-bottom: 16px;
-  padding: 16px;
+  padding: 16px 16px 16px 24px;
   border-radius: 4px;
 }
 
@@ -89,18 +123,20 @@
   background-color: var(--lightest-bg);
   color: var(--text);
   font-size: 20px;
-  padding: 16px;
+  padding: 16px 16px 64px 24px;
   border-radius: 4px;
+  line-height: 1.2;
 }
 
 .image-content__submit {
   cursor: pointer;
-  width: 80px;
+  width: 100%;
   border-radius: 4px;
   padding: 16px;
+  background-color: var(--dark);
+  font-family: var(--highlight-font);
   font-size: 20px;
-  background-color: var(--lightest-bg);
-  color: var(--text);
+  color: white;
 }
 
 input::-webkit-calendar-picker-indicator {
@@ -111,9 +147,9 @@ input::-webkit-calendar-picker-indicator {
   display: inline-block;
   width: 100%;
   border-radius: 8px;
-  padding: 16px;
-  margin: 8px;
+  margin: 16px;
   text-align: center;
+  box-shadow: 3px 3px 8px black; 
 }
 
 .grid-div__image {
