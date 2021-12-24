@@ -15,22 +15,23 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 80px 10px 10px 10px;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0));
+  padding: 15px 10px;
+  background: rgba(0, 0, 0, 0.5);
   color: var(--highlight-text);
 }
 
 .post-item__title {
-  font-family: var(--highlight-font);
-  margin-bottom: 15px;
   line-height: 1.7;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
+  width: 100%;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
 .post-item__info {
   display: flex;
+  align-items: center;
   line-height: 1.7;
 }
 
