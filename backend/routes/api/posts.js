@@ -85,8 +85,7 @@ export default (app) => {
     loginRequired,
     uploadFile,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const photos = req.files;
       const { title, contents, wideAddr, localAddr } = req.body;
 
@@ -115,8 +114,7 @@ export default (app) => {
     "/:postId",
     loginRequired,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const { postId } = req.params;
       const { title, contents } = req.body;
 
@@ -141,8 +139,7 @@ export default (app) => {
     "/:postId/like",
     loginRequired,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const { postId } = req.params;
       const isLiked = await checkLike(authorId, postId);
       res.status(200).json({ isLiked });
@@ -153,8 +150,7 @@ export default (app) => {
     "/:postId/like",
     loginRequired,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const { postId } = req.params;
       await pushLike(authorId, postId);
       res.status(201).json({ success: true });
@@ -166,8 +162,7 @@ export default (app) => {
     "/:postId/like",
     loginRequired,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const { postId } = req.params;
       await pushUnlike(authorId, postId);
       res.status(204).json();
@@ -183,8 +178,7 @@ export default (app) => {
     "/:postId",
     loginRequired,
     asyncHandler(async (req, res) => {
-      // eslint-disable-next-line no-underscore-dangle
-      const authorId = req.user._id;
+      const authorId = req.user.id;
       const { postId } = req.params;
       await deletePost(postId, authorId);
       res.json({ success: true });
