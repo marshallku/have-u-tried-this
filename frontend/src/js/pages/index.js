@@ -18,7 +18,7 @@ function resetApp() {
   }
 }
 
-function isReset({ page, initializing, isPopstate }) {
+function isReset({ page, initializing, renderPostOnly, isPopstate }) {
   if (initializing) return true;
 
   if (page !== "post") {
@@ -38,13 +38,22 @@ function isReset({ page, initializing, isPopstate }) {
     return true;
   }
 
-  document.documentElement.classList.add("overflow-hidden");
+  if (!renderPostOnly)
+    document.documentElement.classList.add("overflow-hidden");
   return true;
 }
 
 export default function renderPage(page, isPopstate) {
-  const initializing = !document.getElementById("app").firstChild;
-  const shouldAppend = isReset({ page, initializing, isPopstate });
+  const isInitialized = !!document.getElementById("app").firstChild;
+  const isMasonry = !!document.querySelector(".masonry-x");
+  const renderPostOnly = !isInitialized || !isMasonry;
+  console.log(renderPostOnly);
+  const shouldAppend = isReset({
+    page,
+    initializing: !isInitialized,
+    renderPostOnly,
+    isPopstate,
+  });
 
   try {
     switch (page) {
@@ -57,7 +66,13 @@ export default function renderPage(page, isPopstate) {
         }
         break;
       case "post":
-        app.append(PostPage(!initializing));
+        if (renderPostOnly) {
+          const header = document.querySelector(".header");
+          if (header) header.remove();
+
+          resetApp();
+        }
+        app.append(PostPage(!renderPostOnly));
         break;
       case "add":
         app.append(UploadPage());
