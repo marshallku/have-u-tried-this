@@ -36,15 +36,11 @@
   margin-bottom: 32px;
 }
 
-.image-upload__gps > input {
+.image-upload__gps > form > input {
   width: 100%;
   padding: 16px;
   font-size: 20px;
   cursor: pointer;
-}
-
-input::-webkit-calendar-picker-indicator {
-  opacity: 1;
 }
 
 .image-content__label {
