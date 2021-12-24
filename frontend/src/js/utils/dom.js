@@ -29,6 +29,8 @@ export default function el(nodeName, attributes, ...children) {
   });
 
   children.forEach((childNode) => {
+    if (!childNode) return;
+
     if (typeof childNode === "string") {
       if (childNode.includes("\n")) {
         node.innerText = childNode;

@@ -6,38 +6,27 @@ import el from "../utils/dom";
 export default function GlobalNavigation() {
   const logoAnchor = el("a", {}, el("img", { src: "/static/images/logo.svg" }));
   const createBtn = el("a", { className: "gnb__add-post icon-add_a_photo" });
-  const profileAnchor = el(
-    "a",
-    {},
-    el("img", { src: "/static/images/default_profile.png" }),
-  );
-  const dataList = WordAutoComplete();
+  const profileAnchor = window.user.token
+    ? el(
+        "a",
+        { className: "gnb__profile" },
+        el("img", { src: window.user.profile }),
+      )
+    : el("a", { className: "gnb__login" }, "로그인");
 
   addClickEvent(logoAnchor, "/");
   addClickEvent(createBtn, "/add");
-  addClickEvent(profileAnchor, "/login");
+  addClickEvent(profileAnchor, window.user.token ? "/user" : "/login");
 
   return el(
     "nav",
     { className: "gnb" },
     el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
-    el(
-      "form",
-      {
+    WordAutoComplete({
+      formAttr: {
         className: "search search--gnb",
-        events: {
-          submit: (event) => {
-            event.preventDefault();
-            // TODO: 입력받은 지역 올바른 지역인지 검증
-            const input = document.querySelector(".search__input");
-            if (!input) return;
-            const [wideAddr, localAddr] = input.value.split(" ");
-
-            updatePath(`/location/${wideAddr}/${localAddr}`);
-          },
-        },
       },
-      el("input", {
+      inputAttr: {
         type: "text",
         id: "search",
         name: "search",
@@ -45,14 +34,29 @@ export default function GlobalNavigation() {
         list: "address",
         className: "search__input search__input--gnb",
         autocomplete: "off",
-      }),
-      dataList,
-    ),
+      },
+      onSubmit: () => {
+        // TODO: 입력받은 지역 올바른 지역인지 검증
+        const input = document.querySelector(".search__input");
+        if (!input) return;
+        const [wideAddr, localAddr] = input.value.split(" ");
+
+        updatePath(`/location/${wideAddr}/${localAddr}`);
+      },
+    }),
     el(
       "div",
       { className: "gnb__expand" },
       createBtn,
-      el("div", { className: "gnb__profile-image" }, profileAnchor),
+      el(
+        "div",
+        {
+          className: `gnb__profile-image ${
+            window.user.token ? "signed-in" : "signed-out"
+          }`,
+        },
+        profileAnchor,
+      ),
     ),
   );
 }

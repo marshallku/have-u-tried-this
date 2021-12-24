@@ -25,18 +25,20 @@ function isReset({ page, initializing, isPopstate }) {
     const fixedContainer = document.querySelector(".fixed-container");
 
     if (fixedContainer && isPopstate) {
+      document.documentElement.classList.remove("overflow-hidden");
       fixedContainer.remove();
 
       return false;
     }
 
+    document.documentElement.classList.remove("overflow-hidden");
     window.scrollTo(0, 0);
     removeWindowEventListener();
     resetApp();
     return true;
   }
 
-  window.scrollTo(0, 0);
+  document.documentElement.classList.add("overflow-hidden");
   return true;
 }
 
@@ -64,7 +66,9 @@ export default function renderPage(page, isPopstate) {
         app.append(SignInPage());
         break;
       case "user":
-        app.append(UserPage());
+        if (shouldAppend) {
+          app.append(UserPage());
+        }
         break;
       default:
         app.append(ErrorComponent());

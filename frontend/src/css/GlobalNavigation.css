@@ -65,6 +65,12 @@
   background: var(--lightest-bg);
 }
 
+.gnb__profile-image.signed-out {
+  width: auto;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
 .gnb__profile-image img {
   display: block;
   width: 100%;

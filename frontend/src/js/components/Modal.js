@@ -2,7 +2,6 @@ import el from "../utils/dom";
 import "../../css/Modal.css";
 
 export default function Modal({ title, content, callback }) {
-  const app = document.getElementById("app");
   const backdrop = el("div", {
     className: "backdrop",
     events: { click: () => backdrop.remove() },
@@ -43,5 +42,5 @@ export default function Modal({ title, content, callback }) {
     ),
   );
 
-  app.append(backdrop);
+  return backdrop;
 }

@@ -1,6 +1,7 @@
 import el from "../utils/dom";
 import UserPagePost from "../components/UserPagePost";
 import UserPageLike from "../components/UserPageLike";
+import UserPageComment from "../components/UserPageComment";
 import { customRouter } from "../router";
 import "../../css/userPage.css";
 
@@ -32,6 +33,10 @@ function Drawer(userPageRouter) {
         text: "추천한 글",
         path: "/liked",
       }),
+      Button({
+        text: "작성 댓글",
+        path: "/comment",
+      }),
     ),
   );
 }
@@ -42,6 +47,7 @@ export default function UserPage() {
   userPageRouter.routes = {
     "/": UserPagePost,
     "/liked": UserPageLike,
+    "/comment": UserPageComment,
   };
 
   const drawer = Drawer(userPageRouter);

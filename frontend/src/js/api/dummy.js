@@ -58,3 +58,20 @@ export const postData = {
   updatedAt: "2021-12-18T03:07:30.754Z",
   likes: 8,
 };
+
+export const getUserCommentData = () => ({
+  data: [
+    {
+      commentId: "61c2ebbbabbd7b2c61d4c7",
+      postId: "61c2ebbbabbd7b2c61d4c700",
+      photo:
+        "https://lh3.googleusercontent.com/pw/AM-JKLV7TvNQ5eFsAjkF1OCVR8oTHGeW4iftbFHaf6NL1MKyC3G9IeZU1c38ENLCsXi2kxnwaVML_EutFf4dTEVCgoaJ1to_Y-Gfq1dD3_yc-G7uWpg-TV0oaI21DgSUjMt1jgETPHukIo7AjEMO0Tz6fYQK=s1080-no",
+      title: "무슨무슨식당",
+      comment: "쏼라쏼라",
+    },
+  ],
+  pagination: {
+    page: 1,
+    nextPage: false,
+  },
+});

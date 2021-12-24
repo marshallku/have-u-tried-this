@@ -1,121 +1,119 @@
-import EXIF from "exif-js";
 import el from "../utils/dom";
 import toast from "../utils/toast";
 import { debounce } from "../utils/optimize";
 import { checkLock, lock } from "../router/lock";
-import { getAddressAPI } from "../api";
-import { MINUTE_TO_SECOND, HOUR_TO_SECOND } from "../utils/time";
+import { getWideAddrLocalAddr } from "../utils/gps";
 import "../../css/UploadImage.css";
 
 const MAX_UPLOAD_IMAGES = 4;
-const POSITIVE_VALUE = 1;
-const NEGATIVE_VALUE = -1;
+const IMAGE_TYPES = [
+  "image/apng",
+  "image/bmp",
+  "image/jpeg",
+  "image/pjpeg",
+  "image/png",
+  "image/tiff",
+  "image/webp",
+];
+const MEGA_BYTES = 20;
+const BASE_UNIT = 1024;
+const MAXIMUM_IMAGE_SIZE = MEGA_BYTES * BASE_UNIT * BASE_UNIT;
 
 export default function UploadPage() {
-  const wrapperElement = (
-    element,
-    className,
-    inner = document.createElement("div"),
-  ) => {
-    const elt = document.createElement(element);
-    elt.classList.add(className);
-    elt.append(inner);
-    return elt;
-  };
-
-  const embedImgElement = (event) => {
-    const img = wrapperElement("img", "embed-image");
-    img.src = event.target.result;
-    return img;
-  };
-
   const preventEvent = (event) => {
     event.stopPropagation();
     event.preventDefault();
   };
 
-  const getGPSTag = (img) => ({
-    latitude: EXIF.getTag(img, "GPSLatitude"),
-    latitudeRef: EXIF.getTag(img, "GPSLatitudeRef"),
-    longitude: EXIF.getTag(img, "GPSLongitude"),
-    longitudeRef: EXIF.getTag(img, "GPSLongitudeRef"),
-  });
-
-  const getCoordinateSign = (direction) =>
-    direction === "E" || direction === "N" ? POSITIVE_VALUE : NEGATIVE_VALUE;
-
-  const calculateDegreeToDecimal = (coordinate, sign) => {
-    const [degrees, minutes, seconds] = coordinate;
-    return (
-      sign *
-      (degrees + minutes / MINUTE_TO_SECOND + seconds / HOUR_TO_SECOND).toFixed(
-        8,
-      )
-    );
-  };
-
-  const getDecimalCoordinate = (coordinate) => {
-    const {
-      latitudeInfo: { latitude, latitudeRef },
-    } = coordinate;
-    const {
-      longitudeInfo: { longitude, longitudeRef },
-    } = coordinate;
-
-    const latitudeSign = getCoordinateSign(latitudeRef);
-    const latitudeDecimal = calculateDegreeToDecimal(latitude, latitudeSign);
-    const longitudeSign = getCoordinateSign(longitudeRef);
-    const longitudeDecimal = calculateDegreeToDecimal(longitude, longitudeSign);
-
-    return {
-      latitudeDecimal,
-      longitudeDecimal,
-    };
-  };
-
-  const getGPSCoordinate = (img) =>
-    new Promise((resolve, reject) => {
-      img.addEventListener("load", () => {
-        EXIF.getData(img, () => {
-          const { latitude, latitudeRef, longitude, longitudeRef } =
-            getGPSTag(img);
-
-          if (latitude === undefined || longitude === undefined) {
-            reject(
-              new Error("GPS 정보가 없습니다. 사진 촬영 장소를 입력해주세요."),
-            );
-            return;
-          }
-
-          const coordinate = {
-            latitudeInfo: {
-              latitude,
-              latitudeRef,
-            },
-            longitudeInfo: {
-              longitude,
-              longitudeRef,
-            },
-          };
-
-          const { latitudeDecimal, longitudeDecimal } =
-            getDecimalCoordinate(coordinate);
-
-          resolve({
-            latitude: latitudeDecimal,
-            longitude: longitudeDecimal,
-          });
-        });
-      });
-    });
-
   const updateLocation = (wideAddr, localAddr) => {
-    const input = document.getElementById("image-upload-location");
-    input.value = `${wideAddr} ${localAddr}`;
+    const location = document.getElementById("image-upload-location");
+    location.value = `${wideAddr} ${localAddr}`;
   };
+
+  const isValidType = (fileType) =>
+    IMAGE_TYPES.filter((imageType) => imageType === fileType).length >= 1;
+
+  const isValidSize = (fileSize) => MAXIMUM_IMAGE_SIZE > fileSize;
+
+  const moreUpdate = (fileInfo, id) => {
+    const file = [...fileInfo];
+    const [validFile] = file
+      .filter((item) => isValidType(item.type))
+      .filter((item) => isValidSize(item.size));
+
+    if (!validFile) {
+      toast("이미지가 규격에 맞지 않습니다. 다른 이미지를 올려주세요.");
+      return;
+    }
+
+    const parents = document.querySelector(`.grid-div__${id}`);
+    parents.removeChild(parents.firstElementChild);
+
+    const reader = new FileReader();
+
+    reader.addEventListener("load", async (event) => {
+      const img = el("img", {
+        className: "embed-image",
+        src: event.target.result,
+      });
+
+      try {
+        const { wideAddr, localAddr } = await getWideAddrLocalAddr(img);
+        updateLocation(wideAddr, localAddr);
+      } catch (error) {
+        const location = document.getElementById("image-upload-location");
+        if (!location.value) {
+          toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
+        }
+      }
+
+      const imgContainer = el("div", { className: "grid-div__image" }, img);
+      parents.append(imgContainer);
+    });
+    reader.readAsDataURL(validFile);
+  };
+
+  const emptyBox = (id) =>
+    el(
+      "div",
+      {
+        className: `grid-div__${id}`,
+      },
+      el(
+        "label",
+        {
+          className: "grid-div__image grid-div__image--cursor",
+          for: `empty-input__${id}`,
+        },
+        el(
+          "div",
+          {
+            className: "empty-div",
+            events: {
+              change: (event) => {
+                const fileInfo = event.target.files;
+                moreUpdate(fileInfo, id);
+              },
+            },
+          },
+          el("input", {
+            className: "empty-box__input",
+            id: `empty-input__${id}`,
+            type: "file",
+          }),
+          el("i", {
+            className: "icon-add_circle",
+          }),
+        ),
+      ),
+    );
 
   const handleUpdate = (filesInfo) => {
     const fileList = [...filesInfo];
+    const validTypeList = fileList
+      .filter((file) => isValidType(file.type))
+      .filter((file) => isValidSize(file.size));
+
     const preview = document.querySelector(".image-content__preview");
 
     if (filesInfo.length > MAX_UPLOAD_IMAGES) {
@@ -123,34 +121,44 @@ export default function UploadPage() {
       return;
     }
 
-    fileList.forEach((file) => {
+    let currentIndex = 0;
+    validTypeList.forEach((file) => {
       const reader = new FileReader();
       reader.addEventListener("load", async (event) => {
-        const img = embedImgElement(event);
+        const img = el("img", {
+          className: "embed-image",
+          src: event.target.result,
+        });
         lock();
 
         try {
-          const { longitude, latitude } = await getGPSCoordinate(img);
-          const { wideAddr, localAddr } = await getAddressAPI(
-            longitude,
-            latitude,
-          );
+          const { wideAddr, localAddr } = await getWideAddrLocalAddr(img);
           updateLocation(wideAddr, localAddr);
         } catch (error) {
-          if (error instanceof TypeError) {
-            console.log(error);
-            toast(
-              "위도와 경도의 값이 올바르지 않습니다. 사진 촬영 장소를 입력해주세요.",
-            );
-          } else {
-            console.log(error);
-            toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
-          }
+          toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
         }
 
-        const imgDiv = wrapperElement("div", "grid-div__image", img);
-        const div = wrapperElement("div", "grid-div", imgDiv);
-        preview.append(div);
+        const imgContainer = el(
+          "div",
+          { className: "grid-div" },
+          el(
+            "div",
+            {
+              className: "grid-div__image",
+            },
+            img,
+          ),
+        );
+        preview.append(imgContainer);
+
+        currentIndex += 1;
+
+        if (currentIndex === fileList.length) {
+          const emptyBoxLimit = MAX_UPLOAD_IMAGES - currentIndex;
+          for (let i = 0; i < emptyBoxLimit; i += 1) {
+            preview.append(emptyBox(i + 1));
+          }
+        }
       });
       reader.readAsDataURL(file);
     });
@@ -174,6 +182,7 @@ export default function UploadPage() {
         { className: "image-content" },
         el("div", {
           className: "image-content__preview image-content__preview--hidden",
+          id: "preview",
         }),
         el(
           "label",
