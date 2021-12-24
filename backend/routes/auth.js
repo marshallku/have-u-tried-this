@@ -18,7 +18,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/",
+    failureMessage: "로그인 실패",
   }),
   async (req, res) => {
     const user = await createToken(req.user);
