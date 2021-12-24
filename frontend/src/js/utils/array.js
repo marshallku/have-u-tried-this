@@ -19,3 +19,7 @@ export function pick(arr, len, random = false) {
     .map(({ x }) => x)
     .filter((_, i) => i < len);
 }
+
+export function pickRandom(arr) {
+  return arr[~~(Math.random() * arr.length)];
+}
