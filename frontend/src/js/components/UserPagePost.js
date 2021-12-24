@@ -22,7 +22,7 @@ export default function UserPagePost() {
       }),
     emptyComponent: EmptyBox({
       message: "아직 등록한 맛식이 없습니다.",
-      icon: "utensil-spoon-solid",
+      icon: "icon-utensil-spoon-solid",
       link: "/add",
       linkMessage: "첫 맛식 등록하기",
     }),
