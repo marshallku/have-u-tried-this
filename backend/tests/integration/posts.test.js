@@ -12,7 +12,8 @@ jest.setTimeout(10000);
 
 describe("post 라우터 테스트", () => {
   let postId;
-  let updatePostId;
+  const token =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjY2MjEsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjE4MjF9.uaEIqJw5De5MXifwqOtSB3Yv1CRV65LIQyI876GwvCI";
 
   afterAll(async () => {
     // 글 생성 이후 정리
@@ -87,6 +88,7 @@ describe("post 라우터 테스트", () => {
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "title")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -117,36 +119,12 @@ describe("post 라우터 테스트", () => {
     expect(typeof res.body.createdAt).toEqual("string");
   });
 
-  test("Failure Post /api/posts, 이미 존재하는 글 생성", async () => {
-    const __dirname = path.resolve();
-    const pwd = path.join(__dirname, "tests/integration/test-image");
-    const dummy = await request(app)
-      .post("/api/posts")
-      .field("title", "already")
-      .field("contents", "content")
-      .field("wideAddr", "서울특별시")
-      .field("localAddr", "강남구")
-      .attach("photos", pwd + "/1.JPG");
-
-    updatePostId = dummy.body.id;
-
-    const res = await request(app)
-      .post("/api/posts")
-      .field("title", "already")
-      .field("contents", "content")
-      .field("wideAddr", "서울특별시")
-      .field("localAddr", "강남구")
-      .attach("photos", pwd + "/1.JPG");
-
-    expect(res.statusCode).toEqual(500);
-    expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
-  });
-
   test("Failure Post /api/posts, 4개 이상 그림 업로드", async () => {
     const __dirname = path.resolve();
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "title-aa")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -166,6 +144,7 @@ describe("post 라우터 테스트", () => {
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "title-aa")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -182,6 +161,7 @@ describe("post 라우터 테스트", () => {
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "title-aa")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -193,9 +173,22 @@ describe("post 라우터 테스트", () => {
     expect(res.body.message).toEqual("이미지 파일만 업로드 가능합니다.");
   });
 
+  test("Success PUT /api/posts/:id 포스트 수정", async () => {
+    const res = await request(app)
+      .put("/api/posts/" + postId)
+      .set("authorization", token)
+      .send({
+        title: "titleslkdjf",
+        contents: "cosjdflk",
+      });
+
+    expect(res.statusCode).toEqual(200);
+  });
+
   test("Success DELETE /api/posts/:id 포스트 삭제", async () => {
     const res = await request(app)
       .delete("/api/posts/" + postId)
+      .set("authorization", token)
       .send();
 
     expect(res.status).toEqual(200);
@@ -210,7 +203,10 @@ describe("post 라우터 테스트", () => {
   });
 
   test("Failure DELETE /api/posts/:id 포스트 삭제", async () => {
-    const res = await request(app).delete("/api/posts/123").send();
+    const res = await request(app)
+      .delete("/api/posts/123")
+      .set("authorization", token)
+      .send();
 
     expect(res.status).toEqual(500);
     expect(res.body).toEqual({
@@ -220,33 +216,9 @@ describe("post 라우터 테스트", () => {
   });
 
   test("수정 기능 실패 테스트, 없는 게시물", async () => {
-    const res = await request(app).put("/api/posts/1233").send({
-      title: "update title",
-      contents: "content update",
-      wideAddr: "서울특별시",
-      localAddr: "성북구",
-    });
-
-    expect(res.body.message).toEqual("존재하지 않는 글입니다.");
-  });
-
-  test("수정 기능 실패 테스트 이미 있는 이름", async () => {
     const res = await request(app)
-      .put("/api/posts/" + updatePostId)
-      .send({
-        title: "already",
-        contents: "content update",
-        wideAddr: "서울특별시",
-        localAddr: "성북구",
-      });
-
-    expect(res.statusCode).toEqual(500);
-    expect(res.body.message).toEqual("이미 존재하는 제목입니다.");
-  });
-
-  test("수정 기능 성공 테스트 후 삭제", async () => {
-    const res = await request(app)
-      .put("/api/posts/" + updatePostId)
+      .put("/api/posts/1233")
+      .set("authorization", token)
       .send({
         title: "update title",
         contents: "content update",
@@ -254,20 +226,7 @@ describe("post 라우터 테스트", () => {
         localAddr: "성북구",
       });
 
-    expect(res.statusCode).toEqual(200);
-    expect(res.body._id).toEqual(updatePostId);
-    expect(res.body.title).toEqual("update title");
-    expect(res.body.contents).toEqual("content update");
-    expect(res.body.location.wideAddr).toEqual("서울특별시");
-    expect(res.body.location.localAddr).toEqual("성북구");
-    const createdAt = new Date(res.body.createdAt);
-    const updatedAt = new Date(res.body.updatedAt);
-    expect(createdAt <= updatedAt).toEqual(true);
-    expect(res.body.author.toString()).toEqual(process.env.AUTHOR_ID);
-
-    await request(app)
-      .delete("/api/posts/" + updatePostId)
-      .send();
+    expect(res.body.message).toEqual("존재하지 않는 글입니다.");
   });
 
   test("개행 문자 넣은 타이틀 생성 후 확인, 삭제까지", async () => {
@@ -275,6 +234,7 @@ describe("post 라우터 테스트", () => {
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "title\ngg     ")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -293,6 +253,7 @@ describe("post 라우터 테스트", () => {
 
     await request(app)
       .delete("/api/posts/" + res.body.id)
+      .set("authorization", token)
       .send();
   });
 });

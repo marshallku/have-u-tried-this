@@ -7,12 +7,15 @@ import path from "path";
 describe("댓글 기능 테스트", () => {
   let postId;
   let commentId;
+  const token =
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjY2MjEsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjE4MjF9.uaEIqJw5De5MXifwqOtSB3Yv1CRV65LIQyI876GwvCI";
 
   test("테스트 글 생성", async () => {
     const __dirname = path.resolve();
     const pwd = path.join(__dirname, "tests/integration/test-image");
     const res = await request(app)
       .post("/api/posts")
+      .set("authorization", token)
       .field("title", "comment test")
       .field("contents", "content")
       .field("wideAddr", "서울특별시")
@@ -28,6 +31,7 @@ describe("댓글 기능 테스트", () => {
   test("댓글 생성 테스트", async () => {
     const res = await request(app)
       .post("/api/posts/" + postId + "/comments")
+      .set("authorization", token)
       .send({ contents: "testcontent" });
 
     expect(res.statusCode).toEqual(201);
@@ -39,6 +43,7 @@ describe("댓글 기능 테스트", () => {
   test("댓글 생성 테스트 실패 케이스(없는 게시물)", async () => {
     const res = await request(app)
       .post("/api/posts/" + "notexist" + "/comments")
+      .set("authorization", token)
       .send({ contents: "testcontent" });
 
     expect(res.statusCode).toEqual(500);
@@ -58,6 +63,7 @@ describe("댓글 기능 테스트", () => {
   test("댓글 삭제 테스트 실패 케이스 (있는 게시물 없는 코멘트)", async () => {
     const res = await request(app)
       .delete("/api/posts/" + postId + "/comments/" + "notexist")
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(500);
@@ -66,6 +72,7 @@ describe("댓글 기능 테스트", () => {
   test("댓글 삭제 테스트", async () => {
     const res = await request(app)
       .delete("/api/posts/" + postId + "/comments/" + commentId)
+      .set("authorization", token)
       .send();
 
     expect(res.statusCode).toEqual(204);
@@ -85,6 +92,7 @@ describe("댓글 기능 테스트", () => {
   test("테스트 포스트 삭제", async () => {
     await request(app)
       .delete("/api/posts/" + postId)
+      .set("authorization", token)
       .send();
   });
 });

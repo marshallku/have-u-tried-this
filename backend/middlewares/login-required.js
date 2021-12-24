@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { User } from "../models/index.js";
-import { verifyToken } from "../utils/jwt.js";
+import { verifyToken } from "../utils/index.js";
 
 export default (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];

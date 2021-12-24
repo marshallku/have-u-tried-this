@@ -2,15 +2,14 @@
 import { Router } from "express";
 import sanitizeHtml from "sanitize-html";
 
-import loginRequired from "../middlewares/login-required.js";
-import filterEmptyString from "../utils/empty-string-fliter.js";
-import asyncHandler from "../utils/async-handler.js";
-
 import {
   createComment,
   deleteComment,
   getComments,
-} from "../services/comments.js";
+} from "../../services/comments.js";
+
+import { loginRequired } from "../../middlewares/index.js";
+import { asyncHandler, filterEmptyString } from "../../utils/index.js";
 
 const router = Router({ mergeParams: true });
 
