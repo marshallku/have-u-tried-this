@@ -23,13 +23,18 @@ function renderPostDetails(data) {
     location,
     createdAt,
     updatedAt,
-  } = data;
+  } = data.post;
   const locationAnchor = el(
     "a",
     {},
     `${location.wideAddr} ${location.localAddr}`,
   );
-  const likesElt = LikesCount({ type: "button", likes, postId: _id });
+  const likesElt = LikesCount({
+    type: "button",
+    liked: data.isLiked,
+    likes,
+    postId: _id,
+  });
   const titleElt = el("h2", { className: "details__title" }, title);
   const descElt = el("p", { className: "details__desc" }, contents);
   const editing = {
@@ -95,7 +100,7 @@ function renderPostDetails(data) {
     editing.status = nextStatus;
   };
   const editButtons =
-    data.author._id === window.user.id
+    author._id === window.user.id
       ? [
           el("button", {
             events: {
