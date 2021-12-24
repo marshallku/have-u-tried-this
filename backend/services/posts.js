@@ -194,6 +194,9 @@ export async function deletePost(postId, authorId) {
     }
     const post = await Post.findByIdAndDelete(postId);
     // 사진 삭제, DB에서는 삭제 되는지 확인 필요
+    // 관련 코멘트 북마크 모두 삭제
+    await Comment.deleteMany({ post: postId });
+    await Bookmark.deleteMany({ post: postId });
     const { photos, location } = post;
     photos.forEach((photo) => {
       fs.unlinkSync(path.join(process.env.UPLOAD_PATH, photo.filename));
