@@ -1,6 +1,6 @@
 import { getAddressData, getAddressAPI } from "./address";
 import getLocationListData from "./location";
-import { getPostListData, getPostData, getAllPost } from "./post";
+import { getPostListData, getPostData, postData, getAllPost } from "./post";
 import { getUserPostData, getUserLikeData, getUserCommentData } from "./user";
 import getImages from "./images";
 
@@ -10,6 +10,7 @@ export {
   getLocationListData,
   getPostListData,
   getPostData,
+  postData,
   getUserPostData,
   getUserLikeData,
   getUserCommentData,

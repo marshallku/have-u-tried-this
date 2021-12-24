@@ -3,6 +3,9 @@ import toast from "../utils/toast";
 import { debounce } from "../utils/optimize";
 import { checkLock, lock } from "../router/lock";
 import { getWideAddrLocalAddr } from "../utils/gps";
+import WordAutoComplete from "../components/WordAutoComplete";
+import { postData } from "../api/post";
+import { updatePath } from "../router";
 import "../../css/UploadImage.css";
 
 const MAX_UPLOAD_IMAGES = 4;
@@ -26,7 +29,7 @@ export default function UploadPage() {
   };
 
   const updateLocation = (wideAddr, localAddr) => {
-    const location = document.getElementById("image-upload-location");
+    const location = document.getElementById("location");
     location.value = `${wideAddr} ${localAddr}`;
   };
 
@@ -61,7 +64,7 @@ export default function UploadPage() {
         const { wideAddr, localAddr } = await getWideAddrLocalAddr(img);
         updateLocation(wideAddr, localAddr);
       } catch (error) {
-        const location = document.getElementById("image-upload-location");
+        const location = document.getElementById("location");
         if (!location.value) {
           toast("GPS정보를 찾을 수 없습니다. 사진 촬영 장소를 입력해주세요.");
         }
@@ -175,7 +178,8 @@ export default function UploadPage() {
       {
         id: "form",
         className: "image-form",
-        method: "POST",
+        method: "post",
+        enctype: "multipart/form-data",
       },
       el(
         "div",
@@ -238,7 +242,6 @@ export default function UploadPage() {
             el("input", {
               id: "image-upload-images",
               className: "image-content__input",
-              name: "images",
               accept: "image/*",
               type: "file",
               required: true,
@@ -255,14 +258,17 @@ export default function UploadPage() {
         el(
           "div",
           { className: "image-upload__gps" },
-          el("input", {
-            id: "image-upload-location",
-            className: "image-upload__input",
-            type: "text",
-            list: "address",
-            name: "location",
-            placeholder: "사진 촬영 장소",
-            autocomplete: "off",
+          WordAutoComplete({
+            formAttr: {},
+            inputAttr: {
+              type: "text",
+              id: "location",
+              className: "image-upload__location",
+              list: "address",
+              placeholder: "사진 촬영 장소",
+              autocomplete: "off",
+            },
+            onSubmit: {},
           }),
           el("datalist", {
             className: "image-upload_datalist",
@@ -285,7 +291,7 @@ export default function UploadPage() {
           }),
           el("textarea", {
             className: "image-content__desc",
-            name: "description",
+            name: "contents",
             placeholder: "게시글 설명",
             events: {
               input: debounce((event) => {
@@ -301,9 +307,24 @@ export default function UploadPage() {
           className: "image-content__submit",
           type: "submit",
           events: {
-            submit: (event) => {
-              console.log(event);
+            click: async (event) => {
               event.preventDefault();
+              const photos = document.querySelectorAll(".embed-image");
+              const location = document.getElementById("location");
+              const [wideAddr, localAddr] = location.value.split(" ");
+
+              const form = document.getElementById("form");
+              const formData = new FormData(form);
+              formData.append("wideAddr", wideAddr);
+              formData.append("localAddr", localAddr);
+              photos.forEach((photo) => formData.append("photo", photo));
+
+              const response = await postData(formData);
+              if (response && !response.error) {
+                updatePath(`/post/${response.id}`);
+              } else {
+                toast(response.message);
+              }
             },
           },
         },

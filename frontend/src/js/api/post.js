@@ -9,6 +9,16 @@ export async function getPostData(id) {
   return instance.get(`/posts/${id}`);
 }
 
+export async function postData(body) {
+  return instance.post("/posts/", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${window.user?.token}`,
+    },
+    body: JSON.stringify(body),
+  });
+}
+
 export async function getAllPost(page = 1) {
   return instance.get(`/posts/all?page=${page}`);
 }
