@@ -26,9 +26,14 @@ export default function WordAutoComplete({ formAttr, inputAttr, onSubmit }) {
 
     setListAttribute(str);
 
-    if (filtered.length === 1 && isSubmit) {
-      input.value = firstCity;
-      onSubmit();
+    if (isSubmit) {
+      if (filtered.length === 1) {
+        input.value = firstCity;
+        onSubmit();
+        return;
+      }
+
+      input.value = "";
       toast("정확한 주소를 입력해주세요!");
     }
   };
@@ -43,6 +48,7 @@ export default function WordAutoComplete({ formAttr, inputAttr, onSubmit }) {
   input.addEventListener("change", handleInput);
   input.addEventListener("keydown", handleInput);
   input.addEventListener("keyup", handleInput);
+  input.addEventListener("blur", handleSubmit);
   form.addEventListener("submit", handleSubmit);
 
   getAddressData().then((response) => {
