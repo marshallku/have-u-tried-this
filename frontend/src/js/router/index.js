@@ -15,17 +15,16 @@ export function customRouter() {
     baseElement: null,
     routes: {},
     navigators: [],
-    update(path) {
+    update(path, init) {
       const uriPath = `/${this.base}${path === "/" ? "" : path}`;
-
       window.scrollTo(0, 0);
-      window.history.pushState("", document.title, uriPath);
-
+      if (!init) {
+        window.history.pushState("", document.title, uriPath);
+      }
       this.navigators.forEach((x) => x.classList.remove("highlight"));
       this.navigators
         .filter((x) => x.pathname === uriPath)
         .forEach((x) => x.classList.add("highlight"));
-
       if (this.routes[path]) {
         this.baseElement.innerHTML = "";
         this.baseElement.append(this.routes[path]());
@@ -40,7 +39,7 @@ export function customRouter() {
       this.navigators.push(elt);
     },
     initialize(path) {
-      this.update(path);
+      this.update(path, "init");
     },
   };
 
