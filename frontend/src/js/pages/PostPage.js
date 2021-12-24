@@ -24,6 +24,7 @@ function renderPostDetails(data) {
     createdAt,
     updatedAt,
   } = data.post;
+
   const locationAnchor = el(
     "a",
     {},
@@ -65,7 +66,7 @@ function renderPostDetails(data) {
       descElt.removeAttribute("role");
       descElt.classList.remove("details__desc--editing");
 
-      const edited = await editPostData(data._id, {
+      const edited = await editPostData(_id, {
         title: inputtedTitle,
         contents: inputtedDesc,
       });
@@ -77,7 +78,7 @@ function renderPostDetails(data) {
 
         // Update list item
         const element = document
-          .querySelector(`a[href$="${data._id}"]`)
+          .querySelector(`a[href$="${_id}"]`)
           ?.querySelector(".post-item__title");
 
         if (element) {
@@ -117,13 +118,13 @@ function renderPostDetails(data) {
                     title: "삭제하면 되돌릴 수 없어요!",
                     content: "그래도 삭제하시겠습니까?",
                     callback: async () => {
-                      const deleted = await deletePost(data._id);
+                      const deleted = await deletePost(_id);
 
                       if (deleted && !deleted.error) {
                         window.history.back();
                         // Remove list item
                         const element = document.querySelector(
-                          `a[href$="${data._id}"]`,
+                          `a[href$="${_id}"]`,
                         )?.parentElement;
 
                         if (element) {
