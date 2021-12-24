@@ -58,11 +58,34 @@ export const getPostByUserId = async (_id, page, perPage) => {
   };
 };
 
-export const getCommentsByUserId = async (_id) => {
+export const getCommentsByUserId = async (_id, page, perPage) => {
   const objId = mongoose.Types.ObjectId(_id);
-  const comments = await Comment.find({ author: objId }).populate("author");
 
-  return comments;
+  const total = await Comment.find({ author: objId }).countDocuments();
+  const totalPage = Math.ceil(total / perPage);
+
+  const comments = await Comment.find({ author: objId })
+    .populate("author")
+    .populate("post")
+    .sort({ createdAt: -1 })
+    .skip((page - 1) * perPage)
+    .limit(perPage);
+
+  return {
+    data: comments.map((comment) => ({
+      // eslint-disable-next-line no-underscore-dangle
+      commentId: comment._id,
+      // eslint-disable-next-line no-underscore-dangle
+      postId: comment.post._id,
+      photo: comment.post.photos[0].url,
+      title: comment.post.title,
+      comment: comment.contents,
+    })),
+    pagination: {
+      page,
+      nextPage: page < totalPage,
+    },
+  };
 };
 
 export const getUserBookmarks = async (_id, page, perPage) => {
