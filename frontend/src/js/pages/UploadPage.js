@@ -239,22 +239,24 @@ export default function UploadPage() {
               { className: "image-content__text" },
               "드래그하거나 클릭하여 업로드",
             ),
-            el("input", {
-              id: "image-upload-images",
-              className: "image-content__input",
-              accept: "image/*",
-              type: "file",
-              required: true,
-              multiple: true,
-              events: {
-                change: (event) => {
-                  const filesInfo = event.target.files;
-                  handleUpdate(filesInfo);
-                },
-              },
-            }),
           ),
         ),
+        el("input", {
+          id: "image-upload-images",
+          className: "image-content__input",
+          name: "photos",
+          accept: "image/*",
+          type: "file",
+          required: true,
+          multiple: true,
+          hidden: true,
+          events: {
+            change: (event) => {
+              const filesInfo = event.target.files;
+              handleUpdate(filesInfo);
+            },
+          },
+        }),
         el(
           "div",
           { className: "image-upload__gps" },
@@ -300,35 +302,33 @@ export default function UploadPage() {
             },
           }),
         ),
-      ),
-      el(
-        "button",
-        {
-          className: "image-content__submit",
-          type: "submit",
-          events: {
-            click: async (event) => {
-              event.preventDefault();
-              const photos = document.querySelectorAll(".embed-image");
-              const location = document.getElementById("location");
-              const [wideAddr, localAddr] = location.value.split(" ");
+        el(
+          "button",
+          {
+            className: "image-content__submit",
+            type: "submit",
+            events: {
+              click: async (event) => {
+                event.preventDefault();
+                const location = document.getElementById("location");
+                const [wideAddr, localAddr] = location.value.split(" ");
 
-              const form = document.getElementById("form");
-              const formData = new FormData(form);
-              formData.append("wideAddr", wideAddr);
-              formData.append("localAddr", localAddr);
-              photos.forEach((photo) => formData.append("photo", photo));
+                const form = document.getElementById("form");
+                const formData = new FormData(form);
+                formData.append("wideAddr", wideAddr);
+                formData.append("localAddr", localAddr);
 
-              const response = await postData(formData);
-              if (response && !response.error) {
-                updatePath(`/post/${response.id}`);
-              } else {
-                toast(response.message);
-              }
+                const response = await postData(formData);
+                if (response && !response.error) {
+                  updatePath(`/post/${response.id}`);
+                } else {
+                  toast(response.message);
+                }
+              },
             },
           },
-        },
-        "제출",
+          "제출",
+        ),
       ),
     ),
   );
