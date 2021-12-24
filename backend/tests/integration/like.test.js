@@ -42,7 +42,7 @@ describe("북마크 기능 테스트", () => {
       .get("/api/posts/" + postIdLike)
       .send();
 
-    expect(res.body.likes).toEqual(1);
+    expect(res.body.post.likes).toEqual(1);
   });
 
   test("유저 북마크 기능 테스트", async () => {
@@ -98,7 +98,7 @@ describe("북마크 기능 테스트", () => {
       .get("/api/posts/" + postIdLike)
       .send();
 
-    expect(res.body.likes).toEqual(0);
+    expect(res.body.post.likes).toEqual(0);
   });
 
   test("유저 북마크 리스트 없을 때 출력", async () => {
