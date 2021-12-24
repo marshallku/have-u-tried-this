@@ -152,7 +152,7 @@ export default (app) => {
 
   // 좋아요 취소
   router.delete(
-    "/:postId/unlike",
+    "/:postId/like",
     loginRequired,
     asyncHandler(async (req, res) => {
       // eslint-disable-next-line no-underscore-dangle
