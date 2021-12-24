@@ -32,6 +32,7 @@ export async function getComments(postId, page, perPage) {
 export async function createComment(postId, userId, contents) {
   const comment = new Comment({
     author: userId,
+    post: postId,
     contents,
   });
   try {

@@ -44,11 +44,14 @@ export default (app) => {
       const { userId } = req.params;
       const { _id } = req.user;
 
+      const page = Number(req.query.page) || 1;
+      const perPage = Number(req.query.perPage) || 9;
+
       if (!isValidUser(userId, _id)) {
         throw new Error("권한이 없습니다.");
       }
 
-      const comments = await getCommentsByUserId(userId);
+      const comments = await getCommentsByUserId(userId, page, perPage);
       res.json(comments);
     }),
   );

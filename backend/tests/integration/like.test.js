@@ -86,7 +86,7 @@ describe("북마크 기능 테스트", () => {
 
   test("성공 좋아요 취소 클릭", async () => {
     const res = await request(app)
-      .delete("/api/posts/" + postIdLike + "/unlike")
+      .delete("/api/posts/" + postIdLike + "/like")
       .set("authorization", token)
       .send();
 
@@ -113,7 +113,7 @@ describe("북마크 기능 테스트", () => {
 
   test("실패 좋아요 취소 클릭, 없는 게시물", async () => {
     const res = await request(app)
-      .delete("/api/posts/notexist/unlike")
+      .delete("/api/posts/notexist/like")
       .set("authorization", token)
       .send();
 
