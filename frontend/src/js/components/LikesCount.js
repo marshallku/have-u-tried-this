@@ -19,13 +19,28 @@ export default function LikesCount({ type, likes, liked, postId }) {
 
       if (!response || response.error) return;
 
+      const postItem = document
+        .querySelector(`a[href$="${postId}"]`)
+        ?.querySelector(".likes");
+
       icon.classList.toggle("icon-favorite");
       icon.classList.toggle("icon-favorite_outline");
 
+      if (postItem) {
+        postItem.querySelector("i")?.classList.toggle("icon-favorite");
+        postItem.querySelector("i")?.classList.toggle("icon-favorite_outline");
+      }
+
       if (isLiked) {
         likesElt.textContent = `${currentLiked - 1}`;
+        if (postItem) {
+          postItem.lastChild.textContent = `${currentLiked - 1} `;
+        }
       } else {
         likesElt.textContent = `${currentLiked + 1}`;
+        if (postItem) {
+          postItem.lastChild.textContent = `${currentLiked + 1} `;
+        }
       }
     });
 
