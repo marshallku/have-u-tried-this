@@ -2,10 +2,25 @@ import instance from "./instance";
 
 export async function getPostListData(wide, local, page = 1) {
   if (!wide || !local) return instance.error("올바른 주소가 아닙니다");
-  return instance.get(`/posts?wide=${wide}&local=${local}&page=${page}`);
+  const apiUri = `/posts?wide=${wide}&local=${local}&page=${page}`;
+  if (window.user?.token)
+    return instance.get(apiUri, {
+      headers: {
+        Authorization: `Bearer ${window.user?.token}`,
+      },
+    });
+
+  return instance.get(apiUri);
 }
 
 export async function getPostData(id) {
+  const apiUri = `/posts/${id}`;
+  if (window.user?.token)
+    return instance.get(apiUri, {
+      headers: {
+        Authorization: `Bearer ${window.user?.token}`,
+      },
+    });
   return instance.get(`/posts/${id}`);
 }
 

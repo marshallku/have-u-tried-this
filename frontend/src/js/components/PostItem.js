@@ -3,7 +3,7 @@ import LikesCount from "./LikesCount";
 import { addClickEvent } from "../router";
 import "../../css/PostItem.css";
 
-export default function PostItem({ title, thumbnail, slug, likes }) {
+export default function PostItem({ title, thumbnail, slug, liked, likes }) {
   const anchor = el(
     "a",
     {},
@@ -19,7 +19,7 @@ export default function PostItem({ title, thumbnail, slug, likes }) {
       el(
         "div",
         { className: "post-item__info" },
-        LikesCount({ type: "div", likes }),
+        LikesCount({ type: "div", liked, likes }),
       ),
     ),
   );

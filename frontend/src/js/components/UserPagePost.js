@@ -16,6 +16,7 @@ export default function UserPagePost() {
         location: article.wideAddr
           ? `${article.wideAddr} ${article.localAddr}`
           : null,
+        liked: article.isLiked,
         likes: article.likes,
       }),
   });
