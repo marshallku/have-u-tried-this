@@ -1,7 +1,7 @@
 import el from "../utils/dom";
 import toast from "../utils/toast";
 import { debounce } from "../utils/optimize";
-import { checkLock, lock } from "../router/lock";
+import { checkLock, lock, unlock } from "../router/lock";
 import { getWideAddrLocalAddr } from "../utils/gps";
 import WordAutoComplete from "../components/WordAutoComplete";
 import { postData } from "../api/post";
@@ -320,6 +320,7 @@ export default function UploadPage() {
 
                 const response = await postData(formData);
                 if (response && !response.error) {
+                  unlock();
                   updatePath(`/post/${response.id}`);
                 } else {
                   toast(response.message);
