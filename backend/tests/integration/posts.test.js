@@ -107,16 +107,16 @@ describe("post 라우터 테스트", () => {
       .send();
 
     expect(res.statusCode).toEqual(200);
-    expect(res.body.title).toEqual("title");
-    expect(res.body.contents).toEqual("content");
-    expect(res.body.location.localAddr).toEqual("강남구");
-    expect(res.body.photos[0].url).toEqual(
+    expect(res.body.post.title).toEqual("title");
+    expect(res.body.post.contents).toEqual("content");
+    expect(res.body.post.location.localAddr).toEqual("강남구");
+    expect(res.body.post.photos[0].url).toEqual(
       expect.stringContaining(process.env.IMG_PATH),
     );
-    expect(typeof res.body.photos[0].filename).toEqual("string");
-    expect(res.body.likes).toBeGreaterThanOrEqual(0);
-    expect(typeof res.body.author).toEqual("object");
-    expect(typeof res.body.createdAt).toEqual("string");
+    expect(typeof res.body.post.photos[0].filename).toEqual("string");
+    expect(res.body.post.likes).toBeGreaterThanOrEqual(0);
+    expect(typeof res.body.post.author).toEqual("object");
+    expect(typeof res.body.post.createdAt).toEqual("string");
   });
 
   test("Failure Post /api/posts, 4개 이상 그림 업로드", async () => {
@@ -249,7 +249,7 @@ describe("post 라우터 테스트", () => {
       .send();
 
     expect(res2.statusCode).toEqual(200);
-    expect(res2.body.title).toEqual("title gg");
+    expect(res2.body.post.title).toEqual("title gg");
 
     await request(app)
       .delete("/api/posts/" + res.body.id)

@@ -2,7 +2,7 @@
 import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
-import { Post, Location } from "../models/index.js";
+import { Post, Location, Bookmark } from "../models/index.js";
 import { resizeFile } from "../utils/index.js";
 
 dotenv.config();
@@ -19,10 +19,24 @@ async function checkLocation(wideAddr, localAddr) {
   return location;
 }
 
-export async function findById(id) {
+export async function findById(id, user) {
   try {
     const post = await Post.findById(id).populate("author");
-    return post;
+    let bookmarks = [];
+    if (user) {
+      // eslint-disable-next-line no-underscore-dangle
+      bookmarks = await Bookmark.find({ user: user._id });
+    }
+    return {
+      post,
+      isLiked:
+        bookmarks.length > 0
+          ? bookmarks.some(
+              // eslint-disable-next-line no-underscore-dangle
+              (bookmark) => bookmark.post.toString() === post._id.toString(),
+            )
+          : false,
+    };
   } catch (e) {
     throw new Error("존재하지 않는 글입니다.");
   }
@@ -51,7 +65,7 @@ export async function getAllPost(page, perPage) {
   };
 }
 
-export async function getAll(_location, page, perPage) {
+export async function getAllLocation(user, _location, page, perPage) {
   // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
   const totalPage = Math.ceil(total / perPage);
@@ -66,6 +80,12 @@ export async function getAll(_location, page, perPage) {
     throw new Error("해당 지역의 글이 존재하지 않습니다.");
   }
 
+  let bookmarks = [];
+  if (user) {
+    // eslint-disable-next-line no-underscore-dangle
+    bookmarks = await Bookmark.find({ user: user._id });
+  }
+
   return {
     data: posts.map((post) => {
       const data = {
@@ -75,6 +95,10 @@ export async function getAll(_location, page, perPage) {
         photo: post.photos[0].url,
         title: post.photos[0].text,
         likes: post.likes,
+        isLiked:
+          bookmarks.length > 0
+            ? bookmarks.some((bookmark) => bookmark.post.toString() === post.id)
+            : false,
       };
       return data;
     }),
