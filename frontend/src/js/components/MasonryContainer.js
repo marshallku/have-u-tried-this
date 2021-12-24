@@ -21,6 +21,20 @@ export default function MasonryContainer({ fetcher, args, component }) {
 
     try {
       const { data, pagination } = await fetcher(...args, page);
+      if (!data.length) {
+        if (page === 1) {
+          container.append(
+            el(
+              "div",
+              { className: "empty-notifier" },
+              el("h2", {}, "아무것도 보여드릴 게 없어요. 😥"),
+            ),
+          );
+          return;
+        }
+        loader.remove();
+        return;
+      }
       const fragment = el("fragment", {});
       const elements = data.map((x) => component(x));
 
