@@ -21,41 +21,46 @@ export default function GlobalNavigation() {
   return el(
     "nav",
     { className: "gnb" },
-    el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
-    WordAutoComplete({
-      formAttr: {
-        className: "search search--gnb",
-      },
-      inputAttr: {
-        type: "text",
-        id: "search",
-        name: "search",
-        placeholder: "위치 검색",
-        list: "address",
-        className: "search__input search__input--gnb",
-        autocomplete: "off",
-      },
-      onSubmit: () => {
-        // TODO: 입력받은 지역 올바른 지역인지 검증
-        const input = document.querySelector(".search__input");
-        if (!input) return;
-        const [wideAddr, localAddr] = input.value.split(" ");
-
-        updatePath(`/location/${wideAddr}/${localAddr}`);
-      },
-    }),
     el(
       "div",
-      { className: "gnb__expand" },
-      createBtn,
+      { className: "gnb__container" },
+
+      el("div", { className: "gnb__logo gnb__expand" }, logoAnchor),
+      WordAutoComplete({
+        formAttr: {
+          className: "search search--gnb",
+        },
+        inputAttr: {
+          type: "text",
+          id: "search",
+          name: "search",
+          placeholder: "지역을 검색해보세요.",
+          list: "address",
+          className: "search__input search__input--gnb",
+          autocomplete: "off",
+        },
+        onSubmit: () => {
+          // TODO: 입력받은 지역 올바른 지역인지 검증
+          const input = document.querySelector(".search__input");
+          if (!input) return;
+          const [wideAddr, localAddr] = input.value.split(" ");
+
+          updatePath(`/location/${wideAddr}/${localAddr}`);
+        },
+      }),
       el(
         "div",
-        {
-          className: `gnb__profile-image ${
-            window.user.token ? "signed-in" : "signed-out"
-          }`,
-        },
-        profileAnchor,
+        { className: "gnb__expand" },
+        createBtn,
+        el(
+          "div",
+          {
+            className: `gnb__profile-image ${
+              window.user.token ? "signed-in" : "signed-out"
+            }`,
+          },
+          profileAnchor,
+        ),
       ),
     ),
   );
