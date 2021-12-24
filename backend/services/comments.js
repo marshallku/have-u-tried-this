@@ -12,7 +12,9 @@ export async function getComments(postId, page, perPage) {
     const startIndex = (page - 1) * perPage;
     const endIndex =
       startIndex + perPage < total ? startIndex + perPage : total;
-    const slicedComment = post.comments.slice(startIndex, endIndex);
+    const slicedComment = post.comments
+      .sort((p1, p2) => p2.createdAt - p1.createdAt)
+      .slice(startIndex, endIndex);
 
     await User.populate(slicedComment, { path: "author" });
     return {
