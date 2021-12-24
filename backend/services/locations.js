@@ -12,7 +12,6 @@ export async function getAll(page, perPage) {
   const locations = await Location.find({
     $nor: [{ posts: { $exists: false } }, { posts: { $size: 0 } }],
   })
-    .sort({ wideAddr: -1 })
     .skip((page - 1) * perPage)
     .limit(perPage)
     .populate("posts");
