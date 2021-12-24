@@ -9,6 +9,10 @@ export async function getPostData(id) {
   return instance.get(`/posts/${id}`);
 }
 
+export async function getAllPost(page = 1) {
+  return instance.get(`/posts/all?page=${page}`);
+}
+
 export async function deletePost(postId) {
   return instance.delete(`/posts/${postId}`, {
     headers: {
