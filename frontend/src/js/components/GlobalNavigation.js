@@ -61,7 +61,7 @@ export default function GlobalNavigation() {
       el(
         "div",
         { className: "gnb__expand" },
-        createBtn,
+        window.user?.token && createBtn,
         el(
           "div",
           {
