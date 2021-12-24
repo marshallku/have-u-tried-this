@@ -59,7 +59,6 @@ export const postData = {
   likes: 8,
 };
 
-<<<<<<< HEAD
 export const getUserCommentData = () => ({
   data: [
     {
@@ -76,7 +75,7 @@ export const getUserCommentData = () => ({
     nextPage: false,
   },
 });
-=======
+
 export const imagesData = [
   "https://lh3.googleusercontent.com/pw/AM-JKLXk7n1SrdopnJhjMi3uwZmt-nSDrHrUXqHoINdA4FdCbEgux1XRLevp5_BM_rGy3_MiaQM2c8syTjBNscXTI5Vnop0mk5cklfl29KLXSLXILyfJL7Od8ARORxAtDvnXepRlE2cTuVn51rXucO17SkfS=s1080-no",
   "https://lh3.googleusercontent.com/pw/AM-JKLXfccn5mZTKSf-b_SPvrIzp5HgSm2rss5Ui5kYUDx7AbvKFAjvmsL7aOn5WKfivyq8ySgIAbplX1dluE6KzdHVTJIZ_PwexouWlIsRcQQXP35fGolpw7y7WLUIVK5Mxm8OlG55Ifm-9QJsooFOCiLj8=s1080-no",
@@ -85,4 +84,3 @@ export const imagesData = [
   "https://lh3.googleusercontent.com/pw/AM-JKLVSPws8f15B4_y0ruVkL8l9etJnya9sbth71MoWo3042V54lpjfCWEcANcc6NkOTXZFytUoASloS8EFPiYt2nCBEKPpNZdiMVM4mXE3SgJ2AvEP9DzzXLgWfB3VVmhiwZFGf16I12BWWu0GdZ9sUw34=s1080-no",
   "https://i.imgur.com/kqOj5QG.jpg",
 ];
->>>>>>> 54c73a672a30b1eec4b263c16817c1fe15b7a56f
