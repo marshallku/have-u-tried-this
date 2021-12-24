@@ -11,3 +11,7 @@
   line-height: 1.7;
   text-align: center;
 }
+
+.header__title .highlight {
+  color: var(--primary);
+}

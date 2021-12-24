@@ -13,7 +13,12 @@ export default function ListPage() {
     el(
       "header",
       { className: "header" },
-      el("h1", { className: "header__title" }, `${wideAddr} ${localAddr} 맛식`),
+      el(
+        "h1",
+        { className: "header__title" },
+        el("span", { className: "highlight" }, `❝ ${wideAddr} ${localAddr} ❞`),
+        " 맛식",
+      ),
     ),
     MasonryContainer({
       fetcher: getPostListData,
