@@ -5,6 +5,7 @@ import Modal from "./Modal";
 import { addClickEvent } from "../router";
 import { getUserCommentData } from "../api";
 import { deleteComment } from "../api/comment";
+import EmptyBox from "./EmptyBox";
 
 export default function UserPageComment() {
   let page = 1;
@@ -70,25 +71,37 @@ export default function UserPageComment() {
     if (isLoading || isDone) return;
     isLoading = true;
     container.append(loader);
+    try {
+      const { data, pagination, error } = await getUserCommentData(id, page);
+      if (!data || error || !data.length) throw new Error("It's empty!");
+      const fragment = el("fragment", {});
+      const elements = data.map((list) => userComment(list));
 
-    const { data, pagination } = await getUserCommentData(id, page);
-    const fragment = el("fragment", {});
-    const elements = data.map((list) => userComment(list));
+      if (!pagination.nextPage) {
+        isDone = true;
+        // eslint-disable-next-line no-use-before-define
+        io.unobserve(observeTarget);
+      }
 
-    if (!pagination.nextPage) {
-      isDone = true;
-      // eslint-disable-next-line no-use-before-define
-      io.unobserve(observeTarget);
+      await imagesLoaded(elements, () => {
+        page += 1;
+        isLoading = false;
+      });
+
+      loader.remove();
+      elements.forEach((elt) => fragment.append(elt));
+      container.append(fragment);
+    } catch (err) {
+      loader.remove();
+      container.append(
+        EmptyBox({
+          message: "아직 내가 쓴 댓글이 없습니다.",
+          icon: "icon-chat_bubble",
+          link: "/",
+          linkMessage: "맛식 보러 가기",
+        }),
+      );
     }
-
-    await imagesLoaded(elements, () => {
-      page += 1;
-      isLoading = false;
-    });
-
-    loader.remove();
-    elements.forEach((elt) => fragment.append(elt));
-    container.append(fragment);
   };
 
   const io = new IntersectionObserver(() => fetchData());

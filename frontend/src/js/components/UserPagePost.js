@@ -1,5 +1,6 @@
 import PostItem from "./PostItem";
 import MasonryContainer from "./MasonryContainer";
+import EmptyBox from "./EmptyBox";
 import { getUserPostData } from "../api";
 
 export default function UserPagePost() {
@@ -19,5 +20,11 @@ export default function UserPagePost() {
         liked: article.isLiked,
         likes: article.likes,
       }),
+    emptyComponent: EmptyBox({
+      message: "아직 등록한 맛식이 없습니다.",
+      icon: "utensil-spoon-solid",
+      link: "/add",
+      linkMessage: "첫 맛식 등록하기",
+    }),
   });
 }

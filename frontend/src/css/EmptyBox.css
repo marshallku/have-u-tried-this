@@ -1,0 +1,28 @@
+.emptyBox {
+  background-color: var(--lighter-bg);
+  height: calc(100vh - 230px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+}
+
+.emptyBox__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 250px;
+}
+
+.emptyBox__content > i {
+  font-size: 120px;
+}
+
+.emptyBox__content > div {
+  font-size: 18px;
+}
+
+.emptyBox__content > a {
+  color: var(--primary);
+}
