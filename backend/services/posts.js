@@ -3,7 +3,7 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import { Post, Location, Bookmark } from "../models/index.js";
+import { Post, Location, Bookmark, Comment } from "../models/index.js";
 import { resizeFile } from "../utils/index.js";
 
 dotenv.config();
