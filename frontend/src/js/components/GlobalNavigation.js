@@ -1,22 +1,32 @@
 import { addClickEvent, updatePath } from "../router";
-import "../../css/GlobalNavigation.css";
 import WordAutoComplete from "./WordAutoComplete";
+import DropDown from "./DropDown";
 import el from "../utils/dom";
+import "../../css/GlobalNavigation.css";
 
 export default function GlobalNavigation() {
   const logoAnchor = el("a", {}, el("img", { src: "/static/images/logo.svg" }));
   const createBtn = el("a", { className: "gnb__add-post icon-add_a_photo" });
+  const loginAnchor = el("a", { className: "gnb__login" }, "로그인");
   const profileAnchor = window.user.token
     ? el(
-        "a",
-        { className: "gnb__profile" },
+        "button",
+        {
+          className: "gnb__profile",
+          events: {
+            click: () => {
+              const app = document.getElementById("app");
+              app.append(DropDown());
+            },
+          },
+        },
         el("img", { src: window.user.profile }),
       )
-    : el("a", { className: "gnb__login" }, "로그인");
+    : loginAnchor;
 
   addClickEvent(logoAnchor, "/");
   addClickEvent(createBtn, "/add");
-  addClickEvent(profileAnchor, window.user.token ? "/user" : "/login");
+  addClickEvent(loginAnchor, "/login");
 
   return el(
     "nav",

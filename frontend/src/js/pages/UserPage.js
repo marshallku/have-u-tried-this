@@ -42,6 +42,7 @@ function Drawer(userPageRouter) {
 }
 
 export default function UserPage() {
+  const isMain = window.location.pathname === "/user";
   const userPageRouter = customRouter();
   userPageRouter.base = "user";
   userPageRouter.routes = {
@@ -54,7 +55,9 @@ export default function UserPage() {
   const main = el("main", { className: "settings" });
 
   userPageRouter.baseElement = main;
-  userPageRouter.initialize(window.location.pathname.replace("user", ""));
+  userPageRouter.initialize(
+    window.location.pathname.replace("/user", isMain ? "/" : ""),
+  );
 
   return el("fragment", {}, drawer, main);
 }
