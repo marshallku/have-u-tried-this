@@ -18,7 +18,7 @@
 .drop-down {
   position: absolute;
   top: 80px;
-  right: 0;
+  right: 10px;
   padding: 10px 0;
   background: var(--lighter-bg);
   border-radius: 10px;
