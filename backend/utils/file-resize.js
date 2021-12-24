@@ -1,7 +1,7 @@
 import sharp from "sharp";
 import path from "path";
 import dotenv from "dotenv";
-import { writeFile } from "fs";
+import { writeFileSync } from "fs";
 
 dotenv.config();
 
@@ -14,9 +14,7 @@ export default async function resizeFile(files) {
       .withMetadata()
       .toBuffer((err1, buffer) => {
         if (err1) throw err1;
-        writeFile(filePath, buffer, (err2) => {
-          if (err2) throw err2;
-        });
+        writeFileSync(filePath, buffer);
       });
   });
 }
