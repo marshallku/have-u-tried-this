@@ -8,24 +8,32 @@
 }
 
 .sign-in__logo {
-  width: clamp(0px, 300px, 80%);
+  width: clamp(0px, 130px, 80%);
+  padding-top: 50px;
+}
+.sign-in__logo > hr {
+  border-color: #fff263;
 }
 
 .sign-in__container {
-  margin-top: 5rem;
-  padding: 40px 20px;
+  margin-top: 2rem;
+  width: clamp(0px, 860px, 80%);
+  padding: 40px;
   text-align: center;
   border: 2px solid var(--lightest-bg);
   border-radius: 5px;
+  color: var(--highlight-text);
 }
 
 .sign-in__title {
-  font-size: 2rem;
+  font-size: 2.5rem;
+  font-family: var(--highlight-font);
 }
 
 .sign-in__info {
-  margin: 3.5rem 0;
-  font-size: 1.2rem;
+  margin: 2.4rem 0 1.2rem;
+  font-size: 1.1rem;
+  line-height: 1.5rem;
 }
 
 .sign-in__button {
@@ -45,5 +53,6 @@
 }
 
 .sign-in__button > span {
-  font-size: 14px;
+  font-size: 16px;
+  padding: 0 10px;
 }
