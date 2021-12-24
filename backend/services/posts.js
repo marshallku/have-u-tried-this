@@ -123,7 +123,7 @@ export async function createPost(postDto) {
   await post.save();
 
   // 사진 리사이즈
-  resizeFile(photos);
+  await resizeFile(photos);
 
   return post.id;
 }
