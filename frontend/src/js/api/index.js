@@ -3,6 +3,7 @@ import getLocationListData from "./location";
 import { getPostListData, getPostData, postData, getAllPost } from "./post";
 import { getUserPostData, getUserLikeData, getUserCommentData } from "./user";
 import getImages from "./images";
+import { addLike, removeLike } from "./like";
 
 export {
   getAddressData,
@@ -16,4 +17,6 @@ export {
   getUserCommentData,
   getAllPost,
   getImages,
+  addLike,
+  removeLike,
 };
