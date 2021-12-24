@@ -268,6 +268,7 @@ export default function UploadPage() {
               className: "image-upload__location",
               list: "address",
               placeholder: "사진 촬영 장소",
+              required: true,
               autocomplete: "off",
             },
             onSubmit: {},
@@ -285,6 +286,9 @@ export default function UploadPage() {
             type: "text",
             name: "title",
             placeholder: "게시글 제목",
+            required: true,
+            autocomplete: "off",
+            spellcheck: "false",
             events: {
               input: debounce((event) => {
                 checkLock(event);
@@ -295,6 +299,9 @@ export default function UploadPage() {
             className: "image-content__desc",
             name: "contents",
             placeholder: "게시글 설명",
+            required: true,
+            autocomplete: "off",
+            spellcheck: "false",
             events: {
               input: debounce((event) => {
                 checkLock(event);
