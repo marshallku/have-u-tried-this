@@ -57,27 +57,9 @@
   margin-bottom: 10px;
 }
 
-.city-item__button {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: solid var(--highlight-text) 2px;
-  padding: 10px 30px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  color: var(--highlight-text);
-}
-.city-item__button > i {
-  position: absolute;
-  right: 4px;
-  color: var(--highlight-text);
-}
-
 @media (any-hover: hover) {
   .city-item__thumbnail,
-  .city-item__header,
-  .city-item__button {
+  .city-item__header {
     transition: opacity 0.3s ease-in-out;
   }
 
