@@ -2,6 +2,7 @@ import { getPostListData } from "../api";
 import PostItem from "../components/PostItem";
 import MasonryContainer from "../components/MasonryContainer";
 import { getPaths } from "../utils/location";
+import EmptyBox from "../components/EmptyBox";
 import el from "../utils/dom";
 
 export default function ListPage() {
@@ -34,6 +35,12 @@ export default function ListPage() {
           liked: article.isLiked,
           likes: article.likes,
         }),
+      emptyComponent: EmptyBox({
+        message: "아직 등록된 맛식이 없습니다.",
+        icon: "icon-utensil-spoon-solid",
+        link: "/add",
+        linkMessage: "첫 맛식 등록하기",
+      }),
     }),
   );
 }
