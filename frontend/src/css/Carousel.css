@@ -20,6 +20,7 @@
   top: 0;
   left: 0;
   display: flex;
+  width: 100%;
   height: 100%;
   transition: transform 0.2s ease-in-out;
 }
@@ -52,6 +53,10 @@
   border-radius: 2rem;
 }
 
+.carousel__counter--hidden {
+  visibility: hidden;
+}
+
 .carousel__dots {
   position: absolute;
   bottom: 10px;
@@ -59,6 +64,10 @@
   display: flex;
   gap: 10px;
   transform: translateX(-50%);
+}
+
+.carousel__dots--hidden {
+  visibility: hidden;
 }
 
 .carousel__dot {
