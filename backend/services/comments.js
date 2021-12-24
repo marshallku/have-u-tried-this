@@ -45,7 +45,8 @@ export async function createComment(postId, userId, contents) {
     throw new Error("잘못된 접근입니다.");
   }
   comment.save();
-  return comment.id;
+  await User.populate(comment, { path: "author" });
+  return comment;
 }
 
 export async function deleteComment(postId, commentId, userId) {

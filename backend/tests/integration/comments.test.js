@@ -35,7 +35,17 @@ describe("댓글 기능 테스트", () => {
       .send({ contents: "testcontent" });
 
     expect(res.statusCode).toEqual(201);
-    expect(typeof res.body.id).toEqual("string");
+    expect(Object.keys(res.body)).toEqual(
+      expect.arrayContaining([
+        "author",
+        "post",
+        "contents",
+        "_id",
+        "createdAt",
+        "updatedAt",
+        "__v",
+      ]),
+    );
 
     commentId = res.body.id;
   });

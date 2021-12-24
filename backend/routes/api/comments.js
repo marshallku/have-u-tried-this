@@ -38,8 +38,8 @@ router.post(
 
     filterEmptyString(contents);
 
-    const commentId = await createComment(postId, _id, sanitizeHtml(contents));
-    res.status(201).json({ id: commentId });
+    const comment = await createComment(postId, _id, sanitizeHtml(contents));
+    res.status(201).json(comment);
   }),
 );
 
