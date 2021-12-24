@@ -12,10 +12,9 @@ export async function getPostData(id) {
 export async function postData(body) {
   return instance.post("/posts/", {
     headers: {
-      "Content-Type": "application/json",
       Authorization: `Bearer ${window.user?.token}`,
     },
-    body: JSON.stringify(body),
+    body,
   });
 }
 
