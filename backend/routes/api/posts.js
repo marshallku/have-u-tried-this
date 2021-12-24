@@ -37,8 +37,8 @@ export default (app) => {
       const page = Number(req.query.page) || 1;
       const perPage = Number(req.query.perPage) || 9;
 
-      const isExists = await validation(location);
-      if (!isExists) {
+      const isExistsLocation = await validation(location);
+      if (!isExistsLocation) {
         throw new Error("허용되지 않은 접근입니다.");
       }
 
@@ -78,6 +78,11 @@ export default (app) => {
       const authorId = req.user._id;
       const photos = req.files;
       const { title, contents, wideAddr, localAddr } = req.body;
+
+      const isExistsLocation = await validation({ wideAddr, localAddr });
+      if (!isExistsLocation) {
+        throw new Error("허용되지 않은 접근입니다.");
+      }
 
       filterEmptyString(title, contents);
 
