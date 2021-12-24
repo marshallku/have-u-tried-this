@@ -53,14 +53,3 @@
 .modal__button > button:nth-child(2) {
   background-color: var(--dark);
 }
-
-@keyframes slide-down {
-  from {
-    opacity: 0;
-    transform: translateY(-30vh);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(150%);
-  }
-}

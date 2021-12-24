@@ -119,6 +119,7 @@
   .fixed-container {
     display: flex;
     background-color: rgba(0, 0, 0, 0.8);
+    animation: fade-in 0.25s ease-in-out both;
   }
 
   .fixed-container > article:not(:empty) {
@@ -129,6 +130,7 @@
     background: var(--bg);
     border-radius: 5px;
     grid-template-columns: 1fr 1fr;
+    animation: puff-in 0.5s ease-in-out 0.25s both;
   }
 
   .fixed-container .small-container {

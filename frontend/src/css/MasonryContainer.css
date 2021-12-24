@@ -14,6 +14,46 @@
   transform: translate3d(-50%, 100%, 0);
 }
 
+.masonry-container > article {
+  opacity: 0;
+}
+
+.masonry-container > article.revealed {
+  animation: fade-in-up 0.5s forwards ease-in-out;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 7) {
+  animation-delay: 0.15s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 6) {
+  animation-delay: 0.3s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 5) {
+  animation-delay: 0.45s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 4) {
+  animation-delay: 0.6s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 3) {
+  animation-delay: 0.75s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 2) {
+  animation-delay: 0.9s;
+}
+
+.masonry-container > article.revealed:nth-child(9n - 1) {
+  animation-delay: 1.05s;
+}
+
+.masonry-container > article.revealed:nth-child(9n) {
+  animation-delay: 1.2s;
+}
+
 @media screen and (min-width: 600px) {
   .masonry-container {
     grid-template-columns: repeat(2, 1fr);
