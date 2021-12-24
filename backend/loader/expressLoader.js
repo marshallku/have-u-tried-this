@@ -19,7 +19,7 @@ export default (app) => {
 
   app.use(cors());
   app.use(express.json());
-  app.use(express.urlencoded({ extended: false, limit: "20mb" }));
+  app.use(express.urlencoded({ extended: false, limit: "30mb" }));
   app.use(cookieParser());
 
   app.use(passport.initialize());
