@@ -45,9 +45,9 @@ function isReset({ page, initializing, renderPostOnly, isPopstate }) {
 
 export default function renderPage(page, isPopstate) {
   const isInitialized = !!document.getElementById("app").firstChild;
-  const isMasonry = !!document.querySelector(".masonry-x");
+  const isMasonry = !!document.querySelector(".masonry-container");
   const renderPostOnly = !isInitialized || !isMasonry;
-  console.log(renderPostOnly);
+
   const shouldAppend = isReset({
     page,
     initializing: !isInitialized,
