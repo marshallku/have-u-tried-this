@@ -46,13 +46,16 @@ export default function UserPageComment() {
               className: "comment-list__del",
               events: {
                 click: () => {
-                  Modal({
-                    title: "삭제하면 되돌릴 수 없어요!",
-                    content: "그래도 삭제하시겠습니까?",
-                    callback: async () => {
-                      await deleteComment(list.postId, list.commentId);
-                    },
-                  });
+                  const app = document.getElementById("app");
+                  app.append(
+                    Modal({
+                      title: "삭제하면 되돌릴 수 없어요!",
+                      content: "그래도 삭제하시겠습니까?",
+                      callback: async () => {
+                        await deleteComment(list.postId, list.commentId);
+                      },
+                    }),
+                  );
                 },
               },
             },
