@@ -3,6 +3,7 @@ import MasonryContainer from "../components/MasonryContainer";
 import CityItem from "../components/CityItem";
 import { getLocationListData } from "../api";
 import Typewriter from "../components/Typewriter";
+import EmptyBox from "../components/EmptyBox";
 import { addressData } from "../api/dummy";
 import "../../css/FrontPage.css";
 
@@ -35,6 +36,12 @@ export default function FrontPage() {
           local: location.localAddr,
           thumbnail: location.photo,
         }),
+      emptyComponent: EmptyBox({
+        message: "아직 등록된 맛식이 없습니다.",
+        icon: "utensil-spoon-solid",
+        link: "/add",
+        linkMessage: "첫 맛식 등록하기",
+      }),
     }),
   );
 }

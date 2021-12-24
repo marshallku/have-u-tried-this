@@ -6,7 +6,12 @@ import Loader from "./Loader";
 import masonry from "../utils/masonry";
 import "../../css/MasonryContainer.css";
 
-export default function MasonryContainer({ fetcher, args, component }) {
+export default function MasonryContainer({
+  fetcher,
+  args,
+  component,
+  emptyComponent,
+}) {
   let page = 1;
   let isDone = false;
   let isLoading = false;
@@ -20,16 +25,19 @@ export default function MasonryContainer({ fetcher, args, component }) {
     container.append(loader);
 
     try {
-      const { data, pagination } = await fetcher(...args, page);
-      if (!data.length) {
+      const { data, pagination, error } = await fetcher(...args, page);
+      if (!data || error || !data.length) {
         if (page === 1) {
           container.append(
-            el(
-              "div",
-              { className: "empty-notifier" },
-              el("h2", {}, "아무것도 보여드릴 게 없어요. 😥"),
-            ),
+            emptyComponent ||
+              el(
+                "div",
+                { className: "empty-notifier" },
+                el("h2", {}, "아무것도 보여드릴 게 없어요. 😥"),
+              ),
           );
+          container.classList.remove("masonry-container");
+          loader.remove();
           return;
         }
         loader.remove();
