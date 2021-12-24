@@ -34,6 +34,7 @@ export default function Carousel(items) {
     amount.innerText = items.length;
 
     item.elt.classList.add("carousel__counter");
+    if (items.length === 1) item.elt.classList.add("carousel__counter--hidden");
     item.elt.append(count, slash, amount);
 
     return item;
@@ -146,6 +147,7 @@ export default function Carousel(items) {
   carousel.classList.add("carousel");
   slider.classList.add("carousel__items");
   dotsContainer.classList.add("carousel__dots");
+  if (items.length === 1) dotsContainer.classList.add("carousel__dots--hidden");
 
   items.forEach((item, i) => {
     const itemElt = CarouselItem(item);
