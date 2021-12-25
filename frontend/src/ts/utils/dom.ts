@@ -34,9 +34,6 @@ export default function el<
 
       return;
     }
-    const img = document.createElement("img");
-
-    img["src"] = "";
 
     if (key in node) {
       try {
