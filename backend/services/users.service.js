@@ -39,6 +39,8 @@ export const getPostByUserId = async (_id, page, perPage) => {
     .limit(perPage)
     .populate("author");
 
+  const bookmarks = await Bookmark.find({ user: objId });
+
   const posts = myPosts.map((post) => ({
     // eslint-disable-next-line no-underscore-dangle
     id: post._id,
@@ -47,6 +49,10 @@ export const getPostByUserId = async (_id, page, perPage) => {
     photo: post.photos[0].url,
     title: post.title,
     likes: post.likes,
+    isLiked: bookmarks.some(
+      // eslint-disable-next-line no-underscore-dangle
+      (bookmark) => bookmark.post.toString() === post.id,
+    ),
   }));
 
   return {
