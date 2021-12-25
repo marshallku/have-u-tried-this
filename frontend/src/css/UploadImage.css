@@ -80,7 +80,7 @@
   display: inline-block;
   cursor: pointer;
   width: 100%;
-  padding: 156px;
+  padding: 156px 0;
   background-color: var(--lightest-bg);
   color: var(--text);
   text-align: center;
@@ -92,11 +92,13 @@
   background-color: var(--hover-bg);
 }
 
+.image-content__inner{
+  padding: 32px;
+  line-height: 1.2;
+}
+
 .image-content__inner > i{
-  position: absolute;
-  top: 48%;
-  left: 47%;
-  font-size: 64px;
+  font-size: 32px;
 }
 
 .image-content__inner > div {
