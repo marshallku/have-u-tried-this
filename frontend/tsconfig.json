@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["DOM", "es2021", "DOM.Iterable"],
+    "moduleResolution": "node",
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "typeRoots": ["./src/types"]
+  },
+  "exclude": ["node_modules"]
+}
