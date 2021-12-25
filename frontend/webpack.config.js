@@ -6,7 +6,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   mode: "production",
   target: "web",
-  entry: "./src/js/index.js",
+  entry: "./src/ts/index.ts",
   devtool: false,
   output: {
     filename: "[name].js",
@@ -22,8 +22,9 @@ module.exports = {
         },
       },
       {
-        test: /\.js$/,
+        test: /\.tsx?$/,
         exclude: /node_modules/,
+        use: "ts-loader",
       },
       {
         test: /\.css$/,
