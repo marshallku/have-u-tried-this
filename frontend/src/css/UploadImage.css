@@ -141,6 +141,10 @@
   color: white;
 }
 
+.image-content__submit:hover{
+  background-color: var(--dark-hover);
+}
+
 input::-webkit-calendar-picker-indicator {
   opacity: 1;
 }

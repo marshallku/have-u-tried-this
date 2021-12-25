@@ -319,7 +319,7 @@ export default function UploadPage() {
         el(
           "button",
           {
-            className: "image-content__submit",
+            className: "image-content__submit image-content__submit:hover",
             type: "submit",
             events: {
               click: async (event) => {
