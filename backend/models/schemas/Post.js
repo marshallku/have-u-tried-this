@@ -21,6 +21,7 @@ const PostSchema = new mongoose.Schema(
     ],
     likes: {
       type: Number,
+      min: 0,
       default: 0,
     },
     location: {
