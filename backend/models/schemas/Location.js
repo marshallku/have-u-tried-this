@@ -21,4 +21,3 @@ export default new mongoose.Schema(
     versionKey: false,
   },
 );
-
