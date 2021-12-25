@@ -7,7 +7,7 @@ import app from "../../app";
 describe("북마크 기능 테스트", () => {
   let postIdLike;
   const token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjY2MjEsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjE4MjF9.uaEIqJw5De5MXifwqOtSB3Yv1CRV65LIQyI876GwvCI";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjkxMDAsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjQzMDB9.i6XwWsAFDSrBTurijLptFlMGs4Rqs1I3qj8XagaCwvQ";
 
   test("테스트 케이스 글 생성", async () => {
     const __dirname = path.resolve();

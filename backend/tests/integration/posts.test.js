@@ -13,7 +13,7 @@ jest.setTimeout(10000);
 describe("post 라우터 테스트", () => {
   let postId;
   const token =
-    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjY2MjEsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjE4MjF9.uaEIqJw5De5MXifwqOtSB3Yv1CRV65LIQyI876GwvCI";
+    "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2NDA4NjkxMDAsImRhdGEiOiIxMDQwMjA3MzEyOTg1NTQ3MDQ1NzMiLCJpYXQiOjE2NDAyNjQzMDB9.i6XwWsAFDSrBTurijLptFlMGs4Rqs1I3qj8XagaCwvQ";
 
   afterAll(async () => {
     // 글 생성 이후 정리
@@ -94,6 +94,8 @@ describe("post 라우터 테스트", () => {
       .field("wideAddr", "서울특별시")
       .field("localAddr", "강남구")
       .attach("photos", pwd + "/1.JPG");
+
+    console.log(res.body);
 
     expect(res.statusCode).toEqual(201);
     expect(Object.keys(res.body)).toEqual(expect.arrayContaining(["id"]));
