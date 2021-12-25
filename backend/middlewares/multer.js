@@ -1,4 +1,5 @@
 import multer, { MulterError } from "multer";
+
 import dotenv from "dotenv";
 import path from "path";
 
@@ -16,6 +17,7 @@ function fileFilter(req, file, cb) {
   ];
   const fileType = file.mimetype;
   if (imageType.includes(fileType)) {
+
     cb(null, true);
   } else {
     cb("이미지 파일만 업로드 가능합니다.");

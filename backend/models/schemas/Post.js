@@ -2,6 +2,7 @@
 import mongoose from "mongoose";
 import CommentSchema from "./Comment.js";
 
+
 const PostSchema = new mongoose.Schema(
   {
     title: {
@@ -9,6 +10,7 @@ const PostSchema = new mongoose.Schema(
       required: true,
     },
     contents: {
+
       type: String,
       required: true,
     },
