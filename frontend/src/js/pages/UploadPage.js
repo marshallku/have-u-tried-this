@@ -291,11 +291,6 @@ export default function UploadPage() {
             },
             onSubmit: {},
           }),
-
-          el("datalist", {
-            className: "image-upload_datalist",
-            id: "address",
-          }),
         ),
         el(
           "div",
