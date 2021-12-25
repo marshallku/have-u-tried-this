@@ -74,23 +74,26 @@ export default function UploadPage() {
           "div",
           {
             className: "empty-div",
-            events: {
-              change: (event) => {
-                const fileInfo = event.target.files;
-                moreUpdate(fileInfo, id);
-              },
-            },
           },
-          el("input", {
-            className: "empty-box__input",
-            id: `empty-input__${id}`,
-            type: "file",
-          }),
           el("i", {
             className: "icon-add_circle",
           }),
         ),
       ),
+      el("input", {
+        className: "empty-box__input",
+        id: `empty-input__${id}`,
+        type: "file",
+        name: "photos",
+        accept: "image/*",
+        hidden: true,
+        events: {
+          change: (event) => {
+            const fileInfo = event.target.files;
+            moreUpdate(fileInfo, id);
+          },
+        },
+      }),
     );
 
   const handleUpdate = (filesInfo) => {
@@ -194,10 +197,7 @@ export default function UploadPage() {
             },
           }),
         ),
-        el("div", {
-          className: "image-content__preview image-content__preview--hidden",
-          id: "preview",
-        }),
+
         el(
           "label",
           {
@@ -267,6 +267,10 @@ export default function UploadPage() {
               handleUpdate(filesInfo);
             },
           },
+        }),
+        el("div", {
+          className: "image-content__preview image-content__preview--hidden",
+          id: "preview",
         }),
         el(
           "div",
