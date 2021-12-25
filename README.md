@@ -13,7 +13,7 @@
   | Frontend | Vanilla JS, Typescript |
   | Backend  | Node JS, Express JS    |
   | Database | Mongo DB, mongoose     |
-  | Devops   | nginx, VM azure        |
+  | Server   | nginx, VM azure        |
   | Test     | Jest                   |
 
 - 웹서비스에 대한 자세한 개요
@@ -136,8 +136,4 @@
 
 ## 6. 버전
 
-- 프로젝트의 버전 기입
-
 ## 7. FAQ
-
-- 자주 받는 질문 정리
