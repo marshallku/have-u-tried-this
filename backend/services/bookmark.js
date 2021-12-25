@@ -29,6 +29,10 @@ export async function pushLike(authorId, postId) {
 
 export async function pushUnlike(authorId, postId) {
   try {
+    const likeCount = await Post.findById(postId);
+    if (likeCount.likes <= 0) {
+      throw new Error("잘못된 접근입니다.");
+    }
     await updateLikes(postId, -1);
 
     await Bookmark.findOneAndDelete({
