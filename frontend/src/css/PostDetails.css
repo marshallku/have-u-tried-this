@@ -1,0 +1,142 @@
+.details-nav {
+  padding: 20px 10px;
+}
+
+.details-nav > button {
+  font-size: 24px;
+}
+
+.details-nav .icon-arrow_forward_ios {
+  display: block;
+  transform: scaleX(-1);
+}
+
+.fixed-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  overflow-y: auto;
+  overscroll-behavior: none;
+  z-index: 5000;
+}
+
+.fixed-container > .loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%, -50%, 0);
+}
+
+.fixed-container > article {
+  width: clamp(0px, 100%, 880px);
+  margin: 0 auto;
+}
+
+.small-container {
+  width: clamp(0px, 100%, 880px);
+  margin: 3rem auto 0 auto;
+  padding: 0 10px 5vmax;
+}
+
+.small-container::-webkit-scrollbar {
+  display: none;
+}
+
+.details__location,
+.details__buttons i {
+  color: var(--primary);
+}
+
+.details__location,
+.details__date {
+  font-size: 0.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.details__location > i,
+.details__date > i {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.details__buttons {
+  display: flex;
+  font-size: 1.2rem;
+}
+
+.details__rate {
+  margin-right: auto;
+}
+
+.details__buttons > button:not(.details__rate) {
+  padding-left: 5px;
+}
+
+.details__title {
+  font-family: var(--highlight-font);
+  margin: 1rem 0;
+  font-size: 2rem;
+  line-height: 1.7;
+}
+
+.details__author {
+  display: flex;
+  margin-bottom: 2rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.details__author > img {
+  width: 32px;
+  height: 32px;
+  margin-right: 5px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.details__desc {
+  line-height: 1.7;
+}
+.details__title,
+.details__desc {
+  border-bottom: 2px solid var(--bg);
+}
+
+.details__title--editing,
+.details__desc--editing {
+  border-color: var(--primary);
+}
+
+@media screen and (min-width: 860px) {
+  .details-nav {
+    display: none;
+  }
+
+  .fixed-container {
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.8);
+    animation: fade-in 0.25s ease-in-out both;
+  }
+
+  .fixed-container > article:not(:empty) {
+    display: grid;
+    margin: auto;
+    padding: 20px;
+    width: 1100px;
+    background: var(--bg);
+    border-radius: 5px;
+    grid-template-columns: 1fr 1fr;
+    animation: puff-in 0.5s ease-in-out 0.25s both;
+  }
+
+  .fixed-container .small-container {
+    margin-top: 0;
+    padding-bottom: 0;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+}
