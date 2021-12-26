@@ -53,3 +53,7 @@ body {
 .highlight {
   color: var(--highlight-text);
 }
+
+[disabled] {
+  cursor: not-allowed;
+}

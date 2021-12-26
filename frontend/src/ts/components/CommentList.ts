@@ -67,6 +67,7 @@ function CommentInput(postId: string) {
   const textarea = el("textarea", {
     className: "comment-input__text",
     type: "text",
+    disabled,
     placeholder: disabled
       ? "로그인 후 이용할 수 있습니다"
       : "댓글을 입력하세요",
