@@ -10,7 +10,7 @@
 
   | 구성     | 기술 스택              |
   | -------- | ---------------------- |
-  | Frontend | Vanilla JS, Typescript |
+  | Frontend | Vanilla JS             |
   | Backend  | Node JS, Express JS    |
   | Database | Mongo DB, mongoose     |
   | Server   | nginx, VM azure        |
@@ -135,5 +135,7 @@
 - 수정 단계: 피드백 반영해서 백엔드 설계 / 기능 수정
 
 ## 6. 버전
+
+2021. 12. 25. version 1.0.0
 
 ## 7. FAQ
