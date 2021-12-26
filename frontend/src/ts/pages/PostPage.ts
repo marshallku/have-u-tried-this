@@ -6,7 +6,7 @@ import CommentList from "../components/CommentList";
 import { getPostData } from "../api";
 import Loader from "../components/Loader";
 import { addClickEvent } from "../router";
-import { deletePost, editPostData } from "../api/post";
+import { deletePost, editPostData } from "../api";
 import { formatToReadableTime } from "../utils/time";
 import { removeBackSpace, removeLineBreak } from "../utils/string";
 import { getPaths } from "../utils/location";

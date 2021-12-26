@@ -5,10 +5,13 @@ import {
   getPostData,
   createPostData,
   getAllPost,
+  deletePost,
+  editPostData,
 } from "./post";
 import { getUserPostData, getUserLikeData, getUserCommentData } from "./user";
 import getImages from "./images";
 import { addLike, removeLike } from "./like";
+import { getCommentList, postComment, deleteComment } from "./comment";
 
 export {
   getAddressData,
@@ -21,7 +24,12 @@ export {
   getUserLikeData,
   getUserCommentData,
   getAllPost,
+  deletePost,
+  editPostData,
   getImages,
   addLike,
   removeLike,
+  getCommentList,
+  postComment,
+  deleteComment,
 };

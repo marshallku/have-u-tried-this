@@ -23,6 +23,8 @@ export default function createInstance({ baseUrl, timeOut }: InstanceOptions) {
               fetch(`${baseUrl}${resource}`, init),
             ])
           : await fetch(`${baseUrl}${resource}`, init);
+        if ("ok" in response && response.status === 204)
+          return { success: true };
         if ("error" in response) throw new Error(response.message);
         const json = await response.json();
 
