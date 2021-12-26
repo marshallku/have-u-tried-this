@@ -7,9 +7,11 @@ import WordAutoComplete from "../components/WordAutoComplete";
 import { createPostData } from "../api/post";
 import { updatePath } from "../router";
 import { MAX_UPLOAD_IMAGES, isValidType, isValidSize } from "../utils/upload";
-import "../../css/UploadImage.css";
+import "../../css/UploadPage.css";
 
 export default function UploadPage() {
+  const hoverAble = window.matchMedia("(any-hover: hover)");
+
   const preventEvent = (event: Event) => {
     event.stopPropagation();
     event.preventDefault();
@@ -33,9 +35,11 @@ export default function UploadPage() {
       return;
     }
 
-    const parents = document.querySelector(`.grid-div__${id}`);
-    const firstChild = parents?.firstElementChild;
-    firstChild && parents.removeChild(firstChild);
+    const parents = document.querySelector(`.grid-div--${id}`);
+    const firstChild = parents?.querySelector(".grid-div__image");
+
+    if (!parents || !firstChild) return;
+    firstChild.remove();
 
     const reader = new FileReader();
 
@@ -64,13 +68,13 @@ export default function UploadPage() {
     el(
       "div",
       {
-        className: `grid-div__${id}`,
+        className: `grid-div grid-div--${id}`,
       },
       el(
         "label",
         {
           className: "grid-div__image grid-div__image--cursor",
-          for: `empty-input__${id}`,
+          for: `empty-input--${id}`,
         },
         el(
           "div",
@@ -84,7 +88,7 @@ export default function UploadPage() {
       ),
       el("input", {
         className: "empty-box__input",
-        id: `empty-input__${id}`,
+        id: `empty-input--${id}`,
         type: "file",
         name: "photos",
         accept: "image/*",
@@ -108,6 +112,8 @@ export default function UploadPage() {
       .filter((file) => isValidSize(file.size));
 
     const preview = document.querySelector(".image-content__preview");
+
+    if (!preview) return;
 
     if (fileList.length > MAX_UPLOAD_IMAGES) {
       toast(`사진은 최대 ${MAX_UPLOAD_IMAGES}장까지 올릴 수 있습니다.`);
@@ -142,21 +148,21 @@ export default function UploadPage() {
             img,
           ),
         );
-        preview?.append(imgContainer);
+        preview.append(imgContainer);
 
         currentIndex += 1;
 
         if (currentIndex === files.length) {
           const emptyBoxLimit = MAX_UPLOAD_IMAGES - currentIndex;
           for (let i = 0; i < emptyBoxLimit; i += 1) {
-            preview?.append(emptyBox(`${i + 1}`));
+            preview.append(emptyBox(`${i + 1}`));
           }
         }
       });
       reader.readAsDataURL(file);
     });
 
-    preview?.classList.remove("image-content__preview--hidden");
+    preview.classList.remove("image-content__preview--hidden");
     document.getElementById("label")?.remove();
   };
 
@@ -212,6 +218,7 @@ export default function UploadPage() {
             events: {
               mouseover: (event: MouseEvent) => {
                 preventEvent(event);
+                if (!hoverAble) return;
                 const label = document.getElementById("label");
 
                 label?.classList.add("image-content__label--hovered");
@@ -219,6 +226,7 @@ export default function UploadPage() {
 
               mouseout: (event: MouseEvent) => {
                 preventEvent(event);
+                if (!hoverAble) return;
                 const label = document.getElementById("label");
 
                 label?.classList.remove("image-content__label--hovered");
@@ -226,25 +234,32 @@ export default function UploadPage() {
 
               dragover: (event: DragEvent) => {
                 preventEvent(event);
+                if (!hoverAble) return;
                 const label = document.getElementById("label");
 
                 label?.classList.add("image-content__label--hovered");
               },
+
               dragleave: (event: DragEvent) => {
                 preventEvent(event);
+                if (!hoverAble) return;
                 const label = document.getElementById("label");
 
                 label?.classList.remove("image-content__label--hovered");
               },
+
               drop: (event: DragEvent) => {
                 preventEvent(event);
-                const label = document.getElementById("label");
                 const fileInfo = event.dataTransfer?.files;
 
                 if (!fileInfo) return;
 
-                label?.classList.remove("image-content__label--hovered");
                 handleUpdate(fileInfo);
+
+                if (!hoverAble) return;
+                const label = document.getElementById("label");
+
+                label?.classList.remove("image-content__label--hovered");
               },
             },
           },

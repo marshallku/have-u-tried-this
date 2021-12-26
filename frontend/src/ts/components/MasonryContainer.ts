@@ -18,8 +18,7 @@ export default function MasonryContainer({
   component,
   emptyComponent,
 }: {
-  // TODO: Remove any
-  fetcher: any;
+  fetcher: (...x: any) => any;
   args: Array<any>;
   component: (x: any) => HTMLElement;
   emptyComponent: HTMLElement;
