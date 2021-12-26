@@ -1,0 +1,54 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 20000;
+}
+
+.modal {
+  margin: 0 auto;
+  width: clamp(0px, 90%, 860px);
+  padding: 15px;
+  background-color: var(--text);
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  color: var(--dark-text);
+  font-size: 0.8rem;
+  animation: slide-down 0.3s ease-out forwards;
+  z-index: 30;
+}
+
+.modal__title {
+  text-align: center;
+}
+
+.modal__title > div {
+  padding: 15px;
+}
+
+.modal__title > div:nth-child(1) {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.modal__button {
+  display: flex;
+  padding-top: 20px;
+  justify-content: flex-end;
+}
+
+.modal__button > button {
+  width: 100%;
+  height: 30px;
+  margin-left: 10px;
+  border: 1px solid var(--lightest-bg);
+  border-radius: 5px;
+  box-shadow: 1px 1px 4px 0px var(--lightest-bg);
+}
+
+.modal__button > button:nth-child(2) {
+  background-color: var(--dark);
+}

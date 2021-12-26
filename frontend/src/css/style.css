@@ -1,0 +1,59 @@
+@font-face {
+  font-family: "jalnan";
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --text: #bbb;
+  --dark-text: #1b1b1b;
+  --highlight-text: #f1f1f1;
+  --bg: #121212;
+  --lighter-bg: #212121;
+  --lightest-bg: #3a3a3a;
+  --hover-bg: #616161;
+  --bg-transparent: rgba(18, 18, 18, 0);
+  --primary: #fff263;
+  --light: #ffff95;
+  --dark: #c9c02f;
+  --dark-hover: #e6dd60;
+  --highlight-font: "jalnan", sans-serif;
+}
+
+a {
+  color: var(--text);
+}
+
+a:hover {
+  color: var(--highlight-text);
+}
+
+::placeholder {
+  color: var(--text);
+}
+
+html {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: "Noto Sans KR", sans-serif;
+  overflow-x: hidden;
+}
+
+html.overflow-hidden {
+  overflow-y: hidden;
+}
+
+body {
+  padding-top: 70px;
+}
+
+.highlight {
+  color: var(--highlight-text);
+}
+
+[disabled] {
+  cursor: not-allowed;
+}

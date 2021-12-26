@@ -1,0 +1,87 @@
+.city-item {
+  background-color: #000;
+  overflow: hidden;
+  border-radius: 5px;
+  box-shadow: 4px 4px 5px rgba(0, 0, 0, 0.7);
+}
+
+.city-item > a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+}
+
+.city-item__thumbnail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+
+.city-item__thumbnail,
+.city-item__thumbnail > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.city-item__header {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--highlight-text);
+  padding: 0 10px;
+}
+
+.city-item__header > div {
+  width: 100%;
+  text-align: center;
+  line-height: 1.2;
+  border: solid var(--highlight-text) 2px;
+  padding: 20px 0;
+  border-radius: 5px;
+}
+
+.city-item__header h2 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.city-item__header h3 {
+  font-size: 1.3rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.city-item__button {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: solid var(--highlight-text) 2px;
+  padding: 10px 30px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--highlight-text);
+}
+.city-item__button > i {
+  position: absolute;
+  right: 4px;
+  color: var(--highlight-text);
+}
+
+@media (any-hover: hover) {
+  .city-item__thumbnail,
+  .city-item__header,
+  .city-item__button {
+    transition: opacity 0.3s ease-in-out;
+  }
+
+  .city-item:hover .city-item__thumbnail {
+    opacity: 1;
+  }
+}

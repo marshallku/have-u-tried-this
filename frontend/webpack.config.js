@@ -1,11 +1,12 @@
 const path = require("path");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "production",
   target: "web",
-  entry: "./src/js/index.js",
+  entry: "./src/ts/index.ts",
   devtool: false,
   output: {
     filename: "[name].js",
@@ -15,8 +16,15 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js?$/,
+        test: /\.(woff|woff2|eot|ttf|otf|svg)$/i,
+        generator: {
+          filename: "[name][ext]",
+        },
+      },
+      {
+        test: /\.tsx?$/,
         exclude: /node_modules/,
+        use: "ts-loader",
       },
       {
         test: /\.css$/,
@@ -24,7 +32,13 @@ module.exports = {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin({ filename: "[name].css" })],
+  plugins: [
+    new MiniCssExtractPlugin({ filename: "[name].css" }),
+    new HtmlWebpackPlugin({
+      template: "./index.html",
+      filename: "index.html",
+    }),
+  ],
   optimization: {
     minimizer: [new CssMinimizerPlugin(), "..."],
   },
@@ -33,11 +47,11 @@ module.exports = {
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, "dist"),
+      directory: path.join(__dirname, "./static"),
+      publicPath: "/static",
     },
     port: 9990,
     hot: true,
-    host: "localhost",
-    compress: true,
+    historyApiFallback: true,
   },
 };
