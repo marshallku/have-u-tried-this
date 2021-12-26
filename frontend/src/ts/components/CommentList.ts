@@ -1,5 +1,5 @@
 import el from "../utils/dom";
-import { getCommentList, postComment, deleteComment } from "../api/comment";
+import { getCommentList, postComment, deleteComment } from "../api";
 import { formatToReadableTime } from "../utils/time";
 import Loader from "./Loader";
 import toast from "../utils/toast";

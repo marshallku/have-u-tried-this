@@ -4,7 +4,7 @@ import { debounce } from "../utils/optimize";
 import { checkLock, lock, unlock } from "../router/lock";
 import { getWideAddrLocalAddr } from "../utils/gps";
 import WordAutoComplete from "../components/WordAutoComplete";
-import { createPostData } from "../api/post";
+import { createPostData } from "../api";
 import { updatePath } from "../router";
 import { MAX_UPLOAD_IMAGES, isValidType, isValidSize } from "../utils/upload";
 import "../../css/UploadPage.css";
