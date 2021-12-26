@@ -1,8 +1,16 @@
 /* eslint-disable import/extensions */
 import fs from "fs";
 import path from "path";
-import { Post, Location } from "../models/index.js";
-import resizeFile from "../utils/file-resize.js";
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import { Post, Location, Bookmark, Comment } from "../models/index.js";
+import { resizeFile } from "../utils/index.js";
+
+dotenv.config();
+
+function parseTitle(title) {
+  return title.trim().replace("\n", " ");
+}
 
 async function checkLocation(wideAddr, localAddr) {
   const location = await Location.findOne({ wideAddr, localAddr });
@@ -12,10 +20,24 @@ async function checkLocation(wideAddr, localAddr) {
   return location;
 }
 
-export async function findById(id) {
+export async function findById(id, user) {
   try {
-    const post = await Post.findById(id);
-    return post;
+    const post = await Post.findById(id).populate("author");
+    let bookmarks = [];
+    if (user) {
+      // eslint-disable-next-line no-underscore-dangle
+      bookmarks = await Bookmark.find({ user: user._id });
+    }
+    return {
+      post,
+      isLiked:
+        bookmarks.length > 0
+          ? bookmarks.some(
+              // eslint-disable-next-line no-underscore-dangle
+              (bookmark) => bookmark.post.toString() === post._id.toString(),
+            )
+          : false,
+    };
   } catch (e) {
     throw new Error("존재하지 않는 글입니다.");
   }
@@ -26,7 +48,25 @@ export async function findByTitle(_title) {
   return post;
 }
 
-export async function getAll(_location, page, perPage) {
+export async function getAllPost(page, perPage) {
+  const total = await Post.find({}).countDocuments();
+  const totalPage = Math.ceil(total / perPage);
+  const posts = await Post.find({})
+    .sort({ likes: -1 })
+    .skip((page - 1) * perPage)
+    .limit(perPage)
+    .populate("location");
+
+  return {
+    data: posts,
+    pagination: {
+      page,
+      nextPage: page < totalPage,
+    },
+  };
+}
+
+export async function getAllLocation(user, _location, page, perPage) {
   // 페이지네이션
   const total = await Post.find({ location: _location }).countDocuments();
   const totalPage = Math.ceil(total / perPage);
@@ -41,6 +81,12 @@ export async function getAll(_location, page, perPage) {
     throw new Error("해당 지역의 글이 존재하지 않습니다.");
   }
 
+  let bookmarks = [];
+  if (user) {
+    // eslint-disable-next-line no-underscore-dangle
+    bookmarks = await Bookmark.find({ user: user._id });
+  }
+
   return {
     data: posts.map((post) => {
       const data = {
@@ -48,32 +94,36 @@ export async function getAll(_location, page, perPage) {
         wideAddr: _location.wideAddr,
         localAddr: _location.localAddr,
         photo: post.photos[0].url,
-        title: post.photos[0].title,
+        title: post.photos[0].text,
         likes: post.likes,
+        isLiked:
+          bookmarks.length > 0
+            ? bookmarks.some((bookmark) => bookmark.post.toString() === post.id)
+            : false,
       };
       return data;
     }),
     pagination: {
       page,
-      perPage,
-      totalPage,
+      nextPage: page < totalPage,
     },
   };
 }
 export async function createPost(postDto) {
-  const { title, content, photos, wideAddr, localAddr, authorId } = postDto;
+  const { title, contents, photos, wideAddr, localAddr, authorId } = postDto;
 
   // 존재하는 지역인지 검증
   checkLocation(wideAddr, localAddr);
 
   // post 인스턴스 생성
   const post = new Post({
-    title,
-    content,
+    title: parseTitle(title),
+    contents,
     photos: photos.reduce((prev, curr) => {
       prev.push({
-        url: curr.filename,
-        text: postDto.title,
+        url: process.env.IMG_PATH + curr.filename,
+        text: parseTitle(postDto.title),
+        filename: curr.filename,
       });
       return prev;
     }, []),
@@ -98,53 +148,38 @@ export async function createPost(postDto) {
   await post.save();
 
   // 사진 리사이즈
-  resizeFile(photos);
+  await resizeFile(photos);
 
   return post.id;
 }
 
 export async function updatePost(postId, newPostDto) {
   // eslint-disable-next-line no-unused-vars
-  const { title, content, _photos, wideAddr, localAddr, authorId } = newPostDto;
+  const { title, content, _photos, _wideAddr, _localAddr, authorId } =
+    newPostDto;
 
-  // 있는 지역인지 검증
-  const newLocation = await checkLocation(wideAddr, localAddr);
   try {
     // 포스트 있는지 검증
+
     const post = await Post.findById(postId);
-    if (post.author.toString() !== authorId) {
+    if (post.author.toString() !== authorId.toString()) {
       throw new Error("권한이 없습니다.");
     }
     // 새로운 포스트 내용 업데이트
     const newPost = await Post.findByIdAndUpdate(
       postId,
       {
-        title,
+        title: parseTitle(title),
         content,
-        location: {
-          wideAddr,
-          localAddr,
-        },
         photos: post.photos.map((photo) => {
           // eslint-disable-next-line no-param-reassign
-          photo.text = title;
+          photo.text = parseTitle(title);
           return photo;
         }),
         updatedAt: Date.now(),
       },
       { new: true },
     );
-
-    // 로케이션 배열 정리
-    await Location.findOneAndUpdate(
-      { wideAddr: post.location.wideAddr, localAddr: post.location.localAddr },
-      {
-        $pull: { posts: { _id: postId } },
-      },
-    );
-    await Location.findByIdAndUpdate(newLocation.id, {
-      $push: { posts: newPost },
-    });
     return newPost;
   } catch (err) {
     // throw new Error(err);
@@ -155,19 +190,20 @@ export async function updatePost(postId, newPostDto) {
 export async function deletePost(postId, authorId) {
   try {
     const isExist = await Post.findById(postId);
-    if (isExist.author.toString() !== authorId) {
+    if (isExist.author.toString() !== authorId.toString()) {
       throw new Error("권한이 없습니다.");
     }
 
+    await Bookmark.deleteMany({ post: mongoose.Types.ObjectId(postId) });
+    await Comment.deleteMany({ post: mongoose.Types.ObjectId(postId) });
+
     const post = await Post.findByIdAndDelete(postId);
     // 사진 삭제, DB에서는 삭제 되는지 확인 필요
+    // 관련 코멘트 북마크 모두 삭제
     const { photos, location } = post;
-    // eslint-disable-next-line no-underscore-dangle
-    const __dirname = path.resolve();
     photos.forEach((photo) => {
-      fs.unlinkSync(path.join(__dirname, "public/uploads", photo.url));
+      fs.unlinkSync(path.join(process.env.UPLOAD_PATH, photo.filename));
     });
-
     await Location.updateOne(
       {
         wideAddr: location.wideAddr,

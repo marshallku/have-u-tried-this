@@ -2,17 +2,22 @@
 import mongoose from "mongoose";
 import PostSchema from "./Post.js";
 
-export default new mongoose.Schema({
-  wideAddr: {
-    type: String,
-    required: true,
+export default new mongoose.Schema(
+  {
+    wideAddr: {
+      type: String,
+      required: true,
+    },
+    localAddr: {
+      type: String,
+      required: true,
+    },
+    posts: {
+      type: [PostSchema],
+      default: undefined,
+    },
   },
-  localAddr: {
-    type: String,
-    required: true,
+  {
+    versionKey: false,
   },
-  posts: {
-    type: [PostSchema],
-    default: undefined,
-  },
-});
+);

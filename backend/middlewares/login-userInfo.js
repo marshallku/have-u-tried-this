@@ -3,9 +3,12 @@ import { User } from "../models/index.js";
 import { verifyToken } from "../utils/index.js";
 
 export default (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-  if (!token) {
-    next("로그인이 필요합니다.");
+  let token;
+  try {
+    // eslint-disable-next-line prefer-destructuring
+    token = req.headers.authorization.split(" ")[1];
+  } catch (err) {
+    next();
     return;
   }
   // eslint-disable-next-line no-unused-vars

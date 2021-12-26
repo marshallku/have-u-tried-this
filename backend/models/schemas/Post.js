@@ -1,4 +1,6 @@
+/* eslint-disable import/extensions */
 import mongoose from "mongoose";
+import CommentSchema from "./Comment.js";
 
 const PostSchema = new mongoose.Schema(
   {
@@ -6,7 +8,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    content: {
+    contents: {
       type: String,
       required: true,
     },
@@ -14,10 +16,12 @@ const PostSchema = new mongoose.Schema(
       {
         url: String,
         text: String,
+        filename: String,
       },
     ],
     likes: {
       type: Number,
+      min: 0,
       default: 0,
     },
     location: {
@@ -34,9 +38,11 @@ const PostSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    comments: [CommentSchema],
   },
   {
     timestamps: true,
+    versionKey: false,
   },
 );
 
