@@ -4,7 +4,7 @@ import { Location } from "../models/index.js";
 export async function getAll(page, perPage) {
   // 페이지네이션
   const total = await Location.find({
-    posts: { $type: "array" },
+    $nor: [{ posts: { $exists: false } }, { posts: { $size: 0 } }],
   }).countDocuments();
   const totalPage = Math.ceil(total / perPage);
 
@@ -12,7 +12,6 @@ export async function getAll(page, perPage) {
   const locations = await Location.find({
     $nor: [{ posts: { $exists: false } }, { posts: { $size: 0 } }],
   })
-    .sort({ wideAddr: -1 })
     .skip((page - 1) * perPage)
     .limit(perPage)
     .populate("posts");
@@ -31,8 +30,7 @@ export async function getAll(page, perPage) {
     data: parsedLocations,
     pagination: {
       page,
-      perPage,
-      totalPage,
+      nextPage: page < totalPage,
     },
   };
 }

@@ -1,22 +1,16 @@
 import sharp from "sharp";
 import path from "path";
-import { writeFile } from "fs";
+import dotenv from "dotenv";
+import { writeFileSync } from "fs";
 
-export default (files) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const __dirname = path.resolve();
+dotenv.config();
 
-  files.forEach((file) => {
-    const filePath = path.join(__dirname, "public/uploads", file.filename);
-
-    sharp(filePath)
-      .resize({ width: 1080 })
-      .withMetadata()
-      .toBuffer((err1, buffer) => {
-        if (err1) throw err1;
-        writeFile(filePath, buffer, (err2) => {
-          if (err2) throw err2;
-        });
-      });
-  });
-};
+export default async function resizeFile(files) {
+  await Promise.all(
+    files.map(async (file) => {
+      const filePath = path.join(process.env.UPLOAD_PATH, file.filename);
+      const buff = await sharp(filePath).resize({ width: 1080 }).toBuffer();
+      writeFileSync(filePath, buff);
+    }),
+  );
+}

@@ -5,24 +5,29 @@ import "moment-timezone";
 // 타임존 설정
 moment.tz.setDefault("Asia/Seoul");
 
-const UserSchema = new mongoose.Schema({
-  googleId: {
-    type: String,
-    default: null,
+const UserSchema = new mongoose.Schema(
+  {
+    googleId: {
+      type: String,
+      default: null,
+    },
+    email: {
+      type: String,
+      required: [true, "email required"],
+      unique: [true, "email already registered"],
+    },
+    firstName: String,
+    lastName: String,
+    profile: String,
+    source: { type: String, required: [true, "source not specified"] },
+    lastVisited: {
+      type: Date,
+      default: moment(),
+    },
   },
-  email: {
-    type: String,
-    required: [true, "email required"],
-    unique: [true, "email already registered"],
+  {
+    versionKey: false,
   },
-  firstName: String,
-  lastName: String,
-  profile: String,
-  source: { type: String, required: [true, "source not specified"] },
-  lastVisited: {
-    type: Date,
-    default: moment(),
-  },
-});
+);
 
 export default UserSchema;

@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import moment from "moment";
 import "moment-timezone";
 import passportGoogleOAuth from "passport-google-oauth20";
+import { ExtractJwt } from "passport-jwt";
 import { getUserById, addGoogleUser } from "../../services/users.service.js";
 
 dotenv.config();
@@ -15,12 +16,13 @@ const passportConfig = {
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
   callbackURL: process.env.GOOGLE_CALLBACK_URL,
+  jwtFromRequest: ExtractJwt.fromAuthHeader,
   passReqToCallback: true,
 };
 
 export default new GoogleStrategy(
   passportConfig,
-  async (accessToken, refreshToken, params, profiles, done) => {
+  async (req, accessToken, refreshToken, profiles, done) => {
     const googleId = profiles.id;
     const email = profiles.emails[0].value;
     const firstName = profiles.name.givenName;
@@ -30,7 +32,7 @@ export default new GoogleStrategy(
 
     const currentUser = await getUserById(googleId);
     if (!currentUser) {
-      const newUser = addGoogleUser({
+      const newUser = await addGoogleUser({
         googleId,
         email,
         firstName,
@@ -38,7 +40,7 @@ export default new GoogleStrategy(
         profile,
         source,
       });
-      return done(null, newUser.googleId);
+      return done(null, newUser);
     }
 
     if (currentUser.source !== "google") {
@@ -47,9 +49,8 @@ export default new GoogleStrategy(
         message: "You have previously signed up with a different signin method",
       });
     }
-
     currentUser.lastVisited = moment();
     currentUser.save();
-    return done(null, currentUser.googleId);
+    return done(null, currentUser);
   },
 );
