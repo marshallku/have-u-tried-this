@@ -47,7 +47,6 @@ export default function GlobalNavigation() {
           autocomplete: "off",
         },
         onSubmit: () => {
-          // TODO: 입력받은 지역 올바른 지역인지 검증
           const input = document.querySelector(".search__input");
           if (!input || !(input instanceof HTMLInputElement)) return;
           const [wideAddr, localAddr] = input.value.split(" ");
