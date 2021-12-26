@@ -3,7 +3,7 @@ import { getAddressData } from "../api";
 import { debounce } from "../utils/optimize";
 import toast from "../utils/toast";
 
-const WAIT = 100;
+const WAIT = 500;
 
 export default function WordAutoComplete({
   formAttr,
@@ -29,16 +29,16 @@ export default function WordAutoComplete({
 
     input.setAttribute("list", dataListId);
   };
-  const filter = (str: string, isSubmit?: boolean) => {
+  const filter = (str: string, event?: SubmitEvent | FocusEvent) => {
     const filtered = locationData.filter((city) => city.includes(str));
     const [firstCity] = filtered;
 
     setListAttribute(str);
 
-    if (isSubmit) {
+    if (event) {
       if (filtered.length === 1) {
         input.value = firstCity;
-        onSubmit && onSubmit();
+        if (event instanceof SubmitEvent && onSubmit) onSubmit();
         return;
       }
 
@@ -48,7 +48,7 @@ export default function WordAutoComplete({
   };
   const handleSubmit = (event: SubmitEvent | FocusEvent) => {
     event.preventDefault();
-    filter(input.value, true);
+    filter(input.value, event);
   };
   const handleInput = debounce(() => {
     filter(input.value);
