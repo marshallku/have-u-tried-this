@@ -91,7 +91,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 0 10px 0 40px;
+  padding: 0 10px;
 }
 
 .comment-list__content > div {
