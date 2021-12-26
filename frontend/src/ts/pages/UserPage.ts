@@ -3,7 +3,7 @@ import UserPagePost from "../components/UserPagePost";
 import UserPageLike from "../components/UserPageLike";
 import UserPageComment from "../components/UserPageComment";
 import { customRouter } from "../router";
-import "../../css/userPage.css";
+import "../../css/UserPage.css";
 
 function Drawer(userPageRouter: ICustomRouter) {
   const Button = ({ text, path }: { text: string; path: string }) => {
