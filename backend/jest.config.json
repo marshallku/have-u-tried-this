@@ -1,9 +1,14 @@
 {
-  "moduleFileExtensions": ["js", "mjs"],
+  "moduleFileExtensions": ["js", "ts"],
   "transform": {
-    "^.+\\.js$": "babel-jest",
-    "^.+\\.mjs$": "babel-jest"
+    "^.+\\.ts$": "ts-jest"
   },
-  "testRegex": "((\\.|/*.)(test))\\.js?$",
-  "verbose": true
+  "testMatch": ["**/tests/**/*.test.ts", "**/tests/**/*.test.js"],
+  "verbose": true,
+  "testEnvironment": "node",
+  "globals": {
+    "ts-jest": {
+      "tsconfig": "./tsconfig.json"
+    }
+  }
 }
