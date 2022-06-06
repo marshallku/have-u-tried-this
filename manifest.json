@@ -4,37 +4,37 @@
   "description": "대한민국 방방곳곳 맛집자랑 SNS",
   "icons": [
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-128.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-128.png",
       "sizes": "128x128",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-144.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-144.png",
       "sizes": "144x144",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-152.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-152.png",
       "sizes": "152x152",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-192.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-256.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-256.png",
       "sizes": "256x256",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com/logo/logo-512.png",
+      "src": "https://marshallku.github.io/have-u-tried-this/logo/logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -46,7 +46,7 @@
   "theme_color": "#fff263",
   "lang": "ko-KR",
   "categories": [],
-  "url": "https://elice-kdt-sw-1st-vm02.koreacentral.cloudapp.azure.com",
+  "url": "https://marshallku.github.io/have-u-tried-this",
   "screenshots": [],
   "orientation": "portrait",
   "shortcuts": [
